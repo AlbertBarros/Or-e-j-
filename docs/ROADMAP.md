@@ -17,7 +17,7 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 - [x] Hub `/modelo-de-orcamento` e home simples
 - [x] Schema JSON-LD, sitemap, robots, canonical
 - [x] Escrever o bloco "Como preencher" das 10 profissões (rascunho do Claude, revisão do Jonathan)
-- [ ] Deploy no Cloudflare Pages
+- [x] Deploy no Cloudflare Pages (https://orca-ja-6cz.pages.dev)
 
 **Pronto quando:** as 10 páginas estão no ar, o PDF baixa no celular, o lead é gravado no Firestore, o Lighthouse mobile dá ≥ 90 em Performance e SEO e o sitemap foi enviado ao Search Console.
 
