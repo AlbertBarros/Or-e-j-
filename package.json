@@ -1,0 +1,19 @@
+{
+  "name": "orca-ja",
+  "private": true,
+  "description": "Orça Já — orçamento, aprovação por link, Pix e recibo para autônomos",
+  "workspaces": [
+    "shared",
+    "site"
+  ],
+  "scripts": {
+    "dev:site": "npm run dev --workspace site",
+    "dev:app": "npm run dev --workspace app",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

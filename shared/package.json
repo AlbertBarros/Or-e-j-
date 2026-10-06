@@ -1,0 +1,19 @@
+{
+  "name": "@orcaja/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Funções puras (Pix, cálculos, mensagens) e dados compartilhados entre o app e o site",
+  "exports": {
+    "./*": "./src/*.ts",
+    "./data/*": "./data/*"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.3"
+  }
+}

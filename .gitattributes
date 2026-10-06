@@ -1,0 +1,7 @@
+# Mantém quebras de linha LF no repositório, mesmo no Windows
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.woff binary
+*.woff2 binary
