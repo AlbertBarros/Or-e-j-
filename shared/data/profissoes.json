@@ -1,0 +1,535 @@
+{
+  "_aviso": "Valores de REFERÊNCIA para sugestão inicial. Revise antes de publicar; o profissional sempre pode editar.",
+  "profissoes": [
+    {
+      "slug": "eletricista",
+      "nome": "Eletricista",
+      "plural": "eletricistas",
+      "seo": {
+        "titulo": "Modelo de orçamento para eletricista grátis | Orça Já",
+        "h1": "Modelo de orçamento para eletricista",
+        "descricao": "Monte um orçamento profissional de eletricista em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Instalação de tomada ou interruptor",
+          "unidade": "un",
+          "precoSugerido": 60
+        },
+        {
+          "descricao": "Troca de disjuntor",
+          "unidade": "un",
+          "precoSugerido": 90
+        },
+        {
+          "descricao": "Instalação de chuveiro elétrico",
+          "unidade": "un",
+          "precoSugerido": 120
+        },
+        {
+          "descricao": "Instalação de luminária/lustre",
+          "unidade": "un",
+          "precoSugerido": 90
+        },
+        {
+          "descricao": "Passagem de fiação (ponto novo)",
+          "unidade": "ponto",
+          "precoSugerido": 150
+        },
+        {
+          "descricao": "Visita técnica / diagnóstico",
+          "unidade": "un",
+          "precoSugerido": 80
+        }
+      ],
+      "observacoesPadrao": "Material elétrico por conta do cliente, salvo indicação em contrário. Garantia de 90 dias sobre a mão de obra.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "O orçamento de eletricista inclui o material?",
+          "resposta": "Depende do combinado. O mais comum é separar mão de obra e material em itens diferentes, como neste modelo."
+        },
+        {
+          "pergunta": "Posso cobrar visita técnica?",
+          "resposta": "Sim. Muitos eletricistas cobram a visita e descontam o valor se o serviço for aprovado."
+        }
+      ]
+    },
+    {
+      "slug": "encanador",
+      "nome": "Encanador",
+      "plural": "encanadores",
+      "seo": {
+        "titulo": "Modelo de orçamento para encanador grátis | Orça Já",
+        "h1": "Modelo de orçamento para encanador",
+        "descricao": "Monte um orçamento profissional de encanador em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Desentupimento de pia ou ralo",
+          "unidade": "un",
+          "precoSugerido": 120
+        },
+        {
+          "descricao": "Troca de torneira",
+          "unidade": "un",
+          "precoSugerido": 70
+        },
+        {
+          "descricao": "Conserto de vazamento",
+          "unidade": "un",
+          "precoSugerido": 150
+        },
+        {
+          "descricao": "Instalação de vaso sanitário",
+          "unidade": "un",
+          "precoSugerido": 180
+        },
+        {
+          "descricao": "Troca de reparo de válvula de descarga",
+          "unidade": "un",
+          "precoSugerido": 100
+        },
+        {
+          "descricao": "Visita técnica",
+          "unidade": "un",
+          "precoSugerido": 80
+        }
+      ],
+      "observacoesPadrao": "Peças e conexões por conta do cliente. Garantia de 90 dias sobre o serviço executado.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "Como cobrar desentupimento?",
+          "resposta": "Normalmente por serviço, com valor maior para casos que exigem equipamento."
+        },
+        {
+          "pergunta": "Devo colocar prazo de validade?",
+          "resposta": "Sim. Um prazo de 7 a 15 dias protege você de variações de preço."
+        }
+      ]
+    },
+    {
+      "slug": "pintor",
+      "nome": "Pintor",
+      "plural": "pintores",
+      "seo": {
+        "titulo": "Modelo de orçamento para pintor grátis | Orça Já",
+        "h1": "Modelo de orçamento para pintor",
+        "descricao": "Monte um orçamento profissional de pintor em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Pintura de parede (por m²)",
+          "unidade": "m²",
+          "precoSugerido": 25
+        },
+        {
+          "descricao": "Pintura de teto (por m²)",
+          "unidade": "m²",
+          "precoSugerido": 30
+        },
+        {
+          "descricao": "Aplicação de massa corrida (por m²)",
+          "unidade": "m²",
+          "precoSugerido": 20
+        },
+        {
+          "descricao": "Pintura de porta",
+          "unidade": "un",
+          "precoSugerido": 120
+        },
+        {
+          "descricao": "Pintura de grade/portão",
+          "unidade": "m²",
+          "precoSugerido": 40
+        },
+        {
+          "descricao": "Proteção e limpeza do ambiente",
+          "unidade": "un",
+          "precoSugerido": 100
+        }
+      ],
+      "observacoesPadrao": "Tinta e materiais por conta do cliente. Valores calculados por metro quadrado de área pintada.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "Como calcular orçamento de pintura?",
+          "resposta": "O mais usado é o valor por metro quadrado, somando paredes e teto, com itens extras para massa e preparação."
+        },
+        {
+          "pergunta": "Duas demãos estão incluídas?",
+          "resposta": "Deixe isso explícito nas observações para evitar discussões depois."
+        }
+      ]
+    },
+    {
+      "slug": "pedreiro",
+      "nome": "Pedreiro",
+      "plural": "pedreiros",
+      "seo": {
+        "titulo": "Modelo de orçamento para pedreiro grátis | Orça Já",
+        "h1": "Modelo de orçamento para pedreiro",
+        "descricao": "Monte um orçamento profissional de pedreiro em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Assentamento de piso (por m²)",
+          "unidade": "m²",
+          "precoSugerido": 50
+        },
+        {
+          "descricao": "Reboco de parede (por m²)",
+          "unidade": "m²",
+          "precoSugerido": 40
+        },
+        {
+          "descricao": "Levantamento de alvenaria (por m²)",
+          "unidade": "m²",
+          "precoSugerido": 60
+        },
+        {
+          "descricao": "Contrapiso (por m²)",
+          "unidade": "m²",
+          "precoSugerido": 35
+        },
+        {
+          "descricao": "Demolição e retirada de entulho",
+          "unidade": "un",
+          "precoSugerido": 400
+        },
+        {
+          "descricao": "Diária de pedreiro",
+          "unidade": "dia",
+          "precoSugerido": 250
+        }
+      ],
+      "observacoesPadrao": "Materiais por conta do cliente. Prazo estimado sujeito às condições da obra e do clima.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "Cobro por diária ou por empreitada?",
+          "resposta": "Para serviços bem definidos, por m² ou empreitada passa mais confiança. Diária funciona para reparos variados."
+        },
+        {
+          "pergunta": "Como incluir retirada de entulho?",
+          "resposta": "Coloque como item separado; assim o cliente entende o custo."
+        }
+      ]
+    },
+    {
+      "slug": "diarista",
+      "nome": "Diarista",
+      "plural": "diaristas",
+      "seo": {
+        "titulo": "Modelo de orçamento para diarista grátis | Orça Já",
+        "h1": "Modelo de orçamento para diarista",
+        "descricao": "Monte um orçamento profissional de diarista em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Faxina completa (casa até 2 quartos)",
+          "unidade": "un",
+          "precoSugerido": 200
+        },
+        {
+          "descricao": "Faxina completa (casa 3 quartos ou mais)",
+          "unidade": "un",
+          "precoSugerido": 280
+        },
+        {
+          "descricao": "Limpeza pós-obra",
+          "unidade": "un",
+          "precoSugerido": 450
+        },
+        {
+          "descricao": "Passar roupa (por hora)",
+          "unidade": "h",
+          "precoSugerido": 35
+        },
+        {
+          "descricao": "Limpeza de geladeira e forno",
+          "unidade": "un",
+          "precoSugerido": 60
+        }
+      ],
+      "observacoesPadrao": "Produtos de limpeza fornecidos pelo cliente, salvo combinação diferente.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "Diarista precisa fazer orçamento?",
+          "resposta": "Para pós-obra, mudança ou clientes novos, um orçamento por escrito evita mal-entendidos sobre o que está incluído."
+        },
+        {
+          "pergunta": "Como cobrar faxina pesada?",
+          "resposta": "Use um item específico com valor maior, como 'limpeza pós-obra'."
+        }
+      ]
+    },
+    {
+      "slug": "tecnico-ar-condicionado",
+      "nome": "Técnico de ar-condicionado",
+      "plural": "técnicos de ar-condicionado",
+      "seo": {
+        "titulo": "Modelo de orçamento para técnico de ar-condicionado grátis | Orça Já",
+        "h1": "Modelo de orçamento para técnico de ar-condicionado",
+        "descricao": "Monte um orçamento profissional de técnico de ar-condicionado em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Instalação de split até 12.000 BTUs",
+          "unidade": "un",
+          "precoSugerido": 550
+        },
+        {
+          "descricao": "Instalação de split 18.000 a 24.000 BTUs",
+          "unidade": "un",
+          "precoSugerido": 750
+        },
+        {
+          "descricao": "Limpeza / higienização completa",
+          "unidade": "un",
+          "precoSugerido": 220
+        },
+        {
+          "descricao": "Recarga de gás",
+          "unidade": "un",
+          "precoSugerido": 300
+        },
+        {
+          "descricao": "Visita técnica / diagnóstico",
+          "unidade": "un",
+          "precoSugerido": 100
+        },
+        {
+          "descricao": "Metro adicional de tubulação",
+          "unidade": "m",
+          "precoSugerido": 80
+        }
+      ],
+      "observacoesPadrao": "Instalação padrão inclui até 3 metros de tubulação. Suporte e material elétrico cobrados à parte quando necessários.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "O que incluir no orçamento de instalação?",
+          "resposta": "Separe a instalação padrão, os metros adicionais de tubulação e o suporte. Isso evita surpresa para o cliente."
+        },
+        {
+          "pergunta": "Quanto tempo de garantia oferecer?",
+          "resposta": "É comum oferecer 90 dias sobre a instalação."
+        }
+      ]
+    },
+    {
+      "slug": "montador-de-moveis",
+      "nome": "Montador de móveis",
+      "plural": "montadores de móveis",
+      "seo": {
+        "titulo": "Modelo de orçamento para montador de móveis grátis | Orça Já",
+        "h1": "Modelo de orçamento para montador de móveis",
+        "descricao": "Monte um orçamento profissional de montador de móveis em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Montagem de guarda-roupa",
+          "unidade": "un",
+          "precoSugerido": 180
+        },
+        {
+          "descricao": "Montagem de cama/box",
+          "unidade": "un",
+          "precoSugerido": 90
+        },
+        {
+          "descricao": "Montagem de rack/painel",
+          "unidade": "un",
+          "precoSugerido": 120
+        },
+        {
+          "descricao": "Montagem de cozinha (por módulo)",
+          "unidade": "módulo",
+          "precoSugerido": 60
+        },
+        {
+          "descricao": "Instalação de prateleira/nicho",
+          "unidade": "un",
+          "precoSugerido": 50
+        },
+        {
+          "descricao": "Desmontagem",
+          "unidade": "un",
+          "precoSugerido": 100
+        }
+      ],
+      "observacoesPadrao": "Fixação na parede inclui buchas e parafusos comuns. Furação em porcelanato cobrada à parte.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "Como cobrar montagem de móveis?",
+          "resposta": "Por peça é o padrão. Para cozinhas planejadas, por módulo funciona melhor."
+        },
+        {
+          "pergunta": "Cobro desmontagem?",
+          "resposta": "Sim, como item separado."
+        }
+      ]
+    },
+    {
+      "slug": "jardineiro",
+      "nome": "Jardineiro",
+      "plural": "jardineiros",
+      "seo": {
+        "titulo": "Modelo de orçamento para jardineiro grátis | Orça Já",
+        "h1": "Modelo de orçamento para jardineiro",
+        "descricao": "Monte um orçamento profissional de jardineiro em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Corte de grama (por m²)",
+          "unidade": "m²",
+          "precoSugerido": 3
+        },
+        {
+          "descricao": "Poda de arbustos",
+          "unidade": "un",
+          "precoSugerido": 80
+        },
+        {
+          "descricao": "Poda de árvore de pequeno porte",
+          "unidade": "un",
+          "precoSugerido": 200
+        },
+        {
+          "descricao": "Limpeza de terreno (por m²)",
+          "unidade": "m²",
+          "precoSugerido": 5
+        },
+        {
+          "descricao": "Plantio de mudas",
+          "unidade": "un",
+          "precoSugerido": 20
+        },
+        {
+          "descricao": "Manutenção mensal de jardim",
+          "unidade": "mês",
+          "precoSugerido": 350
+        }
+      ],
+      "observacoesPadrao": "Retirada de resíduos inclusa até 5 sacos. Mudas e insumos por conta do cliente.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "Posso oferecer plano mensal?",
+          "resposta": "Sim. Manutenção mensal garante renda recorrente e costuma ter desconto em relação ao avulso."
+        },
+        {
+          "pergunta": "Como medir área de grama?",
+          "resposta": "Multiplique comprimento por largura de cada área e some."
+        }
+      ]
+    },
+    {
+      "slug": "fotografo",
+      "nome": "Fotógrafo",
+      "plural": "fotógrafos",
+      "seo": {
+        "titulo": "Modelo de orçamento para fotógrafo grátis | Orça Já",
+        "h1": "Modelo de orçamento para fotógrafo",
+        "descricao": "Monte um orçamento profissional de fotógrafo em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Ensaio fotográfico (até 2h)",
+          "unidade": "un",
+          "precoSugerido": 450
+        },
+        {
+          "descricao": "Cobertura de evento (por hora)",
+          "unidade": "h",
+          "precoSugerido": 250
+        },
+        {
+          "descricao": "Fotos editadas adicionais",
+          "unidade": "un",
+          "precoSugerido": 15
+        },
+        {
+          "descricao": "Álbum impresso",
+          "unidade": "un",
+          "precoSugerido": 600
+        },
+        {
+          "descricao": "Deslocamento",
+          "unidade": "un",
+          "precoSugerido": 80
+        }
+      ],
+      "observacoesPadrao": "Entrega das fotos editadas em galeria online em até 15 dias úteis. Sinal de 30% para reserva da data.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "Como cobrar sinal?",
+          "resposta": "Inclua nas observações: um sinal de 30% a 50% garante a data reservada."
+        },
+        {
+          "pergunta": "Devo detalhar quantidade de fotos?",
+          "resposta": "Sim. Deixe claro quantas fotos editadas estão incluídas."
+        }
+      ]
+    },
+    {
+      "slug": "marido-de-aluguel",
+      "nome": "Marido de aluguel",
+      "plural": "maridos de aluguel",
+      "seo": {
+        "titulo": "Modelo de orçamento para marido de aluguel grátis | Orça Já",
+        "h1": "Modelo de orçamento para marido de aluguel",
+        "descricao": "Monte um orçamento profissional de marido de aluguel em 1 minuto, com itens prontos. Baixe em PDF grátis ou envie pelo WhatsApp."
+      },
+      "itens": [
+        {
+          "descricao": "Instalação de suporte de TV",
+          "unidade": "un",
+          "precoSugerido": 120
+        },
+        {
+          "descricao": "Instalação de cortina/varão",
+          "unidade": "un",
+          "precoSugerido": 80
+        },
+        {
+          "descricao": "Instalação de prateleira",
+          "unidade": "un",
+          "precoSugerido": 50
+        },
+        {
+          "descricao": "Troca de fechadura",
+          "unidade": "un",
+          "precoSugerido": 90
+        },
+        {
+          "descricao": "Pequenos reparos (por hora)",
+          "unidade": "h",
+          "precoSugerido": 70
+        },
+        {
+          "descricao": "Visita técnica",
+          "unidade": "un",
+          "precoSugerido": 60
+        }
+      ],
+      "observacoesPadrao": "Material por conta do cliente. Serviços extras combinados no local entram em novo orçamento.",
+      "validadeDiasPadrao": 15,
+      "faq": [
+        {
+          "pergunta": "Como orçar vários pequenos serviços?",
+          "resposta": "Liste cada serviço como item. O cliente enxerga valor em cada parte e aprova mais rápido."
+        },
+        {
+          "pergunta": "Cobro por hora ou por serviço?",
+          "resposta": "Por serviço passa mais segurança; por hora funciona em reparos imprevisíveis."
+        }
+      ]
+    }
+  ]
+}

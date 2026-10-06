@@ -1,0 +1,49 @@
+rules_version = '2';
+// Orça Já — regras do Firestore (MVP)
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function logado() { return request.auth != null; }
+    function dono(uid) { return logado() && request.auth.uid == uid; }
+    function mudou() { return request.resource.data.diff(resource.data).affectedKeys(); }
+
+    // Perfil do profissional. "plano" só pode ser alterado pelo servidor (Admin SDK / webhook).
+    match /users/{uid} {
+      allow read: if dono(uid);
+      allow create: if dono(uid) && request.resource.data.plano == "free";
+      allow update: if dono(uid) && !mudou().hasAny(["plano", "planoAte"]);
+      allow delete: if false;
+    }
+
+    // Orçamentos. O id é aleatório e longo: o link público é "não adivinhável".
+    match /orcamentos/{id} {
+      // Qualquer pessoa com o link lê UM documento; ninguém lista orçamentos alheios.
+      allow get: if true;
+      allow list: if logado() && resource.data.ownerId == request.auth.uid;
+
+      allow create: if logado()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.status in ["rascunho", "enviado"];
+
+      allow update: if
+        // O dono altera tudo, menos o dono.
+        (logado() && resource.data.ownerId == request.auth.uid
+          && request.resource.data.ownerId == resource.data.ownerId)
+        ||
+        // O cliente (sem login) só aprova ou recusa um orçamento enviado.
+        (resource.data.status == "enviado"
+          && request.resource.data.status in ["aprovado", "recusado"]
+          && mudou().hasOnly(["status", "respondidoEm"]));
+
+      allow delete: if logado() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Lista de espera vinda do site de SEO: só criação, ninguém lê pelo cliente.
+    match /leads/{id} {
+      allow create: if request.resource.data.keys().hasOnly(["email", "whatsapp", "profissao", "origem", "criadoEm"])
+        && request.resource.data.email is string
+        && request.resource.data.email.size() < 120;
+      allow read, update, delete: if false;
+    }
+  }
+}
