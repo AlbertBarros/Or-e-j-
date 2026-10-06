@@ -53,6 +53,12 @@
           "pergunta": "Posso cobrar visita técnica?",
           "resposta": "Sim. Muitos eletricistas cobram a visita e descontam o valor se o serviço for aprovado."
         }
+      ],
+      "comoPreencher": [
+        "O eletricista costuma cobrar por ponto ou por serviço fechado: uma tomada nova, a troca de um disjuntor, a instalação de um chuveiro. Em reformas maiores, muitos cobram por ponto de energia e somam a visita técnica, que pode ser descontada se o cliente aprovar o serviço. Escolha um jeito de cobrar e deixe isso claro no orçamento.",
+        "Separe mão de obra e material em itens diferentes. Se o cliente vai comprar o material, escreva isso nas observações. Se você vai comprar, liste os itens principais (fio, disjuntor, tomada) com o preço, para ninguém se surpreender depois.",
+        "Não esqueça de dizer o que não está no serviço: abrir e fechar paredes, pintura e reparos de acabamento costumam ficar de fora e geram discussão. Informe também a garantia da mão de obra e até quando o orçamento vale.",
+        "Um erro comum é orçar sem ver o quadro de luz. Um quadro antigo ou sem aterramento pode dobrar o trabalho. Se não puder visitar antes, peça fotos do quadro e das tomadas e escreva no orçamento que o valor pode mudar se a instalação estiver fora do padrão."
       ]
     },
     {
@@ -107,6 +113,12 @@
           "pergunta": "Devo colocar prazo de validade?",
           "resposta": "Sim. Um prazo de 7 a 15 dias protege você de variações de preço."
         }
+      ],
+      "comoPreencher": [
+        "Encanadores cobram de três formas: por serviço fechado (desentupir uma pia, trocar uma torneira), por ponto hidráulico em obras e reformas, ou por hora em casos de vazamento sem causa clara. Para serviços simples, prefira o valor fechado: o cliente entende melhor e aprova mais rápido.",
+        "Peças e conexões merecem um item à parte ou uma observação dizendo que ficam por conta do cliente. Sifão, flexível, registro e vedantes parecem baratos, mas somam no fim do dia. Se você fornece as peças, liste cada uma com valor.",
+        "Inclua a visita e o diagnóstico quando houver vazamento escondido. Achar o problema pode levar mais tempo do que consertar, e isso precisa aparecer no orçamento. Diga se o valor inclui quebrar e refazer piso ou parede, porque quase sempre não inclui.",
+        "O erro mais comum é prometer prazo sem saber se a peça existe no mercado. Registros antigos e conexões fora de linha atrasam o serviço. Escreva no orçamento que o prazo começa a contar depois que o material estiver no local."
       ]
     },
     {
@@ -161,6 +173,12 @@
           "pergunta": "Duas demãos estão incluídas?",
           "resposta": "Deixe isso explícito nas observações para evitar discussões depois."
         }
+      ],
+      "comoPreencher": [
+        "Pintura se cobra por metro quadrado, e é assim que o cliente compara orçamentos. Meça as paredes (largura vezes altura, descontando portas e janelas grandes) e informe a metragem no orçamento. Para serviços pequenos, como pintar uma porta ou um portão, use o valor por peça.",
+        "Diga quantas demãos estão incluídas e se a preparação faz parte: lixar, aplicar massa corrida, corrigir trincas e selar. A preparação é o que mais toma tempo e o que diferencia um serviço bom de um ruim. Se for cobrada à parte, coloque como item.",
+        "Tinta e materiais por conta do cliente é o combinado mais comum, mas escreva isso. Indique a quantidade aproximada de tinta e o tipo (acrílica, látex, esmalte), para o cliente comprar certo. Proteção de piso e móveis também deve estar nas observações.",
+        "Um erro frequente é orçar pela metragem do chão em vez da metragem das paredes. Um quarto de 12 metros quadrados pode ter mais de 30 metros quadrados de parede. Meça as paredes sempre e, se for pintar o teto, coloque como item separado."
       ]
     },
     {
@@ -215,6 +233,12 @@
           "pergunta": "Como incluir retirada de entulho?",
           "resposta": "Coloque como item separado; assim o cliente entende o custo."
         }
+      ],
+      "comoPreencher": [
+        "O pedreiro cobra por metro quadrado em serviços como contrapiso, reboco e assentamento de piso, por metro linear em muros e rodapés, e por empreitada (valor fechado) em reformas completas. Se cobrar por diária, informe o valor do dia e quantos dias estima.",
+        "Liste os serviços por etapa: demolição, alvenaria, reboco, piso, acabamento. Assim o cliente entende o que está pagando e você consegue mostrar o que já foi feito quando pedir o pagamento de cada etapa.",
+        "Materiais quase sempre ficam por conta do cliente, mas é bom indicar as quantidades aproximadas de cimento, areia e tijolo. Inclua nas observações a retirada de entulho, que costuma ser esquecida e custa caro, e se o valor inclui o ajudante.",
+        "O erro clássico é não prever imprevistos: uma parede que esconde um cano, um piso sem contrapiso. Escreva que serviços extras serão orçados à parte antes de começar. E coloque um prazo realista, contando com dias de chuva se o serviço for do lado de fora."
       ]
     },
     {
@@ -264,6 +288,12 @@
           "pergunta": "Como cobrar faxina pesada?",
           "resposta": "Use um item específico com valor maior, como 'limpeza pós-obra'."
         }
+      ],
+      "comoPreencher": [
+        "A diarista cobra por diária ou por meio período, e o valor muda com o tamanho da casa e o tipo de limpeza. Uma faxina pesada (pós-obra, casa fechada há meses) vale mais do que a manutenção semanal. Defina o tipo de serviço no orçamento e o tempo estimado.",
+        "Liste o que está incluído: quais cômodos, se tem lavagem de roupa, passar roupa, limpeza de vidros ou de geladeira por dentro. O que não estiver escrito, o cliente vai achar que está incluído. Serviços extras podem virar itens separados.",
+        "Produtos de limpeza costumam ser do cliente. Se você leva os seus, inclua um valor pelos produtos. Informe também se cobra o deslocamento quando a casa fica longe e como quer receber (no dia, por Pix).",
+        "Um erro comum é aceitar o serviço sem saber o tamanho real da casa. Pergunte quantos quartos e banheiros, se tem animais e se a limpeza é leve ou pesada. Se o serviço levar muito mais tempo do que o combinado, você precisa ter como cobrar a diferença, e isso só funciona se estiver no orçamento."
       ]
     },
     {
@@ -318,6 +348,12 @@
           "pergunta": "Quanto tempo de garantia oferecer?",
           "resposta": "É comum oferecer 90 dias sobre a instalação."
         }
+      ],
+      "comoPreencher": [
+        "Técnicos de ar-condicionado cobram por serviço: instalação, higienização, carga de gás, manutenção preventiva. A instalação varia com a capacidade do aparelho (BTUs) e com a distância entre a unidade de dentro e a de fora. Informe o que está incluído em cada item.",
+        "Na instalação, diga quantos metros de tubulação de cobre estão incluídos (3 metros é o padrão) e quanto custa o metro a mais. Suporte, disjuntor, cabo e dreno também precisam aparecer, como item ou como observação dizendo que ficam por conta do cliente.",
+        "Para higienização e manutenção, informe se o preço é por aparelho e se há desconto para mais de um. Em carga de gás, diga o tipo de gás, porque os preços são diferentes. Inclua a garantia do serviço e até quando o orçamento vale.",
+        "O erro mais comum é não visitar o local antes de instalar. Parede de concreto, altura acima do normal e falta de ponto elétrico adequado mudam o serviço. Peça fotos do local das duas unidades ou cobre a visita técnica e desconte na aprovação."
       ]
     },
     {
@@ -372,6 +408,12 @@
           "pergunta": "Cobro desmontagem?",
           "resposta": "Sim, como item separado."
         }
+      ],
+      "comoPreencher": [
+        "O montador cobra por peça montada e pelo tamanho dela: um criado-mudo não vale o mesmo que um guarda-roupa de seis portas. Alguns cobram uma porcentagem do valor do móvel (10% a 15% é comum). Escolha um critério e use o mesmo em todos os itens.",
+        "Liste cada móvel com nome e tamanho, e informe se a montagem inclui fixar na parede e regular portas e gavetas. Para cozinhas e armários planejados, separe por módulo ou por ambiente para o cliente acompanhar.",
+        "Nas observações, diga o que não está incluído: furação em parede de concreto ou azulejo, desmontagem de móvel antigo, retirada das caixas e embalagens. Deixe claro também que peças faltando ou com defeito de fábrica não são responsabilidade sua.",
+        "Um erro frequente é orçar sem perguntar a marca e o modelo do móvel. Um guarda-roupa de loja popular e um planejado de marcenaria têm tempos de montagem muito diferentes. Peça o nome do produto ou uma foto da caixa antes de fechar o valor."
       ]
     },
     {
@@ -426,6 +468,12 @@
           "pergunta": "Como medir área de grama?",
           "resposta": "Multiplique comprimento por largura de cada área e some."
         }
+      ],
+      "comoPreencher": [
+        "O jardineiro cobra por visita de manutenção (corte de grama, poda leve, limpeza), por metro quadrado em plantio de grama e preparo de canteiros, e por valor fechado em podas de árvores grandes. Para manutenção mensal, informe quantas visitas estão incluídas.",
+        "Separe mão de obra e insumos. Mudas, terra adubada, sementes e adubo podem ser itens com valor ou ficar por conta do cliente, mas isso tem que estar escrito. Para poda de árvore, informe a altura aproximada e se o serviço inclui tirar os galhos.",
+        "Não esqueça da retirada de resíduos. Sacos de grama e galhos ocupam espaço e precisam de destino. Defina quantos sacos estão incluídos e o valor dos sacos extras. Inclua também o uso de máquinas, se cobrar à parte.",
+        "O erro comum é dar o preço do corte de grama sem ver o terreno. Grama alta demais, terreno em desnível e muitos obstáculos dobram o tempo. Peça fotos ou visite antes, e escreva que o valor vale para a grama na altura normal de manutenção."
       ]
     },
     {
@@ -475,6 +523,12 @@
           "pergunta": "Devo detalhar quantidade de fotos?",
           "resposta": "Sim. Deixe claro quantas fotos editadas estão incluídas."
         }
+      ],
+      "comoPreencher": [
+        "Fotógrafos cobram por pacote: tempo de cobertura, número de fotos editadas e forma de entrega. Um ensaio de uma hora com 20 fotos editadas é um pacote; um casamento de dez horas com álbum é outro. Monte o orçamento mostrando o que cada pacote inclui.",
+        "Informe o tempo de cobertura, a quantidade de fotos editadas e o prazo de entrega. Fotos extras, horas a mais e deslocamento para fora da cidade são itens separados. Se oferece álbum impresso ou fotos em alta resolução, coloque como item com valor.",
+        "Nas observações, deixe claro como as fotos serão entregues (galeria online, pen drive), por quanto tempo ficam disponíveis e se o cliente pode usar as fotos para divulgar um negócio. Informe o valor do sinal para reservar a data e a regra para remarcar.",
+        "O erro mais comum é não cobrar sinal. Sem sinal, o cliente cancela na véspera e você perde a data e outros trabalhos. Peça entre 30% e 50% na aprovação do orçamento e escreva que a data só fica reservada depois do pagamento."
       ]
     },
     {
@@ -529,6 +583,12 @@
           "pergunta": "Cobro por hora ou por serviço?",
           "resposta": "Por serviço passa mais segurança; por hora funciona em reparos imprevisíveis."
         }
+      ],
+      "comoPreencher": [
+        "O marido de aluguel costuma cobrar por serviço pequeno fechado (trocar uma torneira, instalar uma prateleira, pendurar um quadro) ou por hora quando a lista de reparos é longa. Para visitas com vários itens, muitos cobram uma taxa de visita e somam cada serviço.",
+        "Liste cada reparo como um item separado. O cliente gosta de ver o que está pagando e pode tirar ou acrescentar algo. Se um item exige material (bucha, parafuso, vedante, suporte), diga se está incluído ou se o cliente compra.",
+        "Nas observações, informe o que não faz: serviços elétricos complexos, hidráulica dentro da parede, trabalhos em altura sem equipamento. Isso protege você e evita que o cliente espere algo que não foi combinado. Inclua a garantia dos pequenos reparos.",
+        "Um erro comum é aceitar \"dar uma olhada\" sem cobrar a visita. Você gasta deslocamento e tempo e, se o cliente não aprova, fica no prejuízo. Cobre a visita e deixe escrito que ela é descontada se o serviço for aprovado."
       ]
     }
   ]

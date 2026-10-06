@@ -1,0 +1,66 @@
+---
+/**
+ * Prévia estática do documento (HTML puro, sem JavaScript):
+ * mostra ao Google e ao visitante como fica um orçamento preenchido.
+ */
+import { subtotal, total, formatarReais } from "@shared/src/mensagens";
+import type { Profissao } from "../lib/profissoes";
+
+interface Props {
+  profissao: Profissao;
+}
+const { profissao } = Astro.props;
+
+const exemplo = profissao.itens.slice(0, 3).map((i, k) => ({
+  descricao: i.descricao,
+  qtd: k === 0 ? 2 : 1,
+  unidade: i.unidade,
+  valorUnit: i.precoSugerido,
+}));
+const valorSubtotal = subtotal(exemplo);
+const valorTotal = total(exemplo, 0);
+---
+
+<figure class="documento mx-auto max-w-xl overflow-hidden text-sm" aria-label={`Exemplo de orçamento de ${profissao.nome.toLowerCase()} preenchido`}>
+  <div class="flex items-start justify-between border-b border-pauta px-4 py-3">
+    <div>
+      <p class="font-semibold">{profissao.nome} Exemplo</p>
+      <p class="text-xs text-grafite">WhatsApp (61) 99999-0000</p>
+    </div>
+    <div class="text-right">
+      <p class="text-[10px] uppercase tracking-wide text-grafite">Orçamento</p>
+      <p class="tabular text-lg font-bold text-carbono">Nº 0012</p>
+    </div>
+  </div>
+  <p class="px-4 pt-3 text-xs text-grafite">Cliente</p>
+  <p class="px-4 pb-2 font-medium">Maria Souza</p>
+  <table class="w-full">
+    <thead>
+      <tr class="border-b border-tinta text-left text-[10px] uppercase tracking-wide text-grafite">
+        <th scope="col" class="px-4 py-1 font-semibold">Descrição</th>
+        <th scope="col" class="px-2 py-1 text-right font-semibold">Qtd</th>
+        <th scope="col" class="px-4 py-1 text-right font-semibold">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        exemplo.map((i) => (
+          <tr class="border-b border-pauta">
+            <td class="px-4 py-2">{i.descricao}</td>
+            <td class="tabular px-2 py-2 text-right text-grafite">
+              {i.qtd} {i.unidade}
+            </td>
+            <td class="tabular px-4 py-2 text-right">{formatarReais(i.qtd * i.valorUnit)}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  <div class="flex items-baseline justify-between border-t-2 border-double border-tinta px-4 py-3">
+    <span class="font-medium">Total</span>
+    <span class="tabular text-xl font-bold">{formatarReais(valorTotal)}</span>
+  </div>
+  <figcaption class="border-t border-pauta px-4 py-2 text-xs text-grafite">
+    Subtotal {formatarReais(valorSubtotal)} · validade de {profissao.validadeDiasPadrao} dias · {profissao.observacoesPadrao}
+  </figcaption>
+</figure>

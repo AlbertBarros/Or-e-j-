@@ -1,0 +1,16 @@
+---
+import { urlProfissao, type Profissao } from "../lib/profissoes";
+
+interface Props {
+  profissao: Profissao;
+}
+const { profissao } = Astro.props;
+---
+
+<a
+  href={urlProfissao(profissao.slug)}
+  class="flex min-h-11 items-center justify-between gap-3 border-b border-pauta bg-folha px-4 py-3 hover:bg-carbono-claro"
+>
+  <span class="font-medium">{profissao.nome}</span>
+  <span class="text-sm text-grafite">{profissao.itens.length} itens prontos →</span>
+</a>

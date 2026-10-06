@@ -95,7 +95,8 @@ Além disso: abrir no navegador em largura de celular e percorrer o fluxo da tar
 
 ## Comandos úteis (preencher conforme forem criados)
 
-- `npm run dev --workspace app` — app local
-- `npm run dev --workspace site` — site de SEO local
-- `npm run test` — testes do `shared/` e do app
-- `firebase deploy --only firestore:rules,firestore:indexes,storage`
+- `npm run dev:site` — site de SEO local (http://localhost:4321)
+- `npm run dev:app` — app local (a partir da Fase 1)
+- `npm run test` / `npm run typecheck` / `npm run build` — rodam em todos os workspaces
+- `firebase deploy --only firestore:rules,firestore:indexes` — regras e índices (Storage entra na Fase 1, quando for ativado)
+- Projeto Firebase: `orca-ja-aaf65` (Firestore em `southamerica-east1`). Chaves públicas do site em `site/.env.local` (modelo em `site/.env.example`).

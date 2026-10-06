@@ -1,0 +1,86 @@
+---
+import Base from "../layouts/Base.astro";
+import CardProfissao from "../components/CardProfissao.astro";
+import { profissoes } from "../lib/profissoes";
+import { NOME_SITE, URL_HUB } from "../lib/site";
+
+const titulo = "Orça Já — orçamento, aprovação por link e Pix para autônomos";
+const descricao =
+  "Mande um orçamento com cara de empresa em 1 minuto, receba a aprovação pelo WhatsApp e cobre por Pix. Modelos grátis para eletricista, pintor, diarista e mais.";
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: NOME_SITE,
+    url: new URL("/", Astro.site).href,
+    logo: new URL("/favicon.svg", Astro.site).href,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: NOME_SITE,
+    url: new URL("/", Astro.site).href,
+    inLanguage: "pt-BR",
+  },
+];
+---
+
+<Base titulo={titulo} descricao={descricao} caminho="/" jsonLd={jsonLd}>
+  <section class="pt-10 sm:pt-16">
+    <p class="text-sm font-semibold uppercase tracking-wide text-carbono">Para quem trabalha por conta própria</p>
+    <h1 class="mt-2 text-4xl font-bold leading-tight sm:text-5xl">
+      Mande um orçamento com cara de empresa em 1 minuto.
+    </h1>
+    <p class="mt-4 text-lg text-grafite">
+      O cliente recebe um link pelo WhatsApp, aprova com um toque e paga por Pix. Quando o dinheiro cai, o recibo
+      sai em PDF. Sem papel, sem constrangimento na hora de cobrar.
+    </p>
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <a href={URL_HUB} class="botao-primario">Fazer um orçamento grátis</a>
+      <a href="#como-funciona" class="botao-secundario">Ver como funciona</a>
+    </div>
+  </section>
+
+  <section id="como-funciona" aria-labelledby="cf-titulo" class="mt-16">
+    <h2 id="cf-titulo" class="text-2xl font-semibold">Orçar, aprovar, cobrar, recibo</h2>
+    <ol class="mt-4 grid gap-3 sm:grid-cols-2">
+      <li class="rounded-lg border border-pauta bg-folha p-4">
+        <span class="tabular text-2xl font-bold text-carbono">1</span>
+        <p class="mt-1 font-semibold">Orçar</p>
+        <p class="text-sm text-grafite">Itens da sua profissão já sugeridos. Total ao vivo. Pronto em 1 minuto, no celular.</p>
+      </li>
+      <li class="rounded-lg border border-pauta bg-folha p-4">
+        <span class="tabular text-2xl font-bold text-carbono">2</span>
+        <p class="mt-1 font-semibold">Aprovar</p>
+        <p class="text-sm text-grafite">O cliente abre o link no WhatsApp e toca em "Aprovar orçamento". Sem baixar nada.</p>
+      </li>
+      <li class="rounded-lg border border-pauta bg-folha p-4">
+        <span class="tabular text-2xl font-bold text-carbono">3</span>
+        <p class="mt-1 font-semibold">Cobrar</p>
+        <p class="text-sm text-grafite">Pix copia-e-cola na mesma página. Se atrasar, mensagens de cobrança prontas, no tom certo.</p>
+      </li>
+      <li class="rounded-lg border border-pauta bg-folha p-4">
+        <span class="tabular text-2xl font-bold text-carbono">4</span>
+        <p class="mt-1 font-semibold">Recibo</p>
+        <p class="text-sm text-grafite">Marcou como pago, saiu o recibo em PDF para mandar ao cliente.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="prof-titulo" class="mt-16">
+    <h2 id="prof-titulo" class="text-2xl font-semibold">Modelos de orçamento grátis por profissão</h2>
+    <p class="mt-2 text-grafite">Preencha online e baixe em PDF agora, sem cadastro.</p>
+    <div class="mt-4 overflow-hidden rounded-lg border border-pauta">
+      {profissoes.map((p) => <CardProfissao profissao={p} />)}
+    </div>
+  </section>
+
+  <section aria-labelledby="lista-titulo" class="mt-16 rounded-lg border border-pauta bg-folha p-5">
+    <h2 id="lista-titulo" class="text-xl font-semibold">O envio por link está chegando</h2>
+    <p class="mt-2 text-grafite">
+      Estamos terminando a parte de aprovação e Pix. Faça um orçamento em qualquer modelo acima e toque em "Salvar e
+      enviar pelo WhatsApp" para entrar na lista. Avisamos você quando abrir, e começar é grátis.
+    </p>
+  </section>
+</Base>

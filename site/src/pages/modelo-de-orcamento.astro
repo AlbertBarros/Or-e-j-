@@ -1,0 +1,128 @@
+---
+import Base from "../layouts/Base.astro";
+import CardProfissao from "../components/CardProfissao.astro";
+import Faq from "../components/Faq.astro";
+import { profissoes, urlProfissao } from "../lib/profissoes";
+import { URL_HUB } from "../lib/site";
+
+const titulo = "Modelo de orçamento simples e grátis para autônomos | Orça Já";
+const descricao =
+  "Modelos de orçamento prontos para eletricista, pintor, encanador, diarista e outros serviços. Preencha online, baixe em PDF ou envie pelo WhatsApp. Grátis.";
+
+const faq = [
+  {
+    pergunta: "O que não pode faltar em um orçamento?",
+    resposta:
+      "Seus dados e contato, o nome do cliente, a lista de serviços com quantidade e valor, o total, a validade do orçamento e as observações sobre o que está ou não incluído.",
+  },
+  {
+    pergunta: "Preciso de CNPJ para fazer orçamento?",
+    resposta:
+      "Não. Autônomo sem CNPJ pode fazer orçamento normalmente. O CNPJ (como MEI) só é necessário para emitir nota fiscal.",
+  },
+  {
+    pergunta: "Orçamento tem validade?",
+    resposta:
+      "Deve ter. O padrão é 15 dias. Sem validade, o cliente pode voltar meses depois cobrando o mesmo preço, mesmo com o material mais caro.",
+  },
+  {
+    pergunta: "O PDF é grátis mesmo?",
+    resposta: "Sim. O PDF sai com uma marca discreta 'Feito com Orça Já' no rodapé. Não pedimos cadastro para baixar.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: new URL("/", Astro.site).href },
+      { "@type": "ListItem", position: 2, name: "Modelos de orçamento", item: new URL(URL_HUB, Astro.site).href },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Modelos de orçamento por profissão",
+    itemListElement: profissoes.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: p.seo.h1,
+      url: new URL(urlProfissao(p.slug), Astro.site).href,
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({
+      "@type": "Question",
+      name: f.pergunta,
+      acceptedAnswer: { "@type": "Answer", text: f.resposta },
+    })),
+  },
+];
+---
+
+<Base titulo={titulo} descricao={descricao} caminho={URL_HUB} jsonLd={jsonLd}>
+  <nav aria-label="Você está em" class="pt-4 text-sm text-grafite">
+    <ol class="flex gap-1">
+      <li><a href="/" class="hover:text-carbono">Início</a> ›</li>
+      <li aria-current="page" class="text-tinta">Modelos de orçamento</li>
+    </ol>
+  </nav>
+
+  <h1 class="mt-3 text-3xl font-bold leading-tight sm:text-4xl">Modelo de orçamento grátis para o seu serviço</h1>
+  <p class="mt-2 text-lg text-grafite">
+    Escolha a sua profissão. O modelo já vem com os serviços mais comuns e preços de referência, e você edita tudo
+    antes de baixar o PDF.
+  </p>
+
+  <section aria-labelledby="lista-titulo" class="mt-6">
+    <h2 id="lista-titulo" class="sr-only">Profissões</h2>
+    <div class="overflow-hidden rounded-lg border border-pauta">
+      {profissoes.map((p) => <CardProfissao profissao={p} />)}
+    </div>
+  </section>
+
+  <section aria-labelledby="bom-titulo" class="mt-12">
+    <h2 id="bom-titulo" class="text-2xl font-semibold">O que um bom orçamento tem</h2>
+    <div class="mt-4 space-y-4 text-[17px] leading-relaxed">
+      <p>
+        Um orçamento bom é aquele que o cliente lê em 30 segundos e entende o que vai pagar. Ele tem o seu nome e
+        contato, o nome do cliente, cada serviço em uma linha com quantidade e valor, o total em destaque e a data
+        até quando o preço vale.
+      </p>
+      <p>
+        As observações são a parte que evita discussão depois. É ali que você diz se o material está incluído, qual
+        é a garantia, o que fica de fora e como quer receber. Escreva frases curtas e diretas.
+      </p>
+      <p>
+        Numere os orçamentos. Um "Orçamento nº 0012" passa mais confiança do que uma mensagem solta, e ajuda você a
+        achar o combinado quando o cliente ligar meses depois.
+      </p>
+    </div>
+  </section>
+
+  <section aria-labelledby="como-titulo" class="mt-12">
+    <h2 id="como-titulo" class="text-2xl font-semibold">Como funciona</h2>
+    <ol class="mt-4 grid gap-3 sm:grid-cols-3">
+      <li class="rounded-lg border border-pauta bg-folha p-4">
+        <span class="tabular text-2xl font-bold text-carbono">1</span>
+        <p class="mt-1 font-semibold">Escolha a profissão</p>
+        <p class="text-sm text-grafite">Os serviços mais comuns já vêm preenchidos.</p>
+      </li>
+      <li class="rounded-lg border border-pauta bg-folha p-4">
+        <span class="tabular text-2xl font-bold text-carbono">2</span>
+        <p class="mt-1 font-semibold">Ajuste itens e valores</p>
+        <p class="text-sm text-grafite">O total atualiza sozinho enquanto você digita.</p>
+      </li>
+      <li class="rounded-lg border border-pauta bg-folha p-4">
+        <span class="tabular text-2xl font-bold text-carbono">3</span>
+        <p class="mt-1 font-semibold">Baixe o PDF</p>
+        <p class="text-sm text-grafite">Ou entre na lista para enviar por link e receber aprovação.</p>
+      </li>
+    </ol>
+  </section>
+
+  <Faq perguntas={faq} />
+</Base>

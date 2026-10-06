@@ -1,0 +1,23 @@
+---
+import type { Faq } from "../lib/profissoes";
+
+interface Props {
+  perguntas: Faq[];
+  titulo?: string;
+}
+const { perguntas, titulo = "Perguntas frequentes" } = Astro.props;
+---
+
+<section aria-labelledby="faq-titulo" class="mt-12">
+  <h2 id="faq-titulo" class="text-2xl font-semibold">{titulo}</h2>
+  <dl class="mt-4 divide-y divide-pauta rounded-lg border border-pauta bg-folha">
+    {
+      perguntas.map((f) => (
+        <div class="px-4 py-4">
+          <dt class="font-semibold">{f.pergunta}</dt>
+          <dd class="mt-1 text-grafite">{f.resposta}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>

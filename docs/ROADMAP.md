@@ -6,17 +6,17 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 
 ## Fase 0 — Fundação e site de validação (semana 1)
 
-- [ ] Inicializar Git, `.gitignore` (node_modules, dist, .env*, .firebase, *.log) e npm workspaces na raiz (`app`, `site`, `shared`)
-- [ ] `shared/package.json` + `tsconfig` + Vitest; rodar os testes que já existem (`pix.test.ts`, `mensagens.test.ts`) e confirmar que passam
-- [ ] Criar `site/` com Astro + Tailwind (tokens do DESIGN.md, fonte Archivo)
-- [ ] Alias `@shared` funcionando no Astro
-- [ ] Página de profissão via `getStaticPaths` a partir de `profissoes.json`, com a anatomia do SEO.md
-- [ ] Gerador (ilha React): editar itens, total ao vivo e **Baixar PDF** (com marca)
-- [ ] Botão "Salvar e enviar pelo WhatsApp" → por enquanto abre o formulário da lista de espera
-- [ ] Formulário de lista de espera gravando em `leads` (Firestore, regras já prontas)
-- [ ] Hub `/modelo-de-orcamento` e home simples
-- [ ] Schema JSON-LD, sitemap, robots, canonical
-- [ ] Escrever o bloco "Como preencher" das 10 profissões (rascunho do Claude, revisão do Jonathan)
+- [x] Inicializar Git, `.gitignore` (node_modules, dist, .env*, .firebase, *.log) e npm workspaces na raiz (`app`, `site`, `shared`)
+- [x] `shared/package.json` + `tsconfig` + Vitest; rodar os testes que já existem (`pix.test.ts`, `mensagens.test.ts`) e confirmar que passam
+- [x] Criar `site/` com Astro + Tailwind (tokens do DESIGN.md, fonte Archivo)
+- [x] Alias `@shared` funcionando no Astro
+- [x] Página de profissão via `getStaticPaths` a partir de `profissoes.json`, com a anatomia do SEO.md
+- [x] Gerador (ilha React): editar itens, total ao vivo e **Baixar PDF** (com marca)
+- [x] Botão "Salvar e enviar pelo WhatsApp" → por enquanto abre o formulário da lista de espera
+- [x] Formulário de lista de espera gravando em `leads` (Firestore, regras já prontas)
+- [x] Hub `/modelo-de-orcamento` e home simples
+- [x] Schema JSON-LD, sitemap, robots, canonical
+- [x] Escrever o bloco "Como preencher" das 10 profissões (rascunho do Claude, revisão do Jonathan)
 - [ ] Deploy no Cloudflare Pages
 
 **Pronto quando:** as 10 páginas estão no ar, o PDF baixa no celular, o lead é gravado no Firestore, o Lighthouse mobile dá ≥ 90 em Performance e SEO e o sitemap foi enviado ao Search Console.

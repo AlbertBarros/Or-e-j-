@@ -1,0 +1,65 @@
+---
+import "../styles/global.css";
+import { NOME_SITE, URL_HUB } from "../lib/site";
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  /** Caminho da página, ex.: "/modelo-de-orcamento/eletricista" */
+  caminho: string;
+  jsonLd?: object[];
+}
+
+const { titulo, descricao, caminho, jsonLd = [] } = Astro.props;
+const canonical = new URL(caminho, Astro.site).href;
+const ano = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#1E3A8A" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={NOME_SITE} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="pt_BR" />
+    {jsonLd.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
+  </head>
+  <body class="min-h-screen bg-fundo text-tinta">
+    <header class="border-b border-pauta bg-folha">
+      <div class="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
+        <a href="/" class="flex min-h-11 items-center gap-2 font-bold text-carbono" aria-label="Orça Já, página inicial">
+          <img src="/favicon.svg" alt="" width="28" height="28" />
+          <span class="text-lg">Orça Já</span>
+        </a>
+        <nav aria-label="Principal">
+          <a href={URL_HUB} class="inline-flex min-h-11 items-center px-2 text-sm font-medium text-grafite hover:text-carbono">
+            Modelos de orçamento
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto w-full max-w-3xl px-4 pb-16">
+      <slot />
+    </main>
+
+    <footer class="border-t border-pauta bg-folha">
+      <div class="mx-auto flex max-w-3xl flex-col gap-2 px-4 py-6 text-sm text-grafite sm:flex-row sm:items-center sm:justify-between">
+        <p>© {ano} Orça Já. Feito para quem trabalha por conta própria.</p>
+        <nav aria-label="Rodapé" class="flex gap-4">
+          <a href={URL_HUB} class="inline-flex min-h-11 items-center hover:text-carbono">Modelos de orçamento</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
