@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://orca-ja.pages.dev/sitemap-index.xml
+Sitemap: https://orca-ja-6cz.pages.dev/sitemap-index.xml

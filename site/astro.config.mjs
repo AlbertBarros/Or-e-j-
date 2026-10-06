@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 
 // SITE_URL vem do .env.local (dev) ou das variáveis do Cloudflare Pages (produção).
 const env = loadEnv(process.env.NODE_ENV ?? "production", process.cwd(), "");
-const site = env.SITE_URL || process.env.SITE_URL || "https://orca-ja.pages.dev";
+const site = env.SITE_URL || process.env.SITE_URL || "https://orca-ja-6cz.pages.dev";
 
 export default defineConfig({
   site,
