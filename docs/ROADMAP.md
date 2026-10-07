@@ -70,16 +70,16 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 
 ## Fase 4 — Dinheiro: Pix, cobrança, pago, recibo (semana 4)
 
-- [ ] Bloco Pix na página pública: QR Code (`qrcode`), botão **Copiar código Pix** e aviso de "Copiado"
-- [ ] Testar o código gerado em pelo menos 3 apps de banco (anotar no PR quais)
-- [ ] Cálculo de "Atrasado" e selo "Atrasado há X dias"
-- [ ] Tela Cobrar (T7) com tom sugerido por dias de atraso
-- [ ] **Marcar como pago** (com data editável) e totais do painel atualizados
-- [ ] `shared/src/extenso.ts` + testes
-- [ ] Dados do recibo no perfil (CPF/CNPJ, endereço, e-mail) com tela de edição em Conta
-- [ ] Tela "Emitir recibo" (Pro): a partir de orçamento pago ou avulso, com garantia (período à escolha), observações e numeração própria
-- [ ] PDFs: `OrcamentoPDF` e `ReciboPDF` (elegante, com logo) com lazy load
-- [ ] "Enviar recibo" pelo WhatsApp: Web Share com o PDF anexado; fallback: baixar + wa.me com mensagem pronta
+- [x] Bloco Pix na página pública: QR Code (`qrcode`), botão **Copiar código Pix** e aviso de "Copiado"
+- [ ] Testar o código Pix gerado em pelo menos 3 apps de banco (Jonathan, no celular, com um orçamento Pro real)
+- [x] Cálculo de "Atrasado" e selo "Atrasado há X dias"
+- [x] Tela Cobrar (T7) com tom sugerido por dias de atraso
+- [x] **Marcar como pago** (com data editável) e totais do painel atualizados
+- [x] `shared/src/extenso.ts` + testes
+- [x] Dados do recibo no perfil (CPF/CNPJ, endereço, e-mail), preenchidos na emissão e salvos para a próxima (tela Conta na Fase 5)
+- [x] Tela "Emitir recibo" (Pro): a partir de orçamento pago (avulso fica para depois), com garantia (período à escolha), observações e numeração própria
+- [x] PDFs: `OrcamentoPDF` e `ReciboPDF` (elegante, com logo) com lazy load
+- [x] "Enviar recibo" pelo WhatsApp: Web Share com o PDF anexado; fallback: baixar + wa.me com mensagem pronta
 
 **Pronto quando:** um orçamento vai de aprovado a pago com recibo gerado, o Pix é lido corretamente por 3 bancos e o valor por extenso passa nos testes.
 

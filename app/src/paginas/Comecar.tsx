@@ -107,6 +107,7 @@ export default function Comecar() {
         tipoChavePix: tipoChave,
         nomePix,
         logoDataUrl: logo,
+        email: usuario.email,
       });
       navegar("/", { replace: true });
     } catch (err) {

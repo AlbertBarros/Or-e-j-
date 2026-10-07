@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
+import { createPortal } from "react-dom";
 import CabecalhoPagina from "@/componentes/CabecalhoPagina";
+import Campo from "@/componentes/Campo";
 import Carregando from "@/componentes/Carregando";
 import Confirmar from "@/componentes/Confirmar";
 import DocumentoOrcamento from "@/componentes/DocumentoOrcamento";
@@ -8,15 +10,19 @@ import Selo from "@/componentes/Selo";
 import { useAuth } from "@/hooks/useAuth";
 import { useOrcamento } from "@/hooks/useOrcamentos";
 import {
+  desfazerPago,
   enviarOrcamento,
+  estaAtrasado,
   excluirOrcamento,
   linkEnvioWhatsapp,
   linkPublico,
+  marcarComoPago,
   voltarParaRascunho,
   LimiteAtingidoError,
 } from "@/lib/orcamentos";
 import { buscarLogo } from "@/lib/usuario";
 import { LIMITE_FREE } from "@/lib/firebase";
+import { dataParaInput, inputParaData } from "@/lib/datas";
 
 const URL_PRECOS = "https://orca-ja-6cz.pages.dev/precos";
 
@@ -28,19 +34,22 @@ function IconeWhatsapp() {
   );
 }
 
-/** T5 — Detalhe do orçamento (visão do profissional), com ações por status. */
+/** T5 — Detalhe do orçamento (visão do profissional), com as ações de cada status. */
 export default function DetalheOrcamento() {
   const { id } = useParams();
   const { usuario, perfil } = useAuth();
   const navegar = useNavigate();
   const { orcamento, carregando, erro } = useOrcamento(id);
   const [logo, setLogo] = useState<string | null>(null);
-  const [confirmacao, setConfirmacao] = useState<"excluir" | "editar" | null>(null);
+  const [confirmacao, setConfirmacao] = useState<"excluir" | "editar" | "desfazerPago" | null>(null);
+  const [marcandoPago, setMarcandoPago] = useState(false);
+  const [dataPagamento, setDataPagamento] = useState(dataParaInput(new Date()));
   const [ocupado, setOcupado] = useState(false);
   const [erroAcao, setErroAcao] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
   const [limiteAtingido, setLimiteAtingido] = useState(false);
   const [linkPendente, setLinkPendente] = useState<string | null>(null);
+  const [gerandoPdf, setGerandoPdf] = useState(false);
 
   useEffect(() => {
     if (usuario && perfil?.temLogo) buscarLogo(usuario.uid).then(setLogo).catch(() => setLogo(null));
@@ -54,7 +63,7 @@ export default function DetalheOrcamento() {
 
   function abrirWhatsapp(link: string) {
     const janela = window.open(link, "_blank", "noopener");
-    if (!janela) setLinkPendente(link); // pop-up bloqueado: mostra um botão para abrir
+    if (!janela) setLinkPendente(link);
   }
 
   async function enviar() {
@@ -85,6 +94,42 @@ export default function DetalheOrcamento() {
     }
   }
 
+  async function baixarPdf() {
+    if (!orcamento) return;
+    setGerandoPdf(true);
+    setErroAcao(null);
+    try {
+      const { gerarPdfOrcamento, baixarArquivo } = await import("@/pdf/gerarPdf");
+      baixarArquivo(await gerarPdfOrcamento(orcamento, logo));
+    } catch (e) {
+      console.error(e);
+      setErroAcao("Não deu para gerar o PDF. Tente de novo.");
+    } finally {
+      setGerandoPdf(false);
+    }
+  }
+
+  async function confirmarPago() {
+    if (!orcamento) return;
+    const data = inputParaData(dataPagamento);
+    if (!data) {
+      setErroAcao("Informe a data do pagamento.");
+      return;
+    }
+    setOcupado(true);
+    setErroAcao(null);
+    try {
+      await marcarComoPago(orcamento.id, data);
+      setMarcandoPago(false);
+      setAviso("Marcado como pago");
+    } catch (e) {
+      console.error(e);
+      setErroAcao("Não deu para marcar como pago. Tente de novo.");
+    } finally {
+      setOcupado(false);
+    }
+  }
+
   async function confirmar() {
     if (!orcamento) return;
     setOcupado(true);
@@ -98,6 +143,10 @@ export default function DetalheOrcamento() {
         await voltarParaRascunho(orcamento.id);
         navegar(`/orcamentos/${orcamento.id}/editar`);
         return;
+      }
+      if (confirmacao === "desfazerPago") {
+        await desfazerPago(orcamento.id);
+        setAviso("Voltou para aprovado");
       }
     } catch (e) {
       console.error(e);
@@ -124,14 +173,28 @@ export default function DetalheOrcamento() {
 
   const numero = String(orcamento.numero).padStart(4, "0");
   const status = orcamento.status;
+  const atrasado = estaAtrasado(orcamento);
+  const pro = perfil?.plano === "pro";
+
+  const botaoPdf = (
+    <button type="button" onClick={baixarPdf} disabled={gerandoPdf} className="botao-texto w-full">
+      {gerandoPdf ? "Gerando PDF…" : "Baixar PDF do orçamento"}
+    </button>
+  );
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-[560px] flex-col px-4 pb-40">
+    <main className="mx-auto flex min-h-dvh w-full max-w-[560px] flex-col px-4 pb-48">
       <CabecalhoPagina titulo={`Orçamento nº ${numero}`} acao={<Selo orcamento={orcamento} />} />
 
       <div className="mt-4">
         <DocumentoOrcamento orcamento={orcamento} logoDataUrl={logo} />
       </div>
+
+      {status === "pago" && orcamento.recibo && (
+        <p className="mt-3 text-center text-sm text-grafite">
+          Recibo nº {String(orcamento.recibo.numero).padStart(4, "0")} emitido.
+        </p>
+      )}
 
       {erroAcao && (
         <p role="alert" className="mt-3 rounded-[10px] bg-[#FDECEF] px-3 py-2 text-sm text-recusado">
@@ -147,7 +210,6 @@ export default function DetalheOrcamento() {
         </div>
       )}
 
-      {/* Barra de ações por status */}
       <div className="fixed inset-x-0 bottom-0 border-t border-pauta bg-folha p-4">
         <div className="mx-auto max-w-[560px] space-y-2">
           {aviso && (
@@ -169,6 +231,7 @@ export default function DetalheOrcamento() {
                   Editar
                 </Link>
               </div>
+              {botaoPdf}
             </>
           )}
 
@@ -185,6 +248,7 @@ export default function DetalheOrcamento() {
                   Editar
                 </button>
               </div>
+              {botaoPdf}
             </>
           )}
 
@@ -196,21 +260,74 @@ export default function DetalheOrcamento() {
               <button type="button" onClick={copiarLink} className="botao-secundario">
                 Copiar link
               </button>
+              {botaoPdf}
             </>
           )}
 
-          {(status === "aprovado" || status === "pago") && (
+          {status === "aprovado" && (
             <>
-              <p className="text-center text-xs text-grafite">
-                {status === "aprovado" ? "Cobrar e Marcar como pago chegam na próxima etapa." : "Gerar recibo chega na próxima etapa."}
-              </p>
-              <button type="button" onClick={copiarLink} className="botao-secundario">
-                Copiar link
+              <button type="button" onClick={() => setMarcandoPago(true)} className="botao-primario !bg-pago hover:!bg-[#116632]">
+                Marcar como pago
               </button>
+              <div className="flex gap-2">
+                <Link to={`/orcamentos/${orcamento.id}/cobrar`} className={`botao-secundario ${atrasado ? "!border-atraso !text-atraso" : ""}`}>
+                  Cobrar
+                </Link>
+                <button type="button" onClick={copiarLink} className="botao-secundario">
+                  {pro ? "Copiar link do Pix" : "Copiar link"}
+                </button>
+              </div>
+              {botaoPdf}
+            </>
+          )}
+
+          {status === "pago" && (
+            <>
+              <Link to={`/orcamentos/${orcamento.id}/recibo`} className="botao-primario">
+                {orcamento.recibo ? "Ver e enviar recibo" : "Gerar recibo"}
+              </Link>
+              <div className="flex gap-2">
+                <button type="button" onClick={() => setConfirmacao("desfazerPago")} className="botao-secundario">
+                  Desfazer pago
+                </button>
+                <button type="button" onClick={copiarLink} className="botao-secundario">
+                  Copiar link
+                </button>
+              </div>
+              {botaoPdf}
             </>
           )}
         </div>
       </div>
+
+      {marcandoPago &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/50 sm:items-center sm:p-4"
+            onClick={(e) => {
+              if (e.target === e.currentTarget && !ocupado) setMarcandoPago(false);
+            }}
+          >
+            <div role="dialog" aria-modal="true" aria-labelledby="pago-titulo" className="w-full max-w-md rounded-t-2xl bg-folha p-5 shadow-xl sm:rounded-2xl">
+              <h2 id="pago-titulo" className="text-xl font-semibold">
+                Marcar como pago
+              </h2>
+              <p className="mt-1 text-sm text-grafite">O valor entra em "Recebido no mês" na data informada.</p>
+              <div className="mt-4">
+                <Campo id="dataPagamento" rotulo="Data do pagamento" type="date" value={dataPagamento} onChange={(e) => setDataPagamento(e.target.value)} />
+              </div>
+              <div className="mt-5 grid gap-2">
+                <button type="button" onClick={confirmarPago} disabled={ocupado} className="botao-primario !bg-pago hover:!bg-[#116632]">
+                  {ocupado ? "Salvando…" : "Confirmar pagamento"}
+                </button>
+                <button type="button" onClick={() => setMarcandoPago(false)} disabled={ocupado} className="botao-secundario">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
 
       {confirmacao === "excluir" && (
         <Confirmar
@@ -228,6 +345,16 @@ export default function DetalheOrcamento() {
           titulo="Editar este orçamento?"
           texto="Ele volta a ser rascunho e o link que o cliente recebeu deixa de mostrar os botões de aprovar até você enviar de novo."
           textoConfirmar="Voltar a rascunho e editar"
+          ocupado={ocupado}
+          aoConfirmar={confirmar}
+          aoCancelar={() => setConfirmacao(null)}
+        />
+      )}
+      {confirmacao === "desfazerPago" && (
+        <Confirmar
+          titulo="Desfazer o pagamento?"
+          texto="O orçamento volta para aprovado e sai de 'Recebido no mês'. Use se marcou como pago por engano."
+          textoConfirmar="Voltar para aprovado"
           ocupado={ocupado}
           aoConfirmar={confirmar}
           aoCancelar={() => setConfirmacao(null)}

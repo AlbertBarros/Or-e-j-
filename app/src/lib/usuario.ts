@@ -59,11 +59,13 @@ export interface DadosCadastro {
   tipoChavePix: TipoChavePix;
   nomePix: string;
   logoDataUrl?: string | null;
+  email?: string | null;
 }
 
 /** Cria o perfil (plano free, numeração em 1) e, se houver, a logo, numa única gravação. */
 export async function criarPerfil(uid: string, dados: DadosCadastro): Promise<void> {
   const perfil = {
+    ...(dados.email ? { email: dados.email.toLowerCase() } : {}),
     nomeNegocio: dados.nomeNegocio.trim(),
     nomeResponsavel: dados.nomeResponsavel.trim(),
     nomePix: dados.nomePix.trim(),

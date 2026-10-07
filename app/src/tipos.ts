@@ -10,8 +10,20 @@ export type { TipoChavePix };
 export type Plano = "free" | "pro";
 export type StatusOrcamento = "rascunho" | "enviado" | "aprovado" | "recusado" | "pago";
 
+export interface Endereco {
+  logradouro: string; // rua/avenida e número
+  bairro: string;
+  cidade: string;
+  uf: string;
+  cep: string;
+}
+
 /** users/{uid} — perfil do profissional. "plano" e "planoAte" só o servidor altera. */
 export interface Usuario {
+  email?: string; // e-mail do login, usado para casar o pagamento do Pro
+  documento?: string; // CPF ou CNPJ do emissor (recibo), opcional
+  endereco?: Endereco; // dados do recibo, opcionais
+  proximoRecibo?: number; // numeração própria dos recibos; começa em 1
   nomeNegocio: string;
   nomeResponsavel: string;
   nomePix: string; // nome do recebedor no BR Code (como está no banco)
@@ -39,6 +51,24 @@ export interface ItemOrcamento {
   qtd: number;
   unidade: string;
   valorUnit: number;
+}
+
+/** Recibo emitido a partir de um orçamento pago (Pro). Guardado dentro do próprio orçamento. */
+export interface Recibo {
+  numero: number;
+  emitidoEm: Timestamp;
+  garantiaDias: number; // 0 = sem garantia
+  garantiaInicio: Timestamp;
+  observacoes: string;
+  emissor: {
+    nome: string; // nome do negócio
+    responsavel: string;
+    documento?: string;
+    endereco?: Endereco;
+    whatsapp: string;
+    email?: string;
+    cidade: string;
+  };
 }
 
 /** orcamentos/{id} */
@@ -71,4 +101,5 @@ export interface Orcamento {
   enviadoEm?: Timestamp;
   respondidoEm?: Timestamp;
   pagoEm?: Timestamp;
+  recibo?: Recibo;
 }

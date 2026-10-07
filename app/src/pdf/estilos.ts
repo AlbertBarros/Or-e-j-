@@ -1,0 +1,83 @@
+/** Estilos comuns dos PDFs (talão em azul-carbono, DESIGN.md). Fonte Helvetica embutida, sem download. */
+import { StyleSheet } from "@react-pdf/renderer";
+
+export const CARBONO = "#1E3A8A";
+export const TINTA = "#1A1D23";
+export const GRAFITE = "#5B6270";
+export const PAUTA = "#E4E7EC";
+export const PAGO = "#15803D";
+
+export const estilos = StyleSheet.create({
+  pagina: { padding: 40, fontSize: 11, fontFamily: "Helvetica", color: TINTA, lineHeight: 1.35 },
+  cabecalho: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 },
+  cabecalhoEsq: { flexDirection: "row", alignItems: "center", gap: 10, maxWidth: 330 },
+  logo: { width: 48, height: 48, objectFit: "contain" },
+  negocio: { fontSize: 16, fontFamily: "Helvetica-Bold" },
+  negocioSub: { color: GRAFITE, marginTop: 2, fontSize: 10 },
+  numeroBloco: { alignItems: "flex-end" },
+  rotuloDoc: { fontSize: 9, color: GRAFITE, letterSpacing: 1.2 },
+  numero: { fontSize: 22, fontFamily: "Helvetica-Bold", color: CARBONO },
+  data: { color: GRAFITE, marginTop: 2, fontSize: 10 },
+  bloco: { marginBottom: 14 },
+  rotulo: { fontSize: 8.5, color: GRAFITE, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 3 },
+  linhaCab: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: TINTA,
+    paddingBottom: 4,
+    marginBottom: 2,
+    fontFamily: "Helvetica-Bold",
+    fontSize: 8.5,
+    color: GRAFITE,
+  },
+  linha: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: PAUTA, paddingVertical: 6 },
+  colDesc: { flex: 1, paddingRight: 8 },
+  colQtd: { width: 60, textAlign: "right" },
+  colUnit: { width: 80, textAlign: "right" },
+  colTotal: { width: 90, textAlign: "right" },
+  totais: { marginTop: 10, alignItems: "flex-end" },
+  totalLinha: { flexDirection: "row", justifyContent: "space-between", width: 240, paddingVertical: 2, color: GRAFITE },
+  totalFinal: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: 240,
+    borderTopWidth: 2,
+    borderTopColor: TINTA,
+    marginTop: 4,
+    paddingTop: 6,
+    fontFamily: "Helvetica-Bold",
+    fontSize: 14,
+  },
+  caixa: { borderWidth: 1, borderColor: PAUTA, borderRadius: 6, padding: 12, marginBottom: 14 },
+  destaque: { fontSize: 13, lineHeight: 1.5 },
+  valorGrande: { fontSize: 24, fontFamily: "Helvetica-Bold", color: CARBONO },
+  carimbo: {
+    position: "absolute",
+    right: 40,
+    top: 150,
+    borderWidth: 3,
+    borderColor: PAGO,
+    color: PAGO,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    fontSize: 22,
+    fontFamily: "Helvetica-Bold",
+    letterSpacing: 3,
+    transform: "rotate(-12deg)",
+    borderRadius: 4,
+  },
+  assinatura: { marginTop: 36, alignItems: "center" },
+  linhaAssinatura: { width: 260, borderTopWidth: 1, borderTopColor: TINTA, paddingTop: 6, alignItems: "center" },
+  rodape: {
+    position: "absolute",
+    bottom: 28,
+    left: 40,
+    right: 40,
+    borderTopWidth: 1,
+    borderTopColor: PAUTA,
+    paddingTop: 8,
+    fontSize: 9,
+    color: GRAFITE,
+    textAlign: "center",
+  },
+});

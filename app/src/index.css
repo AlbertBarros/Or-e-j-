@@ -108,3 +108,10 @@
     animation: none;
   }
 }
+
+@keyframes deslizar-pix {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.bloco-pix-animado { animation: deslizar-pix 0.4s ease-out 0.35s both; }
+@media (prefers-reduced-motion: reduce) { .bloco-pix-animado { animation: none; } }

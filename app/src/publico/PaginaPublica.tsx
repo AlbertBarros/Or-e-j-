@@ -3,6 +3,7 @@ import Logo from "@/componentes/Logo";
 import DocumentoOrcamento from "@/componentes/DocumentoOrcamento";
 import Carregando from "@/componentes/Carregando";
 import { buscarLogoPublica, buscarOrcamentoPublico, responderOrcamento } from "./firestorePublico";
+import BlocoPix from "./BlocoPix";
 import { inicioDoDia, paraDate } from "@/lib/datas";
 import type { Orcamento } from "@/tipos";
 import { formatarData, linkWhatsapp } from "@shared/src/mensagens";
@@ -132,14 +133,19 @@ export default function PaginaPublica({ id }: { id: string }) {
               <div className="documento p-5">
                 <h2 className="text-xl font-semibold text-pago">Orçamento aprovado!</h2>
                 <p className="mt-1 text-grafite">
-                  {negocio?.nome} já foi avisado e vai combinar o pagamento e o serviço com você.
-                  {negocio?.mostrarPix ? " O pagamento por Pix aparece aqui em breve." : ""}
+                  {negocio?.nome} já foi avisado.{" "}
+                  {negocio?.mostrarPix ? "Você já pode pagar pelo Pix abaixo." : "Ele vai combinar o pagamento e o serviço com você."}
                 </p>
                 {falarComProfissional && (
                   <a href={falarComProfissional} target="_blank" rel="noopener" className="botao-secundario mt-4">
                     Falar com {negocio?.nome} no WhatsApp
                   </a>
                 )}
+              </div>
+            )}
+            {estado === "aprovado" && negocio?.mostrarPix && (
+              <div className={`mt-4 ${recemAprovado ? "bloco-pix-animado" : ""}`}>
+                <BlocoPix orcamento={orcamento} />
               </div>
             )}
             {estado === "recusado" && (

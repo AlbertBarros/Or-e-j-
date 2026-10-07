@@ -100,3 +100,18 @@ export function formatarWhatsapp(numero: string): string {
   if (local.length === 10) return `(${local.slice(0, 2)}) ${local.slice(2, 6)}-${local.slice(6)}`;
   return numero;
 }
+
+export function mensagemEnvioRecibo(p: { cliente: string; negocio: string; numeroRecibo: number; total: number }): string {
+  return (
+    `Olá, ${primeiroNome(p.cliente)}! Aqui é da ${p.negocio}.\n\n` +
+    `Segue o recibo nº ${p.numeroRecibo}, no valor de ${formatarReais(p.total)}, em PDF. ` +
+    `Obrigado pela confiança!`
+  );
+}
+
+/** Texto da garantia para o recibo: "Garantia de 90 dias sobre a mão de obra, a partir de 07/10/2026." */
+export function textoGarantia(dias: number, inicio: Date): string {
+  if (dias <= 0) return "Sem garantia sobre o serviço.";
+  const periodo = dias % 365 === 0 ? `${dias / 365} ${dias === 365 ? "ano" : "anos"}` : `${dias} dias`;
+  return `Garantia de ${periodo} sobre a mão de obra, a partir de ${formatarData(inicio)}.`;
+}

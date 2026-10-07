@@ -6,6 +6,8 @@ import Comecar from "@/paginas/Comecar";
 import Painel from "@/paginas/Painel";
 import NovoOrcamento from "@/paginas/NovoOrcamento";
 import DetalheOrcamento from "@/paginas/DetalheOrcamento";
+import Cobrar from "@/paginas/Cobrar";
+import EmitirRecibo from "@/paginas/EmitirRecibo";
 import NaoEncontrada from "@/paginas/NaoEncontrada";
 
 export default function App() {
@@ -61,7 +63,23 @@ export default function App() {
               </ExigePerfil>
             }
           />
-          {/* /o/:id (página pública, chunk separado) entra na Fase 3 */}
+          <Route
+            path="/orcamentos/:id/cobrar"
+            element={
+              <ExigePerfil>
+                <Cobrar />
+              </ExigePerfil>
+            }
+          />
+          <Route
+            path="/orcamentos/:id/recibo"
+            element={
+              <ExigePerfil>
+                <EmitirRecibo />
+              </ExigePerfil>
+            }
+          />
+          {/* /o/:id (página pública) é um pacote separado, decidido em main.tsx */}
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
       </BrowserRouter>

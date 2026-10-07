@@ -307,3 +307,89 @@ export async function voltarParaRascunho(id: string): Promise<void> {
     atualizadoEm: serverTimestamp(),
   });
 }
+
+// ---------------------------------------------------------------------------
+// Dinheiro: pago, cobrança e recibo (Fase 4)
+// ---------------------------------------------------------------------------
+import type { Recibo, Endereco } from "@/tipos";
+import { diasEmAtraso, type TomCobranca } from "@shared/src/mensagens";
+
+/** Marca como pago com a data informada (editável; padrão hoje). */
+export async function marcarComoPago(id: string, data: Date): Promise<void> {
+  await updateDoc(doc(db, "orcamentos", id), {
+    status: "pago" as StatusOrcamento,
+    pagoEm: Timestamp.fromDate(data),
+    atualizadoEm: serverTimestamp(),
+  });
+}
+
+/** Desfaz o "pago" (engano), voltando para aprovado. */
+export async function desfazerPago(id: string): Promise<void> {
+  await updateDoc(doc(db, "orcamentos", id), {
+    status: "aprovado" as StatusOrcamento,
+    pagoEm: deleteField(),
+    atualizadoEm: serverTimestamp(),
+  });
+}
+
+/** Tom sugerido pelos dias de atraso (PRD T7): 1–3 gentil, 4–10 firme, mais de 10 final. */
+export function tomSugerido(o: Orcamento, hoje: Date = new Date()): TomCobranca {
+  const venc = paraDate(o.vencimentoPagamento);
+  const dias = venc ? diasEmAtraso(venc, hoje) : 0;
+  if (dias > 10) return "final";
+  if (dias >= 4) return "firme";
+  return "gentil";
+}
+
+export interface DadosRecibo {
+  garantiaDias: number;
+  garantiaInicio: Date;
+  observacoes: string;
+  emissor: {
+    documento?: string;
+    endereco?: Endereco;
+    email?: string;
+  };
+}
+
+/**
+ * Emite o recibo numa transação: pega o próximo número do usuário (users.proximoRecibo),
+ * grava o recibo dentro do orçamento e salva no perfil os dados do emissor para a próxima vez.
+ */
+export async function emitirRecibo(uid: string, orcamento: Orcamento, dados: DadosRecibo): Promise<Recibo> {
+  let emitido: Recibo | null = null;
+  await runTransaction(db, async (tx) => {
+    const usuarioRef = doc(db, "users", uid);
+    const snap = await tx.get(usuarioRef);
+    if (!snap.exists()) throw new Error("Perfil não encontrado.");
+    const perfil = snap.data() as Usuario;
+    const numero = Number(perfil.proximoRecibo ?? 1);
+    const emissor: Recibo["emissor"] = {
+      nome: perfil.nomeNegocio,
+      responsavel: perfil.nomeResponsavel,
+      whatsapp: perfil.whatsapp,
+      cidade: perfil.cidade,
+      ...(dados.emissor.documento ? { documento: dados.emissor.documento } : {}),
+      ...(dados.emissor.endereco ? { endereco: dados.emissor.endereco } : {}),
+      ...(dados.emissor.email ? { email: dados.emissor.email } : {}),
+    };
+    const recibo = {
+      numero,
+      emitidoEm: Timestamp.now(),
+      garantiaDias: dados.garantiaDias,
+      garantiaInicio: Timestamp.fromDate(dados.garantiaInicio),
+      observacoes: dados.observacoes.trim(),
+      emissor,
+    };
+    tx.update(doc(db, "orcamentos", orcamento.id), { recibo, atualizadoEm: serverTimestamp() });
+    tx.update(usuarioRef, {
+      proximoRecibo: numero + 1,
+      ...(dados.emissor.documento !== undefined ? { documento: dados.emissor.documento } : {}),
+      ...(dados.emissor.endereco ? { endereco: dados.emissor.endereco } : {}),
+      ...(dados.emissor.email !== undefined ? { email: dados.emissor.email } : {}),
+    });
+    emitido = recibo as Recibo;
+  });
+  if (!emitido) throw new Error("Recibo não emitido.");
+  return emitido;
+}
