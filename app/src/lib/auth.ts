@@ -2,6 +2,8 @@
 import {
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   sendSignInLinkToEmail,
   isSignInWithEmailLink,
   signInWithEmailLink,
@@ -12,11 +14,28 @@ import { auth } from "./firebase";
 
 const CHAVE_EMAIL = "orcaja:emailParaLogin";
 
-export async function entrarComGoogle(): Promise<User> {
+function ehCelular(): boolean {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+/**
+ * No computador abre a janela do Google; no celular redireciona a página inteira
+ * (o Safari do iPhone bloqueia a janela). Ao voltar do redirecionamento, onAuthStateChanged dispara.
+ */
+export async function entrarComGoogle(): Promise<User | null> {
   const provedor = new GoogleAuthProvider();
   provedor.setCustomParameters({ prompt: "select_account" });
+  if (ehCelular()) {
+    await signInWithRedirect(auth, provedor);
+    return null; // a página vai sair daqui
+  }
   const resultado = await signInWithPopup(auth, provedor);
   return resultado.user;
+}
+
+/** Chamado na tela Entrar ao carregar: traz erros do redirecionamento do Google, se houver. */
+export async function concluirRedirecionamento(): Promise<void> {
+  await getRedirectResult(auth);
 }
 
 /** Envia o link mágico. O e-mail fica guardado para concluir o login no mesmo aparelho. */

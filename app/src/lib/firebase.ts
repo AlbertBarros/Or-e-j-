@@ -3,9 +3,14 @@ import { initializeApp } from "firebase/app";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
+// Em produção, o login passa pelo próprio endereço do app (functions/__/auth/* encaminha ao Firebase).
+// Assim o Google funciona no Safari/iPhone, que bloqueia autenticação em domínio de terceiros.
+const dominioLocal = typeof window !== "undefined" && !["localhost", "127.0.0.1"].includes(window.location.hostname);
+const authDomain = dominioLocal && import.meta.env.PROD ? window.location.host : import.meta.env.VITE_FIREBASE_AUTH_DOMAIN;
+
 const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  authDomain,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,

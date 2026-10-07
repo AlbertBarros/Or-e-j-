@@ -5,6 +5,7 @@ import InstalarApp from "@/componentes/InstalarApp";
 import {
   entrarComGoogle,
   enviarLinkPorEmail,
+  concluirRedirecionamento,
   ehLinkDeEmail,
   emailGuardado,
   concluirLoginPorLink,
@@ -24,6 +25,11 @@ export default function Entrar() {
 
   // Chegou por um link mágico? Conclui o login (pede o e-mail se abriu em outro aparelho).
   // O código do link só vale uma vez: a trava evita a segunda execução do efeito no modo estrito do React.
+  // Voltou do Google (celular)? Mostra o erro, se houver; o login em si chega pelo onAuthStateChanged.
+  useEffect(() => {
+    concluirRedirecionamento().catch((e) => setErro(mensagemDeErroAuth(e)));
+  }, []);
+
   const linkTratado = useRef(false);
   useEffect(() => {
     if (!ehLinkDeEmail() || linkTratado.current) return;
