@@ -9,6 +9,7 @@ import {
   textoEconomia,
   CHECKOUT_MENSAL,
   CHECKOUT_ANUAL,
+  CHECKOUT_ANUAL_PIX,
   APP_PRONTO,
   URL_CADASTRO,
 } from "../lib/planos";
@@ -101,14 +102,26 @@ const recursosPro = [
     <Cta
       client:visible
       variante="primario"
-      texto="Assinar o Pro anual"
+      texto="Assinar no cartão"
       href={CHECKOUT_ANUAL || undefined}
       origem={`${origem}:pro-anual`}
       titulo="O Pro anual abre em breve: garanta seu lugar"
       opcoesProfissao={opcoes}
       className="mt-6 w-full"
     />
-    <p class="mt-2 text-center text-xs text-grafite">Cartão de crédito. 7 dias de garantia.</p>
+    <Cta
+      client:visible
+      variante="secundario"
+      texto="Pagar com Pix"
+      href={CHECKOUT_ANUAL_PIX || undefined}
+      origem={`${origem}:pro-anual-pix`}
+      titulo="O Pro anual abre em breve: garanta seu lugar"
+      opcoesProfissao={opcoes}
+      className="mt-2 w-full"
+    />
+    <p class="mt-2 text-center text-xs text-grafite">
+      Cartão renova sozinho a cada ano. Pix é pagamento único de 12 meses. 7 dias de garantia.
+    </p>
   </article>
 
   <!-- Pro mensal -->

@@ -13,6 +13,7 @@ interface ImportMetaEnv {
   /** Links de checkout da plataforma de pagamento (vazios enquanto não existirem) */
   readonly PUBLIC_CHECKOUT_URL_MENSAL?: string;
   readonly PUBLIC_CHECKOUT_URL_ANUAL?: string;
+  readonly PUBLIC_CHECKOUT_URL_ANUAL_PIX?: string;
 }
 
 interface ImportMeta {
