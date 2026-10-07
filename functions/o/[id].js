@@ -6,7 +6,11 @@
  * permitida pelas regras) e injeta no index.html as tags Open Graph específicas:
  * "Orçamento nº 12 — JS Elétrica" / "Total R$ 240,00 · válido até 22/10. Toque para ver e aprovar."
  *
- * Variáveis usadas (já cadastradas no projeto Pages): VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_API_KEY, VITE_APP_URL.
+ * Variáveis usadas (já cadastradas no projeto Pages do app): VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_API_KEY, VITE_APP_URL.
+ *
+ * Fica na raiz do repositório porque o Cloudflare Pages só lê a pasta functions/ do "root directory" do projeto.
+ * O projeto do site (orca-ja) compartilha o repositório: nele não existem as variáveis VITE_*, então a função
+ * apenas repassa a requisição (context.next) e nada muda no site.
  */
 
 function escapar(texto) {
@@ -49,6 +53,7 @@ async function buscarOrcamento(env, id) {
 
 export async function onRequestGet(context) {
   const { request, env, params } = context;
+  if (!env.VITE_FIREBASE_PROJECT_ID) return context.next(); // projeto do site: não é o app
   // index.html da SPA (servido pelos arquivos estáticos do Pages)
   const indexResp = await env.ASSETS.fetch(new Request(new URL("/index.html", request.url), request));
   let html = await indexResp.text();
