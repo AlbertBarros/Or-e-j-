@@ -75,11 +75,19 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 - Botão **Enviar no WhatsApp**.
 
 ### T8. Configurações e plano
-- Edição dos dados do onboarding.
+- Edição dos dados do onboarding, mais os dados do recibo: CPF/CNPJ, endereço completo e e-mail de contato.
 - Plano atual, uso do mês ("2 de 3 orçamentos") e botão **Assinar o Pro**, que abre o link de pagamento.
 
-### Recibo (PDF)
-- Contém dados do negócio, cliente, descrição resumida dos itens, valor por extenso, data do pagamento e a frase "Recebi de {cliente} a importância de...".
+### Recibo (PDF) — exclusivo do Pro (decisão de 7 out 2026)
+- Emitido a partir de um orçamento pago, ou avulso (sem orçamento) pela tela "Emitir recibo".
+- Documento elegante, no mesmo estilo do orçamento (talão em azul-carbono), com a **logo** do profissional quando houver.
+- Dados do emissor (vêm do perfil, editáveis em Conta): nome do negócio, nome do responsável, CPF ou CNPJ (opcional), **endereço** (rua e número, bairro, cidade/UF, CEP) e **contatos** (WhatsApp, e-mail opcional).
+- Dados do cliente: nome e WhatsApp; CPF do cliente **não** é guardado no MVP (CLAUDE.md).
+- Corpo: descrição resumida dos serviços, **valor** (número e por extenso), forma de pagamento (Pix), data do pagamento e a frase "Recebi de {cliente} a importância de {valor} referente a {descrição}".
+- **Garantia do serviço**: campo com período à escolha (sem garantia, 30, 90, 180 dias, 1 ano ou personalizado) e texto "Garantia de X sobre a mão de obra, a partir de dd/mm/aaaa".
+- **Observações** livres do profissional (até 500 caracteres), pré-preenchidas com as observações padrão.
+- Numeração própria (Recibo nº 0001), assinatura em texto (nome do responsável) e local/data.
+- Envio: botão **Enviar recibo**, que usa o compartilhamento nativo do celular (WhatsApp, e-mail, Drive etc.) com o PDF anexado; se o navegador não suportar, baixa o PDF e abre o WhatsApp do cliente com a mensagem pronta. Envio por e-mail direto pelo sistema fica para depois (exige servidor).
 
 ## Planos
 
@@ -91,7 +99,7 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 | Logo no orçamento | Não | Sim |
 | Marca "Feito com Orça Já" no PDF | Sim | Não |
 | Mensagens de cobrança | Sim | Sim |
-| Recibo PDF | Sim | Sim |
+| Recibo PDF (com logo, garantia, endereço e observações) | Não | Sim |
 
 Ao bater o limite, o app mostra a tela de upgrade no momento de enviar, e o rascunho fica salvo.
 
