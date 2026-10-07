@@ -1,9 +1,15 @@
-/** Datas: conversões entre Timestamp, Date e campos <input type="date">, sempre no fuso do aparelho. */
-import { Timestamp } from "firebase/firestore";
+/**
+ * Datas: conversões entre Timestamp, Date e campos <input type="date">, sempre no fuso do aparelho.
+ * Não importa a classe Timestamp de propósito: a página pública usa o Firestore "lite" e este arquivo
+ * precisa funcionar nos dois mundos (duck typing em toDate()).
+ */
+interface ComToDate {
+  toDate: () => Date;
+}
 
-export function paraDate(valor?: Timestamp | Date | null): Date | null {
+export function paraDate(valor?: ComToDate | Date | null): Date | null {
   if (!valor) return null;
-  return valor instanceof Timestamp ? valor.toDate() : valor;
+  return valor instanceof Date ? valor : typeof valor.toDate === "function" ? valor.toDate() : null;
 }
 
 export function inicioDoDia(d: Date): Date {

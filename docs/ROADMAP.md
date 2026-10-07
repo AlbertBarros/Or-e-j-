@@ -54,17 +54,17 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 
 ## Fase 3 — Enviar, página pública e aprovação (semana 3)
 
-- [ ] Ação **Enviar no WhatsApp**: snapshot `negocio`, status, `uso` e abertura do `wa.me` (ARQUITETURA.md → Enviar)
-- [ ] Rota pública `/o/:id` em chunk separado, sem Auth (T6)
-- [ ] Aprovar / Recusar, com o carimbo animado do DESIGN.md
-- [ ] Estados: expirado, aprovado, recusado, pago e não encontrado
-- [ ] Rodapé "Feito com Orça Já" quando `mostrarMarca`
-- [ ] Meta tags Open Graph na página pública (título: "Orçamento nº X — {negócio}"), para a prévia do link no WhatsApp ficar boa
-- [ ] Ações do detalhe para "enviado": Reenviar, Copiar link, Editar
+- [x] Ação **Enviar no WhatsApp**: snapshot `negocio`, status, `uso` e abertura do `wa.me` (ARQUITETURA.md → Enviar)
+- [x] Rota pública `/o/:id` em chunk separado, sem Auth (T6)
+- [x] Aprovar / Recusar, com o carimbo animado do DESIGN.md
+- [x] Estados: expirado, aprovado, recusado, pago e não encontrado
+- [x] Rodapé "Feito com Orça Já" quando `mostrarMarca`
+- [x] Meta tags Open Graph na página pública (título: "Orçamento nº X — {negócio}"), para a prévia do link no WhatsApp ficar boa
+- [x] Ações do detalhe para "enviado": Reenviar, Copiar link, Editar
 
 **Pronto quando:** o fluxo completo funciona em dois celulares diferentes (profissional envia, cliente aprova, painel mostra Aprovado) e um teste confirma que o anônimo não altera o total.
 
-> Atenção: o Open Graph numa SPA não é lido pelo WhatsApp. Se a prévia for importante, a alternativa é uma Cloudflare Pages Function em `/o/:id` que injeta as meta tags. Proponha antes de implementar.
+> Feito em 7 out 2026 com uma Cloudflare Pages Function (`app/functions/o/[id].js`) que lê o orçamento pela REST do Firestore e injeta as meta tags no index.html. Também já existe o bloqueio básico do limite do grátis no envio (tela completa de upgrade fica para a Fase 5).
 
 ---
 

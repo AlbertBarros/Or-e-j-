@@ -238,3 +238,72 @@ export function clientesDistintos(lista: Orcamento[]): { nome: string; whatsapp:
   }
   return [...vistos.values()];
 }
+
+// ---------------------------------------------------------------------------
+// Enviar, reenviar, copiar link, voltar a rascunho (Fase 3)
+// ---------------------------------------------------------------------------
+import { LIMITE_FREE } from "./firebase";
+import { mesAtual } from "./usuario";
+import { linkWhatsapp, mensagemEnvioOrcamento } from "@shared/src/mensagens";
+
+export class LimiteAtingidoError extends Error {
+  constructor(public limite: number) {
+    super(`Limite de ${limite} orçamentos grátis no mês atingido.`);
+    this.name = "LimiteAtingidoError";
+  }
+}
+
+/** Endereço público do orçamento: {VITE_APP_URL}/o/{id} (em desenvolvimento, a origem atual). */
+export function linkPublico(id: string): string {
+  const base = (import.meta.env.DEV ? window.location.origin : import.meta.env.VITE_APP_URL) || window.location.origin;
+  return `${base.replace(/\/$/, "")}/o/${id}`;
+}
+
+/** Link wa.me com a mensagem de envio pronta. */
+export function linkEnvioWhatsapp(o: Orcamento): string {
+  return linkWhatsapp(
+    o.cliente.whatsapp,
+    mensagemEnvioOrcamento({
+      cliente: o.cliente.nome,
+      negocio: o.negocio.nome,
+      numero: o.numero,
+      total: o.total,
+      link: linkPublico(o.id),
+    }),
+  );
+}
+
+/**
+ * Envia: numa transação, checa o limite do grátis, grava o snapshot do negócio, status "enviado",
+ * enviadoEm e incrementa users.uso (zerando se o mês mudou). Lança LimiteAtingidoError se estourar.
+ */
+export async function enviarOrcamento(uid: string, orcamento: Orcamento): Promise<void> {
+  await runTransaction(db, async (tx) => {
+    const usuarioRef = doc(db, "users", uid);
+    const usuarioSnap = await tx.get(usuarioRef);
+    if (!usuarioSnap.exists()) throw new Error("Perfil não encontrado.");
+    const perfil = usuarioSnap.data() as Usuario;
+    const mes = mesAtual();
+    const enviadosNoMes = perfil.uso?.mes === mes ? perfil.uso.enviados : 0;
+    if (perfil.plano !== "pro" && enviadosNoMes >= LIMITE_FREE) {
+      throw new LimiteAtingidoError(LIMITE_FREE);
+    }
+    tx.update(doc(db, "orcamentos", orcamento.id), {
+      negocio: snapshotNegocio(perfil),
+      status: "enviado" as StatusOrcamento,
+      enviadoEm: serverTimestamp(),
+      atualizadoEm: serverTimestamp(),
+    });
+    tx.update(usuarioRef, { uso: { mes, enviados: enviadosNoMes + 1 } });
+  });
+}
+
+/** Volta um orçamento enviado ou recusado para rascunho, para poder editar. */
+export async function voltarParaRascunho(id: string): Promise<void> {
+  await updateDoc(doc(db, "orcamentos", id), {
+    status: "rascunho" as StatusOrcamento,
+    enviadoEm: deleteField(),
+    respondidoEm: deleteField(),
+    atualizadoEm: serverTimestamp(),
+  });
+}

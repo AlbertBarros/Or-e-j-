@@ -5,10 +5,12 @@ import { paraDate } from "@/lib/datas";
 interface Props {
   orcamento: Orcamento;
   logoDataUrl?: string | null;
+  /** A página pública mostra a marca no rodapé dela mesma; aqui pode desligar para não duplicar. */
+  rodapeMarca?: boolean;
 }
 
 /** O orçamento como documento: folha branca, número em destaque, itens pautados e total no pé. */
-export default function DocumentoOrcamento({ orcamento: o, logoDataUrl }: Props) {
+export default function DocumentoOrcamento({ orcamento: o, logoDataUrl, rodapeMarca = true }: Props) {
   const criado = paraDate(o.criadoEm);
   const validade = paraDate(o.validadeAte);
   const vencimento = paraDate(o.vencimentoPagamento);
@@ -93,7 +95,7 @@ export default function DocumentoOrcamento({ orcamento: o, logoDataUrl }: Props)
         )}
       </section>
 
-      {o.negocio.mostrarMarca && (
+      {o.negocio.mostrarMarca && rodapeMarca && (
         <footer className="border-t border-pauta px-4 py-2 text-center text-xs text-grafite">Feito com Orça Já</footer>
       )}
     </article>
