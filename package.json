@@ -11,7 +11,7 @@
     "dev:site": "npm run dev --workspace site",
     "dev:app": "npm run dev --workspace app",
     "test": "npm run test --workspaces --if-present",
-    "test:regras": "firebase emulators:exec --only firestore \"npx vitest run --config firebase/vitest.config.ts\"",
+    "test:regras": "node firebase/testar-regras.cjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build --workspaces --if-present"
   },
