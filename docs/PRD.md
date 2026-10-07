@@ -87,7 +87,7 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 - **Garantia do serviço**: campo com período à escolha (sem garantia, 30, 90, 180 dias, 1 ano ou personalizado) e texto "Garantia de X sobre a mão de obra, a partir de dd/mm/aaaa".
 - **Observações** livres do profissional (até 500 caracteres), pré-preenchidas com as observações padrão.
 - Numeração própria (Recibo nº 0001), assinatura em texto (nome do responsável) e local/data.
-- Envio: botão **Enviar recibo**, que usa o compartilhamento nativo do celular (WhatsApp, e-mail, Drive etc.) com o PDF anexado; se o navegador não suportar, baixa o PDF e abre o WhatsApp do cliente com a mensagem pronta. Envio por e-mail direto pelo sistema fica para depois (exige servidor).
+- Envio: botão **Enviar recibo** só pelo WhatsApp (decisão de 7 out 2026): no celular, compartilhamento nativo com o PDF anexado direto no WhatsApp; se o navegador não suportar, baixa o PDF e abre o `wa.me` do cliente com a mensagem pronta para anexar.
 
 ## Planos
 

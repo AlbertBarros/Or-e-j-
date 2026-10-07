@@ -78,7 +78,7 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 - [ ] Dados do recibo no perfil (CPF/CNPJ, endereço, e-mail) com tela de edição em Conta
 - [ ] Tela "Emitir recibo" (Pro): a partir de orçamento pago ou avulso, com garantia (período à escolha), observações e numeração própria
 - [ ] PDFs: `OrcamentoPDF` e `ReciboPDF` (elegante, com logo) com lazy load
-- [ ] "Enviar recibo": compartilhamento nativo (Web Share com arquivo) → WhatsApp/e-mail; fallback: baixar + wa.me
+- [ ] "Enviar recibo" pelo WhatsApp: Web Share com o PDF anexado; fallback: baixar + wa.me com mensagem pronta
 
 **Pronto quando:** um orçamento vai de aprovado a pago com recibo gerado, o Pix é lido corretamente por 3 bancos e o valor por extenso passa nos testes.
 
