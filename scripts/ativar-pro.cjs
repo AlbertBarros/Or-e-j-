@@ -41,7 +41,7 @@ async function tokenDeAcesso() {
   const corpo = base64url(
     JSON.stringify({
       iss: conta.client_email,
-      scope: "https://www.googleapis.com/auth/datastore",
+      scope: "https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/identitytoolkit",
       aud: "https://oauth2.googleapis.com/token",
       iat: agora,
       exp: agora + 3600,
@@ -76,12 +76,31 @@ async function main() {
     }),
   });
   const resultados = await busca.json();
-  const docUsuario = (resultados || []).map((r) => r.document).find(Boolean);
+  let docUsuario = (resultados || []).map((r) => r.document).find(Boolean);
+  let uid = docUsuario && docUsuario.name.split("/").pop();
+  let salvarEmail = false;
+
+  // Conta antiga sem o campo e-mail? Procura no login do Firebase (Authentication) e usa o uid de lá.
+  if (!docUsuario) {
+    const lookup = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${projeto}/accounts:lookup`, {
+      method: "POST",
+      headers: cab,
+      body: JSON.stringify({ email: [email.toLowerCase()] }),
+    });
+    const contaAuth = lookup.ok ? ((await lookup.json()).users || [])[0] : null;
+    if (contaAuth) {
+      const perfil = await fetch(`${base}/users/${contaAuth.localId}`, { headers: cab });
+      if (perfil.ok) {
+        docUsuario = await perfil.json();
+        uid = contaAuth.localId;
+        salvarEmail = true;
+      }
+    }
+  }
   if (!docUsuario) {
     console.error(`Nenhum usuário com o e-mail ${email}. A pessoa precisa criar a conta no app com esse e-mail primeiro.`);
     process.exit(2);
   }
-  const uid = docUsuario.name.split("/").pop();
   const nome = docUsuario.fields.nomeNegocio && docUsuario.fields.nomeNegocio.stringValue;
 
   const campos = voltarFree
@@ -91,6 +110,7 @@ async function main() {
         ate.setMonth(ate.getMonth() + meses);
         return { plano: { stringValue: "pro" }, planoAte: { timestampValue: ate.toISOString() } };
       })();
+  if (salvarEmail) campos.email = { stringValue: email.toLowerCase() }; // deixa a conta pronta para o webhook
   const mask = Object.keys(campos).map((c) => `updateMask.fieldPaths=${c}`).join("&");
   const atualiza = await fetch(`${base}/users/${uid}?${mask}`, { method: "PATCH", headers: cab, body: JSON.stringify({ fields: campos }) });
   if (!atualiza.ok) throw new Error(`Falha ao atualizar: ${atualiza.status} ${await atualiza.text()}`);

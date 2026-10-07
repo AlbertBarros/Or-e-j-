@@ -35,7 +35,7 @@ async function tokenFirestore(conta) {
   const corpo = base64url(
     JSON.stringify({
       iss: conta.client_email,
-      scope: "https://www.googleapis.com/auth/datastore",
+      scope: "https://www.googleapis.com/auth/datastore https://www.googleapis.com/auth/identitytoolkit",
       aud: "https://oauth2.googleapis.com/token",
       iat: agora,
       exp: agora + 3600,
@@ -76,19 +76,38 @@ async function ativarPro(env, email, meses) {
       },
     }),
   });
-  const docUsuario = ((await busca.json()) || []).map((r) => r.document).find(Boolean);
+  let docUsuario = ((await busca.json()) || []).map((r) => r.document).find(Boolean);
+  let uidAuth = null;
+  if (!docUsuario) {
+    // Conta antiga sem o campo e-mail: procura no Authentication
+    const lookup = await fetch(`https://identitytoolkit.googleapis.com/v1/projects/${conta.project_id}/accounts:lookup`, {
+      method: "POST",
+      headers: cab,
+      body: JSON.stringify({ email: [email.toLowerCase()] }),
+    });
+    const contaAuth = lookup.ok ? ((await lookup.json()).users || [])[0] : null;
+    if (contaAuth) {
+      const perfil = await fetch(`${base}/users/${contaAuth.localId}`, { headers: cab });
+      if (perfil.ok) {
+        docUsuario = await perfil.json();
+        uidAuth = contaAuth.localId;
+      }
+    }
+  }
   if (!docUsuario) return { ok: false, motivo: `nenhum usuário com e-mail ${email}` };
 
   // Se já é Pro com validade futura, soma os meses a partir dela (renovação antecipada).
   const atual = docUsuario.fields.planoAte && docUsuario.fields.planoAte.timestampValue;
   const inicio = atual && new Date(atual) > new Date() ? new Date(atual) : new Date();
   inicio.setMonth(inicio.getMonth() + meses);
-  const uid = docUsuario.name.split("/").pop();
-  const resp = await fetch(`${base}/users/${uid}?updateMask.fieldPaths=plano&updateMask.fieldPaths=planoAte`, {
-    method: "PATCH",
-    headers: cab,
-    body: JSON.stringify({ fields: { plano: { stringValue: "pro" }, planoAte: { timestampValue: inicio.toISOString() } } }),
-  });
+  const uid = uidAuth || docUsuario.name.split("/").pop();
+  const campos = { plano: { stringValue: "pro" }, planoAte: { timestampValue: inicio.toISOString() } };
+  let mask = "updateMask.fieldPaths=plano&updateMask.fieldPaths=planoAte";
+  if (uidAuth) {
+    campos.email = { stringValue: email.toLowerCase() };
+    mask += "&updateMask.fieldPaths=email";
+  }
+  const resp = await fetch(`${base}/users/${uid}?${mask}`, { method: "PATCH", headers: cab, body: JSON.stringify({ fields: campos }) });
   if (!resp.ok) return { ok: false, motivo: `firestore ${resp.status}` };
   return { ok: true, uid, ate: inicio.toISOString() };
 }
