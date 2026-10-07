@@ -13,7 +13,7 @@ export const textoAnualTotal = formatarReais(PRECO_ANUAL_TOTAL);
 export const textoEconomia = formatarReais(ECONOMIA_ANUAL);
 
 /** Links de assinatura do Mercado Pago (cartão de crédito). A variável de ambiente, se existir, tem prioridade. */
-export const CHECKOUT_MENSAL = import.meta.env.PUBLIC_CHECKOUT_URL_MENSAL || ""; // aguardando o link do plano mensal
+export const CHECKOUT_MENSAL = import.meta.env.PUBLIC_CHECKOUT_URL_MENSAL || "https://mpago.la/1AxUgpG"; // Orça Já Pro mensal
 export const CHECKOUT_ANUAL = import.meta.env.PUBLIC_CHECKOUT_URL_ANUAL || "https://mpago.la/1qdLoPa"; // Orça Já Pro anual (12 meses)
 
 /** O app está publicado desde 6 out 2026; PUBLIC_APP_PRONTO=false volta os botões para a lista de espera. */
