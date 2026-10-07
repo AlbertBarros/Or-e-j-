@@ -76,7 +76,7 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 
 ### T8. Configurações e plano
 - Edição dos dados do onboarding.
-- Plano atual, uso do mês ("3 de 5 orçamentos") e botão **Assinar o Pro**, que abre o link de pagamento.
+- Plano atual, uso do mês ("2 de 3 orçamentos") e botão **Assinar o Pro**, que abre o link de pagamento.
 
 ### Recibo (PDF)
 - Contém dados do negócio, cliente, descrição resumida dos itens, valor por extenso, data do pagamento e a frase "Recebi de {cliente} a importância de...".
@@ -85,7 +85,7 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 
 | | Grátis | Pro (R$ 29,90/mês ou R$ 19,90/mês no plano anual, R$ 238,80/ano) |
 |---|---|---|
-| Orçamentos enviados/mês | 5 | Ilimitados |
+| Orçamentos enviados/mês | 3 | Ilimitados |
 | Link de aprovação | Sim | Sim |
 | Pix (copia-e-cola + QR) na página de aprovação | Não | Sim |
 | Logo no orçamento | Não | Sim |

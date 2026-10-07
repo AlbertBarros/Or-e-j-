@@ -98,7 +98,7 @@ export default function ListaDeEspera({
             </h2>
             <p className="mt-2 text-grafite">
               Avisamos você no e-mail e no WhatsApp assim que der para enviar orçamentos e receber a aprovação por
-              link. Quem entra na lista começa com os 5 orçamentos grátis do mês já liberados.
+              link. Quem entra na lista começa com os 3 orçamentos grátis do mês já liberados.
             </p>
             <button type="button" onClick={aoFechar} className="botao-primario mt-5 w-full">
               Fechar

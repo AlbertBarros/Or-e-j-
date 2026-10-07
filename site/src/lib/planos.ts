@@ -1,7 +1,7 @@
 /** Planos e preços do Orça Já. Fonte da verdade para o site (docs/PRD.md espelha estes valores). */
 import { formatarReais } from "@shared/src/mensagens";
 
-export const LIMITE_FREE = 5;
+export const LIMITE_FREE = 3;
 export const PRECO_MENSAL = 29.9;
 export const PRECO_ANUAL_POR_MES = 19.9;
 export const PRECO_ANUAL_TOTAL = Math.round(PRECO_ANUAL_POR_MES * 12 * 100) / 100; // 238,80
