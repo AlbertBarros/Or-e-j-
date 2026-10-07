@@ -54,9 +54,11 @@ async function buscarOrcamento(env, id) {
 export async function onRequestGet(context) {
   const { request, env, params } = context;
   if (!env.VITE_FIREBASE_PROJECT_ID) return context.next(); // projeto do site: não é o app
-  // index.html da SPA (servido pelos arquivos estáticos do Pages)
-  const indexResp = await env.ASSETS.fetch(new Request(new URL("/index.html", request.url), request));
+  // index.html da SPA. Pedimos "/" (não "/index.html": o Pages redireciona esse caminho e o corpo vem vazio).
+  const indexResp = await env.ASSETS.fetch(new Request(new URL("/", request.url).toString(), { method: "GET" }));
+  if (!indexResp.ok) return context.next();
   let html = await indexResp.text();
+  if (!html.includes("</head>")) return context.next();
 
   let titulo = "Orçamento — Orça Já";
   let descricao = "Veja o orçamento e aprove com um toque. Sem cadastro, sem baixar nada.";
