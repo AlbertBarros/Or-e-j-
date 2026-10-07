@@ -1,22 +1,42 @@
 import { useEffect, useRef, useState } from "react";
 import { emailValido, whatsappValido, gravarLead } from "../lib/leads";
 
+export interface OpcaoProfissao {
+  slug: string;
+  nome: string;
+}
+
 interface Props {
-  profissaoSlug: string;
-  profissaoNome: string;
+  /** Profissão já conhecida (página de profissão). Se ausente, o formulário pergunta. */
+  profissaoSlug?: string;
+  profissaoNome?: string;
+  opcoesProfissao?: OpcaoProfissao[];
+  /** De onde veio o interesse: "site:eletricista", "home:comecar", "precos:pro-anual"... */
+  origem: string;
+  /** Texto do título, para adaptar ao botão que abriu o formulário. */
+  titulo?: string;
   aoFechar: () => void;
 }
 
 /**
- * Enquanto o app não existe, "Salvar e enviar pelo WhatsApp" abre esta lista de espera.
- * Na Fase 5 este botão passa a levar ao cadastro com o orçamento preenchido.
+ * Enquanto o app não existe, os botões de cadastro e assinatura abrem esta lista de espera.
+ * Quando PUBLIC_APP_PRONTO for "true", os botões passam a levar ao app (ver lib/planos.ts).
  */
-export default function ListaDeEspera({ profissaoSlug, profissaoNome, aoFechar }: Props) {
+export default function ListaDeEspera({
+  profissaoSlug,
+  profissaoNome,
+  opcoesProfissao = [],
+  origem,
+  titulo = "Enviar pelo WhatsApp e receber a aprovação por link",
+  aoFechar,
+}: Props) {
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [profissao, setProfissao] = useState(profissaoSlug ?? "");
   const [estado, setEstado] = useState<"editando" | "enviando" | "enviado">("editando");
   const [erro, setErro] = useState<string | null>(null);
   const primeiroCampo = useRef<HTMLInputElement>(null);
+  const perguntarProfissao = !profissaoSlug;
 
   useEffect(() => {
     primeiroCampo.current?.focus();
@@ -43,9 +63,13 @@ export default function ListaDeEspera({ profissaoSlug, profissaoNome, aoFechar }
       setErro("WhatsApp inválido. Digite com DDD, por exemplo (61) 99999-8888.");
       return;
     }
+    if (perguntarProfissao && !profissao) {
+      setErro("Escolha a sua profissão. Se não estiver na lista, marque \"Outra\".");
+      return;
+    }
     setEstado("enviando");
     try {
-      await gravarLead({ email, whatsapp, profissao: profissaoSlug, origem: `site:${profissaoSlug}` });
+      await gravarLead({ email, whatsapp, profissao: profissao || "outra", origem });
       setEstado("enviado");
     } catch (err) {
       console.error(err);
@@ -65,7 +89,7 @@ export default function ListaDeEspera({ profissaoSlug, profissaoNome, aoFechar }
         role="dialog"
         aria-modal="true"
         aria-labelledby="le-titulo"
-        className="w-full max-w-md rounded-t-2xl bg-folha p-5 shadow-xl sm:rounded-2xl"
+        className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-t-2xl bg-folha p-5 shadow-xl sm:rounded-2xl"
       >
         {estado === "enviado" ? (
           <div>
@@ -74,16 +98,16 @@ export default function ListaDeEspera({ profissaoSlug, profissaoNome, aoFechar }
             </h2>
             <p className="mt-2 text-grafite">
               Avisamos você no e-mail e no WhatsApp assim que der para enviar orçamentos e receber a aprovação por
-              link. Enquanto isso, o PDF já está liberado.
+              link. Quem entra na lista começa com os 5 orçamentos grátis do mês já liberados.
             </p>
             <button type="button" onClick={aoFechar} className="botao-primario mt-5 w-full">
-              Voltar ao orçamento
+              Fechar
             </button>
           </div>
         ) : (
           <form onSubmit={enviar} noValidate>
             <h2 id="le-titulo" className="text-xl font-semibold">
-              Enviar pelo WhatsApp e receber a aprovação por link
+              {titulo}
             </h2>
             <p className="mt-2 text-sm text-grafite">
               Essa parte está quase pronta. Deixe seu contato e avisamos você quando abrir. É grátis para começar.
@@ -121,9 +145,32 @@ export default function ListaDeEspera({ profissaoSlug, profissaoNome, aoFechar }
                   required
                 />
               </div>
-              <p className="text-sm text-grafite">
-                Profissão: <strong className="text-tinta">{profissaoNome}</strong>
-              </p>
+              {perguntarProfissao ? (
+                <div>
+                  <label htmlFor="le-prof" className="rotulo">
+                    Sua profissão
+                  </label>
+                  <select
+                    id="le-prof"
+                    className="campo"
+                    value={profissao}
+                    onChange={(e) => setProfissao(e.target.value)}
+                    required
+                  >
+                    <option value="">Escolha…</option>
+                    {opcoesProfissao.map((o) => (
+                      <option key={o.slug} value={o.slug}>
+                        {o.nome}
+                      </option>
+                    ))}
+                    <option value="outra">Outra</option>
+                  </select>
+                </div>
+              ) : (
+                <p className="text-sm text-grafite">
+                  Profissão: <strong className="text-tinta">{profissaoNome}</strong>
+                </p>
+              )}
             </div>
             {erro && (
               <p role="alert" className="mt-3 rounded-[10px] bg-[#FDECEF] px-3 py-2 text-sm text-recusado">

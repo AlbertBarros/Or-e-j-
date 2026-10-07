@@ -18,6 +18,7 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 - [x] Schema JSON-LD, sitemap, robots, canonical
 - [x] Escrever o bloco "Como preencher" das 10 profissões (rascunho do Claude, revisão do Jonathan)
 - [x] Deploy no Cloudflare Pages (https://orca-ja-6cz.pages.dev)
+- [x] Extra: logo, home de vendas, página /precos (Grátis, Pro mensal R$ 29,90, Pro anual R$ 19,90/mês) e botões "Começar grátis" / "Assinar o Pro" prontos para o app e o checkout (variáveis PUBLIC_APP_PRONTO e PUBLIC_CHECKOUT_URL_*)
 
 **Pronto quando:** as 10 páginas estão no ar, o PDF baixa no celular, o lead é gravado no Firestore, o Lighthouse mobile dá ≥ 90 em Performance e SEO e o sitemap foi enviado ao Search Console.
 

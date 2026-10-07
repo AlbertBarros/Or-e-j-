@@ -1,12 +1,69 @@
 ---
 import Base from "../layouts/Base.astro";
-import CardProfissao from "../components/CardProfissao.astro";
-import { profissoes } from "../lib/profissoes";
+import Cta from "../components/Cta";
+import HeroDocumento from "../components/HeroDocumento.astro";
+import Planos from "../components/Planos.astro";
+import Faq from "../components/Faq.astro";
+import { profissoes, urlProfissao } from "../lib/profissoes";
 import { NOME_SITE, URL_HUB } from "../lib/site";
+import { APP_PRONTO, URL_CADASTRO, LIMITE_FREE, textoMensal, textoAnualPorMes } from "../lib/planos";
 
-const titulo = "Orça Já — orçamento, aprovação por link e Pix para autônomos";
+const titulo = "Orça Já — orçamento profissional, aprovação por link e Pix em 1 minuto";
 const descricao =
-  "Mande um orçamento com cara de empresa em 1 minuto, receba a aprovação pelo WhatsApp e cobre por Pix. Modelos grátis para eletricista, pintor, diarista e mais.";
+  "Mande orçamentos com cara de empresa pelo WhatsApp, receba a aprovação do cliente por link e cobre por Pix. Grátis para começar, feito para eletricistas, pintores, diaristas e outros autônomos.";
+
+const opcoes = profissoes.map((p) => ({ slug: p.slug, nome: p.nome }));
+
+const dores = [
+  {
+    t: "O orçamento vai solto no WhatsApp",
+    d: "Uma mensagem com números no meio da conversa não passa confiança. O cliente compara com quem mandou um documento bonito e fecha com o outro.",
+  },
+  {
+    t: "O cliente some depois do orçamento",
+    d: "Sem um botão claro de aprovar, a decisão fica para depois. E depois vira nunca.",
+  },
+  {
+    t: "Cobrar é constrangedor",
+    d: "Você fez o serviço, o pagamento atrasou e agora precisa escrever aquela mensagem. Sempre fica a dúvida do tom.",
+  },
+];
+
+const recursos = [
+  { t: "Itens prontos da sua profissão", d: "Escolha os serviços da lista e ajuste os valores. Nada de digitar tudo do zero em pé na casa do cliente." },
+  { t: "Link de aprovação", d: "O cliente abre no celular, vê o orçamento como um documento e toca em Aprovar. Sem baixar nada, sem cadastro." },
+  { t: "Pix na mesma página", d: "Aprovou, apareceu o Pix copia-e-cola e o QR Code. O dinheiro cai direto na sua conta, sem intermediário." },
+  { t: "Cobrança sem climão", d: "Três mensagens prontas, da lembrança gentil ao aviso final, com o tom sugerido pelos dias de atraso." },
+  { t: "Recibo em PDF", d: "Marcou como pago, saiu o recibo com valor por extenso para mandar ao cliente. Ele guarda, você se protege." },
+  { t: "Sua marca no documento", d: "No Pro, sua logo aparece no orçamento e no recibo. O cliente lembra de você na próxima vez." },
+];
+
+const faq = [
+  {
+    pergunta: "Meu cliente precisa baixar algum aplicativo?",
+    resposta: "Não. Ele recebe um link pelo WhatsApp, abre no navegador do celular, vê o orçamento e aprova com um toque. Nenhum cadastro é pedido a ele.",
+  },
+  {
+    pergunta: "O dinheiro passa pelo Orça Já?",
+    resposta: "Nunca. O Pix é gerado com a sua chave e cai direto na sua conta. O Orça Já só organiza o orçamento, a aprovação e o recibo.",
+  },
+  {
+    pergunta: "Preciso de CNPJ ou MEI?",
+    resposta: "Não. Autônomo com CPF usa normalmente, inclusive o Pix. Se você tiver MEI, pode colocar o nome da empresa no documento.",
+  },
+  {
+    pergunta: "O plano grátis é grátis mesmo?",
+    resposta: `Sim. Você envia até ${LIMITE_FREE} orçamentos por mês, com link de aprovação, Pix e recibo, sem cartão de crédito. Só a logo e a retirada da nossa marca ficam para o Pro.`,
+  },
+  {
+    pergunta: "Posso cancelar o Pro quando quiser?",
+    resposta: "Pode. No mensal, basta cancelar e você não é cobrado no mês seguinte. No anual, há 7 dias de garantia: não gostou, devolvemos o valor.",
+  },
+  {
+    pergunta: "Funciona no meu celular?",
+    resposta: "Funciona em qualquer celular com navegador, Android ou iPhone, e também no computador. Foi desenhado para ser usado com uma mão, em pé.",
+  },
+];
 
 const jsonLd = [
   {
@@ -14,73 +71,219 @@ const jsonLd = [
     "@type": "Organization",
     name: NOME_SITE,
     url: new URL("/", Astro.site).href,
-    logo: new URL("/favicon.svg", Astro.site).href,
+    logo: new URL("/logo.svg", Astro.site).href,
   },
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
+    "@type": "SoftwareApplication",
     name: NOME_SITE,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
     url: new URL("/", Astro.site).href,
+    description: descricao,
     inLanguage: "pt-BR",
+    offers: [
+      { "@type": "Offer", name: "Grátis", price: "0", priceCurrency: "BRL" },
+      { "@type": "Offer", name: "Pro mensal", price: "29.90", priceCurrency: "BRL" },
+      { "@type": "Offer", name: "Pro anual", price: "238.80", priceCurrency: "BRL" },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({
+      "@type": "Question",
+      name: f.pergunta,
+      acceptedAnswer: { "@type": "Answer", text: f.resposta },
+    })),
   },
 ];
 ---
 
 <Base titulo={titulo} descricao={descricao} caminho="/" jsonLd={jsonLd}>
-  <section class="pt-10 sm:pt-16">
-    <p class="text-sm font-semibold uppercase tracking-wide text-carbono">Para quem trabalha por conta própria</p>
-    <h1 class="mt-2 text-4xl font-bold leading-tight sm:text-5xl">
-      Mande um orçamento com cara de empresa em 1 minuto.
-    </h1>
-    <p class="mt-4 text-lg text-grafite">
-      O cliente recebe um link pelo WhatsApp, aprova com um toque e paga por Pix. Quando o dinheiro cai, o recibo
-      sai em PDF. Sem papel, sem constrangimento na hora de cobrar.
-    </p>
-    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
-      <a href={URL_HUB} class="botao-primario">Fazer um orçamento grátis</a>
-      <a href="#como-funciona" class="botao-secundario">Ver como funciona</a>
+  <!-- Herói -->
+  <section class="grid items-center gap-10 pt-10 sm:pt-16 lg:grid-cols-2 lg:gap-12">
+    <div>
+      <p class="inline-flex items-center gap-2 rounded-full bg-carbono-claro px-3 py-1 text-sm font-medium text-carbono">
+        Para eletricistas, pintores, diaristas e todo autônomo
+      </p>
+      <h1 class="mt-4 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-[3.4rem]">
+        Mande um orçamento com cara de empresa. <span class="text-carbono">Receba a aprovação em 1 toque.</span>
+      </h1>
+      <p class="mt-5 max-w-xl text-lg text-grafite">
+        Você monta o orçamento no celular em 1 minuto, envia pelo WhatsApp, o cliente aprova por um link e paga no
+        Pix. Quando o dinheiro cai, o recibo sai em PDF. Sem papel, sem planilha, sem constrangimento na hora de
+        cobrar.
+      </p>
+      <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+        <Cta
+          client:load
+          variante="primario"
+          texto="Começar grátis"
+          href={APP_PRONTO ? URL_CADASTRO : undefined}
+          origem="home:heroi"
+          titulo="Comece grátis assim que o app abrir"
+          opcoesProfissao={opcoes}
+          className="!min-h-12 !px-7 text-base"
+        />
+        <a href="#como-funciona" class="botao-secundario !min-h-12 !px-7 text-base">Ver como funciona</a>
+      </div>
+      <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm text-grafite">
+        <li class="flex items-center gap-1"><span class="text-pago" aria-hidden="true">✓</span> {LIMITE_FREE} orçamentos grátis por mês</li>
+        <li class="flex items-center gap-1"><span class="text-pago" aria-hidden="true">✓</span> Sem cartão de crédito</li>
+        <li class="flex items-center gap-1"><span class="text-pago" aria-hidden="true">✓</span> O cliente não precisa de app</li>
+      </ul>
+    </div>
+    <div class="px-2 pt-2 lg:pt-0">
+      <HeroDocumento />
     </div>
   </section>
 
-  <section id="como-funciona" aria-labelledby="cf-titulo" class="mt-16">
-    <h2 id="cf-titulo" class="text-2xl font-semibold">Orçar, aprovar, cobrar, recibo</h2>
-    <ol class="mt-4 grid gap-3 sm:grid-cols-2">
-      <li class="rounded-lg border border-pauta bg-folha p-4">
-        <span class="tabular text-2xl font-bold text-carbono">1</span>
+  <!-- Dor -->
+  <section aria-labelledby="dor-titulo" class="mt-20">
+    <h2 id="dor-titulo" class="text-3xl font-bold tracking-tight">Isso acontece com você?</h2>
+    <div class="mt-6 grid gap-4 md:grid-cols-3">
+      {
+        dores.map((d) => (
+          <article class="documento p-5">
+            <h3 class="font-semibold">{d.t}</h3>
+            <p class="mt-2 text-grafite">{d.d}</p>
+          </article>
+        ))
+      }
+    </div>
+    <p class="mt-6 max-w-2xl text-lg">
+      O problema não é o seu serviço. É que o orçamento chega ao cliente de um jeito que não ajuda a decidir. O Orça
+      Já resolve isso em quatro passos.
+    </p>
+  </section>
+
+  <!-- Como funciona -->
+  <section id="como-funciona" aria-labelledby="cf-titulo" class="mt-20 scroll-mt-20">
+    <h2 id="cf-titulo" class="text-3xl font-bold tracking-tight">Orçar, aprovar, cobrar, recibo</h2>
+    <p class="mt-2 text-lg text-grafite">O ciclo inteiro no seu celular, e o cliente só precisa do WhatsApp.</p>
+    <ol class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <li class="documento p-5">
+        <span class="tabular text-3xl font-bold text-carbono">1</span>
         <p class="mt-1 font-semibold">Orçar</p>
-        <p class="text-sm text-grafite">Itens da sua profissão já sugeridos. Total ao vivo. Pronto em 1 minuto, no celular.</p>
+        <p class="mt-1 text-sm text-grafite">Escolha os itens da sua profissão, ajuste os valores e veja o total ao vivo. Pronto em 1 minuto.</p>
       </li>
-      <li class="rounded-lg border border-pauta bg-folha p-4">
-        <span class="tabular text-2xl font-bold text-carbono">2</span>
-        <p class="mt-1 font-semibold">Aprovar</p>
-        <p class="text-sm text-grafite">O cliente abre o link no WhatsApp e toca em "Aprovar orçamento". Sem baixar nada.</p>
+      <li class="documento p-5">
+        <span class="tabular text-3xl font-bold text-carbono">2</span>
+        <p class="mt-1 font-semibold">Enviar e aprovar</p>
+        <p class="mt-1 text-sm text-grafite">Toque em "Enviar no WhatsApp". O cliente abre o link e toca em "Aprovar orçamento".</p>
       </li>
-      <li class="rounded-lg border border-pauta bg-folha p-4">
-        <span class="tabular text-2xl font-bold text-carbono">3</span>
+      <li class="documento p-5">
+        <span class="tabular text-3xl font-bold text-carbono">3</span>
         <p class="mt-1 font-semibold">Cobrar</p>
-        <p class="text-sm text-grafite">Pix copia-e-cola na mesma página. Se atrasar, mensagens de cobrança prontas, no tom certo.</p>
+        <p class="mt-1 text-sm text-grafite">Aprovou, apareceu o Pix. Atrasou, você manda uma das mensagens prontas, no tom certo.</p>
       </li>
-      <li class="rounded-lg border border-pauta bg-folha p-4">
-        <span class="tabular text-2xl font-bold text-carbono">4</span>
+      <li class="documento p-5">
+        <span class="tabular text-3xl font-bold text-carbono">4</span>
         <p class="mt-1 font-semibold">Recibo</p>
-        <p class="text-sm text-grafite">Marcou como pago, saiu o recibo em PDF para mandar ao cliente.</p>
+        <p class="mt-1 text-sm text-grafite">Marque como pago e envie o recibo em PDF pelo WhatsApp. Fim do ciclo, sem papel.</p>
       </li>
     </ol>
   </section>
 
-  <section aria-labelledby="prof-titulo" class="mt-16">
-    <h2 id="prof-titulo" class="text-2xl font-semibold">Modelos de orçamento grátis por profissão</h2>
-    <p class="mt-2 text-grafite">Preencha online e baixe em PDF agora, sem cadastro.</p>
-    <div class="mt-4 overflow-hidden rounded-lg border border-pauta">
-      {profissoes.map((p) => <CardProfissao profissao={p} />)}
+  <!-- Recursos -->
+  <section aria-labelledby="rec-titulo" class="mt-20">
+    <h2 id="rec-titulo" class="text-3xl font-bold tracking-tight">Tudo o que você precisa, nada do que atrapalha</h2>
+    <p class="mt-2 max-w-2xl text-lg text-grafite">
+      Sem agenda, sem estoque, sem relatório complicado. Só o que faz o orçamento virar dinheiro na conta.
+    </p>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        recursos.map((r) => (
+          <article class="rounded-lg border border-pauta bg-folha p-5">
+            <h3 class="font-semibold">{r.t}</h3>
+            <p class="mt-2 text-sm text-grafite">{r.d}</p>
+          </article>
+        ))
+      }
     </div>
   </section>
 
-  <section aria-labelledby="lista-titulo" class="mt-16 rounded-lg border border-pauta bg-folha p-5">
-    <h2 id="lista-titulo" class="text-xl font-semibold">O envio por link está chegando</h2>
-    <p class="mt-2 text-grafite">
-      Estamos terminando a parte de aprovação e Pix. Faça um orçamento em qualquer modelo acima e toque em "Salvar e
-      enviar pelo WhatsApp" para entrar na lista. Avisamos você quando abrir, e começar é grátis.
+  <!-- Conta rápida -->
+  <section aria-labelledby="conta-titulo" class="mt-20 rounded-lg bg-carbono px-6 py-10 text-white sm:px-10">
+    <h2 id="conta-titulo" class="text-3xl font-bold tracking-tight">Faça a conta</h2>
+    <div class="mt-6 grid gap-6 md:grid-cols-3">
+      <div>
+        <p class="tabular text-4xl font-bold">1</p>
+        <p class="mt-1 text-carbono-claro">orçamento aprovado a mais no mês já paga o Pro inteiro, várias vezes.</p>
+      </div>
+      <div>
+        <p class="tabular text-4xl font-bold">{textoAnualPorMes}</p>
+        <p class="mt-1 text-carbono-claro">por mês no plano anual. Menos do que um almoço, pelo mês todo de orçamentos.</p>
+      </div>
+      <div>
+        <p class="tabular text-4xl font-bold">0</p>
+        <p class="mt-1 text-carbono-claro">taxas sobre o que você recebe. O Pix é seu, direto na sua conta.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Para quem é -->
+  <section aria-labelledby="quem-titulo" class="mt-20">
+    <h2 id="quem-titulo" class="text-3xl font-bold tracking-tight">Feito para quem trabalha por conta própria</h2>
+    <p class="mt-2 max-w-2xl text-lg text-grafite">
+      Cada profissão já vem com os serviços mais comuns e preços de referência. Experimente o modelo grátis da sua:
     </p>
+    <ul class="mt-6 flex flex-wrap gap-2">
+      {
+        profissoes.map((p) => (
+          <li>
+            <a
+              href={urlProfissao(p.slug)}
+              class="inline-flex min-h-11 items-center rounded-full border border-pauta bg-folha px-4 text-sm font-medium hover:border-carbono hover:text-carbono"
+            >
+              {p.nome}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href={URL_HUB} class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium text-carbono hover:underline">
+          Ver todos os modelos →
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Planos -->
+  <section id="precos" aria-labelledby="planos-titulo" class="mt-20 scroll-mt-20">
+    <h2 id="planos-titulo" class="text-3xl font-bold tracking-tight">Comece grátis. Cresça quando fizer sentido.</h2>
+    <p class="mt-2 max-w-2xl text-lg text-grafite">
+      O plano grátis já resolve o ciclo inteiro. O Pro tira o limite e coloca a sua marca no documento, por {textoMensal} ao mês ou {textoAnualPorMes} por mês no anual.
+    </p>
+    <div class="mt-8">
+      <Planos origem="home" />
+    </div>
+  </section>
+
+  <!-- Perguntas -->
+  <div id="perguntas" class="scroll-mt-20">
+    <Faq perguntas={faq} titulo="Perguntas antes de começar" />
+  </div>
+
+  <!-- Chamada final -->
+  <section aria-labelledby="final-titulo" class="mt-20 rounded-lg border border-pauta bg-folha px-6 py-10 text-center sm:px-10">
+    <h2 id="final-titulo" class="text-3xl font-bold tracking-tight">Seu próximo orçamento pode ser o primeiro com cara de empresa.</h2>
+    <p class="mx-auto mt-3 max-w-xl text-lg text-grafite">
+      Leva 2 minutos para configurar: profissão, nome do negócio e chave Pix. Depois, cada orçamento leva 1.
+    </p>
+    <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+      <Cta
+        client:visible
+        variante="primario"
+        texto="Começar grátis"
+        href={APP_PRONTO ? URL_CADASTRO : undefined}
+        origem="home:final"
+        titulo="Comece grátis assim que o app abrir"
+        opcoesProfissao={opcoes}
+        className="!min-h-12 !px-7 text-base"
+      />
+      <a href={URL_HUB} class="botao-secundario !min-h-12 !px-7 text-base">Testar um modelo sem cadastro</a>
+    </div>
   </section>
 </Base>

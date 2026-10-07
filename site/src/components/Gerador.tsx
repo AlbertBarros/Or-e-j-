@@ -348,7 +348,12 @@ export default function Gerador({ profissao }: Props) {
       </div>
 
       {listaAberta && (
-        <ListaDeEspera profissaoSlug={profissao.slug} profissaoNome={profissao.nome} aoFechar={() => setListaAberta(false)} />
+        <ListaDeEspera
+          profissaoSlug={profissao.slug}
+          profissaoNome={profissao.nome}
+          origem={`site:${profissao.slug}`}
+          aoFechar={() => setListaAberta(false)}
+        />
       )}
     </section>
   );

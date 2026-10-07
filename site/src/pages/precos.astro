@@ -1,0 +1,105 @@
+---
+import Base from "../layouts/Base.astro";
+import Planos from "../components/Planos.astro";
+import Faq from "../components/Faq.astro";
+import { LIMITE_FREE, textoMensal, textoAnualPorMes, textoAnualTotal, textoEconomia } from "../lib/planos";
+
+const titulo = `Preços do Orça Já — grátis ou Pro por ${textoMensal}/mês`;
+const descricao = `Plano grátis com ${LIMITE_FREE} orçamentos por mês, link de aprovação, Pix e recibo. Pro com orçamentos ilimitados e sua logo por ${textoMensal} ao mês ou ${textoAnualPorMes} por mês no anual.`;
+
+const comparacao = [
+  { r: "Orçamentos enviados por mês", g: `${LIMITE_FREE}`, p: "Ilimitados" },
+  { r: "Link de aprovação para o cliente", g: "Sim", p: "Sim" },
+  { r: "Pix copia-e-cola e QR Code", g: "Sim", p: "Sim" },
+  { r: "Mensagens de cobrança prontas", g: "Sim", p: "Sim" },
+  { r: "Recibo em PDF", g: "Sim", p: "Sim" },
+  { r: "PDF do orçamento", g: "Sim", p: "Sim" },
+  { r: "Sua logo no orçamento e no recibo", g: "Não", p: "Sim" },
+  { r: "Marca \"Feito com Orça Já\" no PDF", g: "Sim", p: "Não" },
+];
+
+const faq = [
+  {
+    pergunta: "Qual a diferença entre o mensal e o anual?",
+    resposta: `São o mesmo Pro. No mensal você paga ${textoMensal} todo mês e pode parar quando quiser. No anual você paga ${textoAnualTotal} uma vez por ano, o que dá ${textoAnualPorMes} por mês, uma economia de ${textoEconomia}.`,
+  },
+  {
+    pergunta: "Como pago?",
+    resposta: "Pix ou cartão de crédito, pela nossa plataforma de pagamento. Depois do pagamento, o Pro é liberado na sua conta.",
+  },
+  {
+    pergunta: "E se eu não gostar?",
+    resposta: "Você tem 7 dias de garantia em qualquer plano Pro. Peça o cancelamento e devolvemos o valor.",
+  },
+  {
+    pergunta: "O que acontece quando acabam os 5 orçamentos do grátis?",
+    resposta: "Seus orçamentos continuam salvos e você pode editá-los. Para enviar novos no mesmo mês, basta assinar o Pro. No mês seguinte, o limite do grátis volta.",
+  },
+  {
+    pergunta: "O Orça Já cobra alguma taxa sobre os meus recebimentos?",
+    resposta: "Não. O Pix é gerado com a sua chave e o dinheiro vai direto para a sua conta. Nós só cobramos a assinatura do Pro.",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: new URL("/", Astro.site).href },
+      { "@type": "ListItem", position: 2, name: "Preços", item: new URL("/precos", Astro.site).href },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({
+      "@type": "Question",
+      name: f.pergunta,
+      acceptedAnswer: { "@type": "Answer", text: f.resposta },
+    })),
+  },
+];
+---
+
+<Base titulo={titulo} descricao={descricao} caminho="/precos" jsonLd={jsonLd}>
+  <section class="pt-10 text-center sm:pt-16">
+    <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Preço simples, sem surpresa</h1>
+    <p class="mx-auto mt-4 max-w-2xl text-lg text-grafite">
+      Comece grátis e use com clientes de verdade. Quando o limite apertar ou quiser sua logo no documento, o Pro
+      custa menos do que um orçamento aprovado.
+    </p>
+  </section>
+
+  <section aria-label="Planos" class="mt-10">
+    <Planos origem="precos" />
+  </section>
+
+  <section aria-labelledby="comp-titulo" class="mt-16">
+    <h2 id="comp-titulo" class="text-2xl font-semibold">O que tem em cada plano</h2>
+    <div class="mt-4 overflow-x-auto rounded-lg border border-pauta bg-folha">
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="border-b border-pauta text-grafite">
+            <th scope="col" class="px-4 py-3 font-semibold">Recurso</th>
+            <th scope="col" class="px-4 py-3 font-semibold">Grátis</th>
+            <th scope="col" class="px-4 py-3 font-semibold text-carbono">Pro</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-pauta">
+          {
+            comparacao.map((l) => (
+              <tr>
+                <th scope="row" class="px-4 py-3 font-medium">{l.r}</th>
+                <td class="px-4 py-3">{l.g}</td>
+                <td class="px-4 py-3 font-medium">{l.p}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <Faq perguntas={faq} titulo="Perguntas sobre pagamento" />
+</Base>

@@ -3,8 +3,10 @@ import Base from "../../layouts/Base.astro";
 import Gerador from "../../components/Gerador";
 import Documento from "../../components/Documento.astro";
 import Faq from "../../components/Faq.astro";
+import Cta from "../../components/Cta";
 import { profissoes, relacionadas, urlProfissao, type Profissao } from "../../lib/profissoes";
 import { NOME_SITE, URL_HUB } from "../../lib/site";
+import { APP_PRONTO, URL_CADASTRO, LIMITE_FREE } from "../../lib/planos";
 
 export function getStaticPaths() {
   return profissoes.map((p) => ({ params: { slug: p.slug }, props: { profissao: p } }));
@@ -18,6 +20,7 @@ const caminho = urlProfissao(profissao.slug);
 const urlAbsoluta = new URL(caminho, Astro.site).href;
 const outras = relacionadas(profissao.slug);
 const paragrafos = profissao.comoPreencher ?? [];
+const opcoes = profissoes.map((p) => ({ slug: p.slug, nome: p.nome }));
 
 const jsonLd = [
   {
@@ -104,10 +107,20 @@ const jsonLd = [
     <h2 id="cta-titulo" class="text-xl font-semibold">Cansou de orçamento no papel ou em mensagem solta?</h2>
     <p class="mt-2 text-grafite">
       Com o Orça Já você manda o orçamento por um link, o cliente aprova com um toque e paga por Pix. Depois, o recibo
-      sai em PDF. Deixe seu contato no gerador acima, no botão "Salvar e enviar pelo WhatsApp", e avisamos você quando
-      abrir.
+      sai em PDF. Grátis para começar, com {LIMITE_FREE} orçamentos por mês.
     </p>
-    <a href="#gerador-titulo" class="botao-primario mt-4 w-full sm:w-auto">Voltar ao gerador</a>
+    <div class="mt-4 flex flex-col gap-2 sm:flex-row">
+      <Cta
+        client:visible
+        variante="primario"
+        texto="Começar grátis"
+        href={APP_PRONTO ? URL_CADASTRO : undefined}
+        origem={`site:${profissao.slug}:cta`}
+        titulo="Comece grátis assim que o app abrir"
+        opcoesProfissao={opcoes}
+      />
+      <a href="/precos" class="botao-secundario">Ver planos e preços</a>
+    </div>
   </section>
 
   <section aria-labelledby="rel-titulo" class="mt-12">

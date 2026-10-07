@@ -80,6 +80,6 @@ Uma fase por sessão. Sempre leia o plano que o Claude Code propõe antes de diz
 ## Antes de lançar, decisões que são suas
 
 - Nome e domínio: verificar se `orcaja.com.br` está disponível no Registro.br.
-- Preço do Pro (sugestão de R$ 24,90/mês) e o gateway do link de pagamento (Asaas, Mercado Pago ou Stripe).
+- Preço do Pro: definido em R$ 29,90/mês ou R$ 19,90/mês no anual (6 out 2026). Gateway sugerido: Mercado Pago (link de assinatura).
 - Revisar os preços de referência em `profissoes.json` para a sua região.
 - Termos de uso e política de privacidade (LGPD).

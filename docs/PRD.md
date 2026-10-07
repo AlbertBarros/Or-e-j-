@@ -83,7 +83,7 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 
 ## Planos
 
-| | Grátis | Pro (R$ 24,90/mês, preço a validar) |
+| | Grátis | Pro (R$ 29,90/mês ou R$ 19,90/mês no plano anual, R$ 238,80/ano) |
 |---|---|---|
 | Orçamentos enviados/mês | 5 | Ilimitados |
 | Link de aprovação + Pix | Sim | Sim |
