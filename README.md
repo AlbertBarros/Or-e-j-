@@ -12,6 +12,7 @@ Este pacote tem tudo o que o Claude Code precisa para construir o MVP: a especif
 | `docs/DESIGN.md` | Cores, tipografia, componentes, textos da interface |
 | `docs/SEO.md` | Site de páginas "modelo de orçamento para X" |
 | `docs/ROADMAP.md` | 6 fases (0 a 5) com checklist e "pronto quando" |
+| `docs/LANCAMENTO.md` | Guia de lançamento e operação: tudo o que o dono do projeto precisa fazer |
 | `docs/PROMPTS.md` | Prompts prontos para colar em cada etapa |
 | `shared/src/pix.ts` | Gerador de Pix copia-e-cola (validado com o exemplo oficial do Banco Central) |
 | `shared/src/mensagens.ts` | Cálculos, links do WhatsApp e mensagens de cobrança |
