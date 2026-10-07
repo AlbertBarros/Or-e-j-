@@ -23,12 +23,12 @@ const opcoes = profissoes.map((p) => ({ slug: p.slug, nome: p.nome }));
 const recursosGratis = [
   `${LIMITE_FREE} orçamentos enviados por mês`,
   "Link de aprovação para o cliente",
-  "Pix copia-e-cola e QR Code",
   "Mensagens de cobrança prontas",
   "Recibo em PDF",
 ];
 const recursosPro = [
   "Orçamentos ilimitados",
+  "Pix copia-e-cola e QR Code na página de aprovação",
   "Sua logo no orçamento e no recibo",
   "Sem a marca \"Feito com Orça Já\"",
   "Tudo do plano grátis",
@@ -54,6 +54,10 @@ const recursosPro = [
           </li>
         ))
       }
+      <li class="flex gap-2 text-grafite">
+        <span aria-hidden="true" class="mt-0.5">–</span>
+        <span>Sem Pix na página de aprovação</span>
+      </li>
       <li class="flex gap-2 text-grafite">
         <span aria-hidden="true" class="mt-0.5">–</span>
         <span>Sem logo; PDF com a marca Orça Já</span>

@@ -32,7 +32,7 @@ const dores = [
 const recursos = [
   { t: "Itens prontos da sua profissão", d: "Escolha os serviços da lista e ajuste os valores. Nada de digitar tudo do zero em pé na casa do cliente." },
   { t: "Link de aprovação", d: "O cliente abre no celular, vê o orçamento como um documento e toca em Aprovar. Sem baixar nada, sem cadastro." },
-  { t: "Pix na mesma página", d: "Aprovou, apareceu o Pix copia-e-cola e o QR Code. O dinheiro cai direto na sua conta, sem intermediário." },
+  { t: "Pix na mesma página", d: "No Pro, aprovou, apareceu o Pix copia-e-cola e o QR Code. O dinheiro cai direto na sua conta, sem intermediário." },
   { t: "Cobrança sem climão", d: "Três mensagens prontas, da lembrança gentil ao aviso final, com o tom sugerido pelos dias de atraso." },
   { t: "Recibo em PDF", d: "Marcou como pago, saiu o recibo com valor por extenso para mandar ao cliente. Ele guarda, você se protege." },
   { t: "Sua marca no documento", d: "No Pro, sua logo aparece no orçamento e no recibo. O cliente lembra de você na próxima vez." },
@@ -53,7 +53,7 @@ const faq = [
   },
   {
     pergunta: "O plano grátis é grátis mesmo?",
-    resposta: `Sim. Você envia até ${LIMITE_FREE} orçamentos por mês, com link de aprovação, Pix e recibo, sem cartão de crédito. Só a logo e a retirada da nossa marca ficam para o Pro.`,
+    resposta: `Sim. Você envia até ${LIMITE_FREE} orçamentos por mês, com link de aprovação e recibo, sem cartão de crédito. O Pix na página de aprovação, a logo e a retirada da nossa marca ficam para o Pro.`,
   },
   {
     pergunta: "Posso cancelar o Pro quando quiser?",
@@ -254,7 +254,7 @@ const jsonLd = [
   <section id="precos" aria-labelledby="planos-titulo" class="mt-20 scroll-mt-20">
     <h2 id="planos-titulo" class="text-3xl font-bold tracking-tight">Comece grátis. Cresça quando fizer sentido.</h2>
     <p class="mt-2 max-w-2xl text-lg text-grafite">
-      O plano grátis já resolve o ciclo inteiro. O Pro tira o limite e coloca a sua marca no documento, por {textoMensal} ao mês ou {textoAnualPorMes} por mês no anual.
+      O plano grátis já resolve orçamento e aprovação. O Pro tira o limite, libera o Pix na aprovação e coloca a sua marca no documento, por {textoMensal} ao mês ou {textoAnualPorMes} por mês no anual.
     </p>
     <div class="mt-8">
       <Planos origem="home" />

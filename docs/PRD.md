@@ -86,7 +86,8 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 | | Grátis | Pro (R$ 29,90/mês ou R$ 19,90/mês no plano anual, R$ 238,80/ano) |
 |---|---|---|
 | Orçamentos enviados/mês | 5 | Ilimitados |
-| Link de aprovação + Pix | Sim | Sim |
+| Link de aprovação | Sim | Sim |
+| Pix (copia-e-cola + QR) na página de aprovação | Não | Sim |
 | Logo no orçamento | Não | Sim |
 | Marca "Feito com Orça Já" no PDF | Sim | Não |
 | Mensagens de cobrança | Sim | Sim |

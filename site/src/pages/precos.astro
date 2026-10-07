@@ -5,12 +5,12 @@ import Faq from "../components/Faq.astro";
 import { LIMITE_FREE, textoMensal, textoAnualPorMes, textoAnualTotal, textoEconomia } from "../lib/planos";
 
 const titulo = `Preços do Orça Já — grátis ou Pro por ${textoMensal}/mês`;
-const descricao = `Plano grátis com ${LIMITE_FREE} orçamentos por mês, link de aprovação, Pix e recibo. Pro com orçamentos ilimitados e sua logo por ${textoMensal} ao mês ou ${textoAnualPorMes} por mês no anual.`;
+const descricao = `Plano grátis com ${LIMITE_FREE} orçamentos por mês, link de aprovação e recibo. Pro com orçamentos ilimitados, Pix na aprovação e sua logo por ${textoMensal} ao mês ou ${textoAnualPorMes} por mês no anual.`;
 
 const comparacao = [
   { r: "Orçamentos enviados por mês", g: `${LIMITE_FREE}`, p: "Ilimitados" },
   { r: "Link de aprovação para o cliente", g: "Sim", p: "Sim" },
-  { r: "Pix copia-e-cola e QR Code", g: "Sim", p: "Sim" },
+  { r: "Pix copia-e-cola e QR Code na aprovação", g: "Não", p: "Sim" },
   { r: "Mensagens de cobrança prontas", g: "Sim", p: "Sim" },
   { r: "Recibo em PDF", g: "Sim", p: "Sim" },
   { r: "PDF do orçamento", g: "Sim", p: "Sim" },
@@ -66,7 +66,7 @@ const jsonLd = [
   <section class="pt-10 text-center sm:pt-16">
     <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Preço simples, sem surpresa</h1>
     <p class="mx-auto mt-4 max-w-2xl text-lg text-grafite">
-      Comece grátis e use com clientes de verdade. Quando o limite apertar ou quiser sua logo no documento, o Pro
+      Comece grátis e use com clientes de verdade. Quando o limite apertar ou quiser receber por Pix direto na aprovação e ter sua logo no documento, o Pro
       custa menos do que um orçamento aprovado.
     </p>
   </section>
