@@ -50,6 +50,14 @@ service cloud.firestore {
       allow delete: if logado() && resource.data.ownerId == request.auth.uid;
     }
 
+    // Métricas (PRD): só criação, sem dados pessoais; ninguém lê pelo cliente.
+    match /eventos/{id} {
+      allow create: if request.resource.data.keys().hasOnly(["nome", "uid", "orcamentoId", "origem", "criadoEm"])
+        && request.resource.data.nome is string
+        && request.resource.data.nome.size() < 60;
+      allow read, update, delete: if false;
+    }
+
     // Lista de espera vinda do site de SEO: só criação, ninguém lê pelo cliente.
     match /leads/{id} {
       allow create: if request.resource.data.keys().hasOnly(["email", "whatsapp", "profissao", "origem", "criadoEm"])

@@ -153,6 +153,15 @@ describe("orcamentos", () => {
   });
 });
 
+describe("eventos", () => {
+  it("qualquer um cria evento sem dados pessoais; ninguém lê", async () => {
+    await assertSucceeds(addDoc(collection(anonimo(), "eventos"), { nome: "orcamento_aprovado", orcamentoId: "x", origem: "publico", criadoEm: new Date() }));
+    await assertSucceeds(addDoc(collection(como(A), "eventos"), { nome: "orcamento_criado", uid: A, origem: "app", criadoEm: new Date() }));
+    await assertFails(addDoc(collection(anonimo(), "eventos"), { nome: "x", email: "a@b.co", criadoEm: new Date() }));
+    await assertFails(getDocs(collection(como(A), "eventos")));
+  });
+});
+
 describe("leads", () => {
   it("anônimo cria lead com os 5 campos e nada mais", async () => {
     const lead = { email: "a@b.co", whatsapp: "5561999990000", profissao: "pintor", origem: "site:pintor", criadoEm: new Date() };

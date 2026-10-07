@@ -11,6 +11,7 @@ import {
   mensagemDeErroAuth,
 } from "@/lib/auth";
 import { validarEmail } from "@/lib/validacao";
+import { URL_SITE } from "@/lib/planos";
 
 type Etapa = "inicial" | "link-enviado" | "confirmar-email";
 
@@ -187,7 +188,15 @@ export default function Entrar() {
       </div>
 
       <p className="mt-6 text-center text-xs text-grafite">
-        Ao entrar, você concorda em usar o Orça Já para enviar orçamentos aos seus próprios clientes.
+        Ao entrar, você concorda com os{" "}
+        <a href={`${URL_SITE}/termos`} target="_blank" rel="noopener" className="underline">
+          termos de uso
+        </a>{" "}
+        e a{" "}
+        <a href={`${URL_SITE}/privacidade`} target="_blank" rel="noopener" className="underline">
+          política de privacidade
+        </a>
+        .
       </p>
     </main>
   );

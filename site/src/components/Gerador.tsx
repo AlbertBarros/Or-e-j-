@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { subtotal, total, formatarReais } from "@shared/src/mensagens";
 import type { Profissao } from "../lib/profissoes";
 import { paraNumero, paraTexto } from "@shared/src/numero";
-import ListaDeEspera from "./ListaDeEspera";
+import { linkCadastroComRascunho } from "../lib/rascunho";
 
 /** Item em edição: quantidade e valor ficam como texto para aceitar vírgula. */
 interface ItemEmEdicao {
@@ -52,7 +52,6 @@ export default function Gerador({ profissao }: Props) {
   const [mostrarSugeridos, setMostrarSugeridos] = useState(false);
   const [gerandoPdf, setGerandoPdf] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
-  const [listaAberta, setListaAberta] = useState(false);
 
   const itensNumericos = useMemo(
     () =>
@@ -337,24 +336,26 @@ export default function Gerador({ profissao }: Props) {
           <button type="button" onClick={baixarPdf} disabled={gerandoPdf} className="botao-secundario">
             {gerandoPdf ? "Gerando PDF…" : "Baixar PDF"}
           </button>
-          <button type="button" onClick={() => setListaAberta(true)} className="botao-primario">
+          <a
+            href={linkCadastroComRascunho({
+              profissao: profissao.slug,
+              negocio: negocio.trim() || undefined,
+              cliente: cliente.trim() || undefined,
+              itens: itensNumericos.filter((i) => i.descricao && i.qtd > 0),
+              desconto: valorDesconto || undefined,
+              observacoes: observacoes.trim() || undefined,
+            })}
+            className="botao-primario"
+          >
             <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1.1 2.7.1.2 1.9 2.9 4.6 4 1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z" />
             </svg>
             Salvar e enviar pelo WhatsApp
-          </button>
+          </a>
         </div>
-        <p className="mt-2 text-center text-xs text-grafite">PDF grátis, com a marca "Feito com Orça Já".</p>
+        <p className="mt-2 text-center text-xs text-grafite">PDF grátis, com a marca "Feito com Orça Já". Para enviar por link e receber a aprovação, crie sua conta grátis: o orçamento vai junto.</p>
       </div>
 
-      {listaAberta && (
-        <ListaDeEspera
-          profissaoSlug={profissao.slug}
-          profissaoNome={profissao.nome}
-          origem={`site:${profissao.slug}`}
-          aoFechar={() => setListaAberta(false)}
-        />
-      )}
     </section>
   );
 }

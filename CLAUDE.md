@@ -62,6 +62,8 @@ O `app/` e o `site/` importam de `shared/` por caminho relativo ou alias `@share
 
 - `users/{uid}`: perfil do negócio (nomeNegocio, nomeResponsavel, nomePix, whatsapp, cidade), chave Pix (normalizada), `temLogo`, `plano` ("free"|"pro", só o servidor altera), `proximoNumero`, `uso: { mes: "AAAA-MM", enviados: number }`.
 - `logos/{uid}`: `dataUrl` da logo (≤ 100 KB, `data:image/*`), leitura pública, escrita só do dono.
+- `eventos/{id}`: métricas (nome, uid?, orcamentoId?, origem, criadoEm), só criação. `leads/{id}`: lista de espera do site, só criação.
+- Recibo (Pro) fica dentro do orçamento em `recibo` (numeração própria em `users.proximoRecibo`). Pro com `planoAte` vencido é tratado como grátis (`comPlanoEfetivo`).
 - `orcamentos/{id}`: `ownerId`, `numero`, `cliente {nome, whatsapp}`, `itens[]`, `desconto`, `total`, `validadeAte`, `vencimentoPagamento`, `observacoes`, `status`, timestamps e **snapshot `negocio`** (nome, nomePix, whatsapp, chavePix, cidade, mostrarMarca, mostrarLogo, mostrarPix) para a página pública não ler `users/`. Pix na página de aprovação só no Pro.
 - `leads/{id}`: lista de espera do site (só criação).
 - Status: `rascunho → enviado → aprovado | recusado → pago`. "Atrasado" é **calculado** (aprovado + vencimento passado), não salvo.
@@ -102,4 +104,6 @@ Além disso: abrir no navegador em largura de celular e percorrer o fluxo da tar
 - `npm run emuladores` + `npm run dev:app:emulador` — app local contra os emuladores de Auth e Firestore (login por link: pegue o link em http://127.0.0.1:9099/emulator/v1/projects/orca-ja-aaf65/oobCodes)
 - `npm run test:regras` — testes das regras do Firestore no emulador (precisa de Java: `winget install Microsoft.OpenJDK.21`; o script ajusta a pasta temporária do Java, ver `firebase/testar-regras.cjs`)
 - `firebase deploy --only firestore:rules,firestore:indexes` — regras e índices (Storage entra na Fase 1, quando for ativado)
+- `node scripts/ativar-pro.cjs <email> [meses|--free]` — libera/retira o Pro (precisa de `service-account.json` na raiz, ignorado pelo Git)
+- `worker-pagamentos/` — webhook do Mercado Pago (Cloudflare Worker) que libera o Pro sozinho; ver README da pasta
 - Projeto Firebase: `orca-ja-aaf65` (Firestore em `southamerica-east1`). Chaves públicas do site em `site/.env.local` (modelo em `site/.env.example`).

@@ -115,4 +115,4 @@ WhatsApp API oficial e envio automático, confirmação automática de Pix (Pix 
 - **Conversão para Pro** de quem atinge o limite.
 - **SEO**: cliques orgânicos por página de profissão e conversão de visitante para cadastro.
 
-Registre eventos simples numa coleção `eventos` ou com Google Analytics 4 (decidir na Fase 5).
+Decisão (Fase 5, 7 out 2026): coleção `eventos` no Firestore, só criação, sem dados pessoais (nome do evento, uid, id do orçamento, origem, data). Sem Google Analytics no MVP.

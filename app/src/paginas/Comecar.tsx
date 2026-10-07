@@ -4,6 +4,8 @@ import Logo from "@/componentes/Logo";
 import Campo from "@/componentes/Campo";
 import { useAuth } from "@/hooks/useAuth";
 import { criarPerfil } from "@/lib/usuario";
+import { registrarEvento } from "@/lib/eventos";
+import { lerRascunhoImportado } from "@/lib/rascunhoImportado";
 import { comprimirLogo, LOGO_MAX_BYTES } from "@/lib/logo";
 import { validarNome, validarWhatsapp, validarChavePix, ROTULO_TIPO_CHAVE } from "@/lib/validacao";
 import { detectarTipoChave, type TipoChavePix } from "@shared/src/pix";
@@ -22,7 +24,7 @@ export default function Comecar() {
   const [passo, setPasso] = useState(1);
 
   // Passo 1
-  const [profissao, setProfissao] = useState("");
+  const [profissao, setProfissao] = useState(() => lerRascunhoImportado()?.profissao ?? "");
   // Passo 2
   const [nomeNegocio, setNomeNegocio] = useState("");
   const [nomeResponsavel, setNomeResponsavel] = useState(usuario?.displayName ?? "");
@@ -109,6 +111,7 @@ export default function Comecar() {
         logoDataUrl: logo,
         email: usuario.email,
       });
+      registrarEvento("cadastro_concluido", { uid: usuario.uid });
       navegar("/", { replace: true });
     } catch (err) {
       console.error(err);

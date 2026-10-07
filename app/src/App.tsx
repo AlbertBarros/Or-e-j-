@@ -8,7 +8,12 @@ import NovoOrcamento from "@/paginas/NovoOrcamento";
 import DetalheOrcamento from "@/paginas/DetalheOrcamento";
 import Cobrar from "@/paginas/Cobrar";
 import EmitirRecibo from "@/paginas/EmitirRecibo";
+import Conta from "@/paginas/Conta";
 import NaoEncontrada from "@/paginas/NaoEncontrada";
+import { capturarRascunhoDaUrl } from "@/lib/rascunhoImportado";
+
+// Veio do gerador do site com ?rascunho=? Guarda antes de qualquer redirecionamento de login.
+capturarRascunhoDaUrl();
 
 export default function App() {
   return (
@@ -76,6 +81,14 @@ export default function App() {
             element={
               <ExigePerfil>
                 <EmitirRecibo />
+              </ExigePerfil>
+            }
+          />
+          <Route
+            path="/conta"
+            element={
+              <ExigePerfil>
+                <Conta />
               </ExigePerfil>
             }
           />

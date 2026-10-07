@@ -87,14 +87,14 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 
 ## Fase 5 — Planos, métricas e lançamento (semana 5)
 
-- [ ] Limite do grátis no momento de enviar, com tela de upgrade (rascunho preservado)
-- [ ] Tela Conta/Plano (T8) com uso do mês e link de pagamento externo
-- [ ] `scripts/ativar-pro.ts` (Admin SDK, uso local)
-- [ ] Logo só no Pro; marca só no grátis
-- [ ] Métricas do PRD (decidir entre GA4 e coleção `eventos`)
-- [ ] Integrar o site ao app: "Salvar e enviar" leva ao cadastro com o orçamento preenchido
+- [x] Limite do grátis no momento de enviar, com tela de upgrade (rascunho preservado) — caixa com link para Conta → plano
+- [x] Tela Conta/Plano (T8) com uso do mês, links de assinatura (mensal, anual cartão, anual Pix), dados do negócio, Pix, logo e dados do recibo
+- [x] `scripts/ativar-pro.cjs` (REST do Firestore com conta de serviço, sem dependências) + `worker-pagamentos/` (webhook do Mercado Pago em Cloudflare Worker, liberação automática; publicação pelo Jonathan, ver README)
+- [x] Logo só no Pro; marca só no grátis; Pro vencido (planoAte) tratado como grátis
+- [x] Métricas do PRD: coleção `eventos` (só criação, sem dados pessoais); eventos de cadastro, criação, envio, aprovação/recusa, pago, recibo, limite e clique em assinar
+- [x] Integrar o site ao app: "Salvar e enviar" leva ao cadastro com o orçamento preenchido (?rascunho= em base64url → sessionStorage → Novo orçamento)
 - [ ] Revisão de acessibilidade e de 360px em todas as telas
 - [ ] Deploy de produção: domínios, domínios autorizados no Auth, regras e índices
-- [ ] Página de termos de uso e privacidade (LGPD: quais dados guardamos e por quê)
+- [x] Página de termos de uso e privacidade (LGPD) no site, com links no app (Entrar e Conta) — revisar com advogado antes do lançamento oficial
 
 **Pronto quando:** um usuário real, de fora, consegue se cadastrar pelo Google, enviar, receber aprovação, cobrar e assinar o Pro sem ajuda.

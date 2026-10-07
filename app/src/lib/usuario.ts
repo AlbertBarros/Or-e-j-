@@ -7,6 +7,7 @@ import {
   updateDoc,
   writeBatch,
   deleteDoc,
+  deleteField,
   setDoc,
   type DocumentData,
 } from "firebase/firestore";
@@ -27,8 +28,15 @@ export function mesAtual(agora: Date = new Date()): string {
   return `${ano}-${mes}`;
 }
 
+/** Pro vencido (planoAte no passado) é tratado como grátis em todo o app, sem esperar o servidor. */
+export function comPlanoEfetivo(perfil: Usuario): Usuario {
+  const ate = perfil.planoAte && typeof (perfil.planoAte as { toDate?: () => Date }).toDate === "function" ? perfil.planoAte.toDate() : null;
+  if (perfil.plano === "pro" && ate && ate.getTime() < Date.now()) return { ...perfil, plano: "free" };
+  return perfil;
+}
+
 function paraUsuario(dados: DocumentData): Usuario {
-  return dados as Usuario;
+  return comPlanoEfetivo(dados as Usuario);
 }
 
 export async function buscarPerfil(uid: string): Promise<Usuario | null> {
@@ -119,4 +127,16 @@ export async function salvarLogo(uid: string, dataUrl: string | null): Promise<v
     await deleteDoc(doc(db, "logos", uid));
   }
   await updateDoc(doc(db, "users", uid), { temLogo: Boolean(dataUrl) });
+}
+
+/** Dados do recibo (Conta). Campos vazios são removidos. */
+export async function atualizarDadosRecibo(
+  uid: string,
+  dados: { documento: string; email: string; endereco: Usuario["endereco"] | null },
+): Promise<void> {
+  await updateDoc(doc(db, "users", uid), {
+    documento: dados.documento ? dados.documento : deleteField(),
+    email: dados.email ? dados.email.toLowerCase() : deleteField(),
+    endereco: dados.endereco ? dados.endereco : deleteField(),
+  });
 }

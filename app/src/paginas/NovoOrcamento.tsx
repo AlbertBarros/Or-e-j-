@@ -6,6 +6,8 @@ import Carregando from "@/componentes/Carregando";
 import { useAuth } from "@/hooks/useAuth";
 import { useOrcamentos } from "@/hooks/useOrcamentos";
 import { atualizarOrcamento, buscarOrcamento, clientesDistintos, criarOrcamento } from "@/lib/orcamentos";
+import { registrarEvento } from "@/lib/eventos";
+import { lerRascunhoImportado, limparRascunhoImportado } from "@/lib/rascunhoImportado";
 import { itensSugeridos, observacoesPadrao, validadeDiasPadrao } from "@/lib/profissoes";
 import { validarNome, validarWhatsapp } from "@/lib/validacao";
 import { dataParaInput, inputParaData, paraDate } from "@/lib/datas";
@@ -61,6 +63,25 @@ export default function NovoOrcamento() {
     if (!editando) {
       setValidadeDias(String(validadeDiasPadrao(slug)));
       setObservacoes(observacoesPadrao(slug));
+      // Veio do gerador do site? Preenche com o que a pessoa já montou lá.
+      const importado = lerRascunhoImportado();
+      if (importado && importado.itens && importado.itens.length > 0) {
+        if (importado.cliente) setClienteNome(importado.cliente);
+        setItens(
+          importado.itens.map((i, k) => ({
+            id: k + 1,
+            descricao: String(i.descricao ?? ""),
+            qtd: paraTexto(Number(i.qtd) || 1),
+            unidade: String(i.unidade ?? "un"),
+            valorUnit: paraTexto(Number(i.valorUnit) || 0),
+          })),
+        );
+        setProximoId(importado.itens.length + 1);
+        if (importado.desconto) setDesconto(paraTexto(importado.desconto));
+        if (importado.observacoes) setObservacoes(importado.observacoes);
+        limparRascunhoImportado();
+        return;
+      }
       setItens([{ id: 1, descricao: "", qtd: "1", unidade: "un", valorUnit: "" }]);
       setProximoId(2);
       return;
@@ -166,6 +187,7 @@ export default function NovoOrcamento() {
         navegar(`/orcamentos/${existente.id}`, { replace: true });
       } else {
         const novoId = await criarOrcamento(usuario.uid, perfil, dados);
+        registrarEvento("orcamento_criado", { uid: usuario.uid, orcamentoId: novoId });
         navegar(`/orcamentos/${novoId}`, { replace: true });
       }
     } catch (err) {

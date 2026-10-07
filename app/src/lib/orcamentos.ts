@@ -25,6 +25,7 @@ import { db } from "./firebase";
 import { inicioDoDia, paraDate, somarDias } from "./datas";
 import type { ItemOrcamento, Orcamento, StatusOrcamento, Usuario } from "@/tipos";
 import { total as calcularTotal } from "@shared/src/mensagens";
+import { comPlanoEfetivo } from "./usuario";
 import { normalizarWhatsapp } from "@shared/src/mensagens";
 
 export interface DadosOrcamento {
@@ -52,7 +53,8 @@ function paraOrcamento(snap: QueryDocumentSnapshot<DocumentData> | DocumentSnaps
 }
 
 /** Snapshot do negócio gravado no orçamento, para a página pública não ler users/. */
-export function snapshotNegocio(perfil: Usuario): Orcamento["negocio"] {
+export function snapshotNegocio(perfilBruto: Usuario): Orcamento["negocio"] {
+  const perfil = comPlanoEfetivo(perfilBruto);
   const pro = perfil.plano === "pro";
   return {
     nome: perfil.nomeNegocio,
@@ -282,7 +284,7 @@ export async function enviarOrcamento(uid: string, orcamento: Orcamento): Promis
     const usuarioRef = doc(db, "users", uid);
     const usuarioSnap = await tx.get(usuarioRef);
     if (!usuarioSnap.exists()) throw new Error("Perfil não encontrado.");
-    const perfil = usuarioSnap.data() as Usuario;
+    const perfil = comPlanoEfetivo(usuarioSnap.data() as Usuario);
     const mes = mesAtual();
     const enviadosNoMes = perfil.uso?.mes === mes ? perfil.uso.enviados : 0;
     if (perfil.plano !== "pro" && enviadosNoMes >= LIMITE_FREE) {

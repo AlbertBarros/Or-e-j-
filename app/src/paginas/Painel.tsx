@@ -5,12 +5,13 @@ import InstalarApp from "@/componentes/InstalarApp";
 import Selo from "@/componentes/Selo";
 import { useAuth } from "@/hooks/useAuth";
 import { useOrcamentos, useResumo } from "@/hooks/useOrcamentos";
-import { sair } from "@/lib/auth";
 import { buscarLogo } from "@/lib/usuario";
 import { LIMITE_FREE } from "@/lib/firebase";
 import { ROTULO_FILTRO, type Filtro } from "@/lib/orcamentos";
 import { diasDesde, paraDate, textoHaDias } from "@/lib/datas";
 import { formatarReais } from "@shared/src/mensagens";
+import { useNavigate } from "react-router";
+import { lerRascunhoImportado } from "@/lib/rascunhoImportado";
 
 const FILTROS: Filtro[] = ["todos", "rascunho", "enviado", "aprovado", "atrasado", "pago"];
 
@@ -22,6 +23,12 @@ export default function Painel() {
   const uid = usuario?.uid;
   const resumo = useResumo(uid);
   const { orcamentos, carregando, erro, temMais, carregarMais } = useOrcamentos(uid, filtro);
+  const navegar = useNavigate();
+
+  // Veio do gerador do site com um orçamento pronto: abre direto a tela de novo orçamento.
+  useEffect(() => {
+    if (perfil && lerRascunhoImportado()) navegar("/orcamentos/novo", { replace: true });
+  }, [perfil, navegar]);
 
   useEffect(() => {
     if (uid && perfil?.temLogo) buscarLogo(uid).then(setLogo).catch(() => setLogo(null));
@@ -35,9 +42,9 @@ export default function Painel() {
     <main className="mx-auto flex min-h-dvh w-full max-w-[560px] flex-col px-4 pb-28 pt-4">
       <header className="flex items-center justify-between">
         <Logo tamanho={28} />
-        <button type="button" onClick={() => void sair()} className="botao-texto">
-          Sair
-        </button>
+        <Link to="/conta" className="botao-texto">
+          Conta
+        </Link>
       </header>
 
       <section className="mt-4 flex items-center gap-3">
@@ -51,7 +58,16 @@ export default function Painel() {
         <div className="min-w-0">
           <h1 className="truncate text-xl font-bold">{perfil.nomeNegocio}</h1>
           <p className="text-sm text-grafite">
-            {perfil.plano === "pro" ? "Plano Pro" : `Plano grátis · ${enviados} de ${LIMITE_FREE} orçamentos este mês`}
+            {perfil.plano === "pro" ? (
+              "Plano Pro"
+            ) : (
+              <>
+                Plano grátis · {enviados} de {LIMITE_FREE} este mês ·{" "}
+                <Link to="/conta#plano" className="font-medium text-carbono underline">
+                  Assinar o Pro
+                </Link>
+              </>
+            )}
           </p>
         </div>
       </section>

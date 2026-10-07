@@ -23,8 +23,8 @@ import {
 import { buscarLogo } from "@/lib/usuario";
 import { LIMITE_FREE } from "@/lib/firebase";
 import { dataParaInput, inputParaData } from "@/lib/datas";
+import { registrarEvento } from "@/lib/eventos";
 
-const URL_PRECOS = "https://orca-ja-6cz.pages.dev/precos";
 
 function IconeWhatsapp() {
   return (
@@ -72,9 +72,13 @@ export default function DetalheOrcamento() {
     setOcupado(true);
     try {
       await enviarOrcamento(usuario.uid, orcamento);
+      registrarEvento("orcamento_enviado", { uid: usuario.uid, orcamentoId: orcamento.id });
       abrirWhatsapp(linkEnvioWhatsapp(orcamento));
     } catch (e) {
-      if (e instanceof LimiteAtingidoError) setLimiteAtingido(true);
+      if (e instanceof LimiteAtingidoError) {
+        setLimiteAtingido(true);
+        registrarEvento("limite_free_atingido", { uid: usuario.uid });
+      }
       else {
         console.error(e);
         setErroAcao("Não deu para enviar. Confira a internet e tente de novo.");
@@ -120,6 +124,7 @@ export default function DetalheOrcamento() {
     setErroAcao(null);
     try {
       await marcarComoPago(orcamento.id, data);
+      registrarEvento("orcamento_pago", { uid: usuario?.uid, orcamentoId: orcamento.id });
       setMarcandoPago(false);
       setAviso("Marcado como pago");
     } catch (e) {
@@ -365,7 +370,7 @@ export default function DetalheOrcamento() {
           titulo={`Você usou os ${LIMITE_FREE} orçamentos grátis deste mês`}
           texto="O rascunho ficou salvo. No Pro, os envios são ilimitados, com Pix na aprovação, recibo em PDF e sua logo."
           textoConfirmar="Ver planos"
-          aoConfirmar={() => window.open(URL_PRECOS, "_blank", "noopener")}
+          aoConfirmar={() => navegar("/conta#plano")}
           aoCancelar={() => setLimiteAtingido(false)}
         />
       )}

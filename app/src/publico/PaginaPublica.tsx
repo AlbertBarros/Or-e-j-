@@ -4,6 +4,7 @@ import DocumentoOrcamento from "@/componentes/DocumentoOrcamento";
 import Carregando from "@/componentes/Carregando";
 import { buscarLogoPublica, buscarOrcamentoPublico, responderOrcamento } from "./firestorePublico";
 import BlocoPix from "./BlocoPix";
+import { registrarEventoPublico } from "./eventosPublico";
 import { inicioDoDia, paraDate } from "@/lib/datas";
 import type { Orcamento } from "@/tipos";
 import { formatarData, linkWhatsapp } from "@shared/src/mensagens";
@@ -67,6 +68,7 @@ export default function PaginaPublica({ id }: { id: string }) {
     setRespondendo(resposta);
     try {
       await responderOrcamento(orcamento.id, resposta);
+      registrarEventoPublico(resposta === "aprovado" ? "orcamento_aprovado" : "orcamento_recusado", orcamento.id);
       setOrcamento({ ...orcamento, status: resposta });
       setEstado(resposta);
       if (resposta === "aprovado") setRecemAprovado(true);

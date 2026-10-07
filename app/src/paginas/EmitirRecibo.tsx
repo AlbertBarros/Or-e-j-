@@ -6,6 +6,7 @@ import Carregando from "@/componentes/Carregando";
 import { useAuth } from "@/hooks/useAuth";
 import { useOrcamento } from "@/hooks/useOrcamentos";
 import { emitirRecibo } from "@/lib/orcamentos";
+import { registrarEvento } from "@/lib/eventos";
 import { buscarLogo } from "@/lib/usuario";
 import { dataParaInput, inputParaData, paraDate } from "@/lib/datas";
 import { observacoesPadrao } from "@/lib/profissoes";
@@ -21,7 +22,6 @@ const OPCOES_GARANTIA = [
   { dias: -1, rotulo: "Outro" },
 ];
 
-const URL_PRECOS = "https://orca-ja-6cz.pages.dev/precos";
 
 /** Recibo (Pro): emitir a partir de um orçamento pago, baixar o PDF e enviar pelo WhatsApp. */
 export default function EmitirRecibo() {
@@ -98,9 +98,9 @@ export default function EmitirRecibo() {
             Com sua logo, garantia do serviço, endereço e valor por extenso, pronto para mandar no WhatsApp. O Pro também libera
             orçamentos ilimitados e o Pix na aprovação.
           </p>
-          <a href={URL_PRECOS} target="_blank" rel="noopener" className="botao-primario mt-5">
+          <Link to="/conta#plano" className="botao-primario mt-5">
             Ver planos
-          </a>
+          </Link>
         </section>
       </main>
     );
@@ -145,6 +145,7 @@ export default function EmitirRecibo() {
             : {}),
         },
       });
+      registrarEvento("recibo_emitido", { uid: usuario.uid, orcamentoId: orcamento.id });
       setAviso("Recibo emitido");
     } catch (err) {
       console.error(err);
