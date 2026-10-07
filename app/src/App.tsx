@@ -4,6 +4,8 @@ import { ExigePerfil, ExigeLoginSemPerfil, SoDeslogado } from "@/rotas/Guardas";
 import Entrar from "@/paginas/Entrar";
 import Comecar from "@/paginas/Comecar";
 import Painel from "@/paginas/Painel";
+import NovoOrcamento from "@/paginas/NovoOrcamento";
+import DetalheOrcamento from "@/paginas/DetalheOrcamento";
 import NaoEncontrada from "@/paginas/NaoEncontrada";
 
 export default function App() {
@@ -32,6 +34,30 @@ export default function App() {
             element={
               <ExigePerfil>
                 <Painel />
+              </ExigePerfil>
+            }
+          />
+          <Route
+            path="/orcamentos/novo"
+            element={
+              <ExigePerfil>
+                <NovoOrcamento />
+              </ExigePerfil>
+            }
+          />
+          <Route
+            path="/orcamentos/:id"
+            element={
+              <ExigePerfil>
+                <DetalheOrcamento />
+              </ExigePerfil>
+            }
+          />
+          <Route
+            path="/orcamentos/:id/editar"
+            element={
+              <ExigePerfil>
+                <NovoOrcamento />
               </ExigePerfil>
             }
           />

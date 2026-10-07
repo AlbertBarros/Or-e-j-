@@ -42,10 +42,11 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 
 ## Fase 2 — Orçamentos e painel (semana 2–3)
 
-- [ ] `lib/orcamentos.ts`: criar (transação de número), atualizar, excluir, listar paginado, buscar por ID
-- [ ] Tela Novo/Editar (T4) com sugestões da profissão, barra de total fixa e autocomplete de clientes
-- [ ] Painel (T3) com totais "A receber" e "Recebido no mês", filtros, estado vazio e paginação
-- [ ] Detalhe (T5) com o layout de documento e ações por status (por enquanto só rascunho)
+- [x] `lib/orcamentos.ts`: criar (transação de número), atualizar, excluir, listar paginado, buscar por ID
+- [x] Tela Novo/Editar (T4) com sugestões da profissão, barra de total fixa e autocomplete de clientes
+- [x] Painel (T3) com totais "A receber" e "Recebido no mês", filtros, estado vazio e paginação
+- [x] Detalhe (T5) com o layout de documento e ações por status (por enquanto só rascunho)
+- [x] Extra: modo emulador para testar sem dados reais (`npm run emuladores` + `npm run dev:app:emulador`); fluxo completo testado em 7 out 2026
 
 **Pronto quando:** um orçamento de 5 itens fica pronto em menos de 60 s no celular, a numeração não repete (testar dois cliques rápidos) e o painel lista e filtra corretamente.
 

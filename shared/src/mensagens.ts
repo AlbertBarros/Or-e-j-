@@ -91,3 +91,12 @@ export function diasEmAtraso(vencimento: Date, hoje = new Date()): number {
   const ms = hoje.setHours(0, 0, 0, 0) - new Date(vencimento).setHours(0, 0, 0, 0);
   return Math.max(0, Math.floor(ms / 86_400_000));
 }
+
+/** Exibe um WhatsApp guardado como "5561999998888" no formato (61) 99999-8888. */
+export function formatarWhatsapp(numero: string): string {
+  const d = numero.replace(/\D/g, "");
+  const local = d.startsWith("55") && d.length >= 12 ? d.slice(2) : d;
+  if (local.length === 11) return `(${local.slice(0, 2)}) ${local.slice(2, 7)}-${local.slice(7)}`;
+  if (local.length === 10) return `(${local.slice(0, 2)}) ${local.slice(2, 6)}-${local.slice(6)}`;
+  return numero;
+}

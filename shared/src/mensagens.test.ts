@@ -25,3 +25,12 @@ describe("mensagens e cálculos", () => {
     expect(diasEmAtraso(new Date(2026, 9, 10), new Date(2026, 9, 6))).toBe(0);
   });
 });
+
+describe("formatarWhatsapp", () => {
+  it("formata celular e fixo", async () => {
+    const { formatarWhatsapp } = await import("./mensagens");
+    expect(formatarWhatsapp("5561999998888")).toBe("(61) 99999-8888");
+    expect(formatarWhatsapp("556133334444")).toBe("(61) 3333-4444");
+    expect(formatarWhatsapp("123")).toBe("123");
+  });
+});

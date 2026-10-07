@@ -50,6 +50,7 @@ export interface Orcamento {
   itens: ItemOrcamento[];
   desconto: number;
   total: number;
+  validadeDias: number; // usado na edição; validadeAte = criadoEm + validadeDias
   validadeAte: Timestamp;
   vencimentoPagamento?: Timestamp;
   observacoes: string;

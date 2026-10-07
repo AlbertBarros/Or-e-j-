@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import Logo from "@/componentes/Logo";
 import Campo from "@/componentes/Campo";
 import InstalarApp from "@/componentes/InstalarApp";
@@ -22,8 +22,11 @@ export default function Entrar() {
   const [ocupado, setOcupado] = useState<"google" | "email" | null>(null);
 
   // Chegou por um link mágico? Conclui o login (pede o e-mail se abriu em outro aparelho).
+  // O código do link só vale uma vez: a trava evita a segunda execução do efeito no modo estrito do React.
+  const linkTratado = useRef(false);
   useEffect(() => {
-    if (!ehLinkDeEmail()) return;
+    if (!ehLinkDeEmail() || linkTratado.current) return;
+    linkTratado.current = true;
     const guardado = emailGuardado();
     if (guardado) {
       setOcupado("email");

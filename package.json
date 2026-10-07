@@ -10,6 +10,8 @@
   "scripts": {
     "dev:site": "npm run dev --workspace site",
     "dev:app": "npm run dev --workspace app",
+    "dev:app:emulador": "npm run dev:emulador --workspace app",
+    "emuladores": "node firebase/emuladores.cjs",
     "test": "npm run test --workspaces --if-present",
     "test:regras": "node firebase/testar-regras.cjs",
     "typecheck": "npm run typecheck --workspaces --if-present",

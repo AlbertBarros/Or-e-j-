@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { subtotal, total, formatarReais } from "@shared/src/mensagens";
 import type { Profissao } from "../lib/profissoes";
-import { paraNumero, paraTexto } from "../lib/numero";
+import { paraNumero, paraTexto } from "@shared/src/numero";
 import ListaDeEspera from "./ListaDeEspera";
 
 /** Item em edição: quantidade e valor ficam como texto para aceitar vírgula. */
