@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import Logo from "@/componentes/Logo";
 import Campo from "@/componentes/Campo";
+import InstalarApp from "@/componentes/InstalarApp";
 import {
   entrarComGoogle,
   enviarLinkPorEmail,
@@ -177,6 +178,10 @@ export default function Entrar() {
           </>
         )}
       </section>
+
+      <div className="mt-4">
+        <InstalarApp compacto />
+      </div>
 
       <p className="mt-6 text-center text-xs text-grafite">
         Ao entrar, você concorda em usar o Orça Já para enviar orçamentos aos seus próprios clientes.

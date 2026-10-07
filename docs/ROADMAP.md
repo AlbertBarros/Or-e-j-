@@ -34,6 +34,7 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 - [x] Onboarding em 3 passos (T2), com detecção e normalização da chave Pix e logo comprimida no navegador (≤ 100 KB) gravada em `logos/{uid}` (sem Storage: exige Blaze)
 - [x] Testes das regras do Firestore (`firebase/regras.test.ts`) com os casos da ARQUITETURA.md — 13 testes passando no emulador (`npm run test:regras`)
 - [x] Publicar o app no Cloudflare Pages (https://orca-ja-app.pages.dev), autorizar o domínio no Firebase Auth e ligar o site
+- [x] Extra: PWA instalável (manifest, ícones, service worker) com botão "Baixar o app" (Android instala; iPhone mostra o passo a passo do Safari)
 
 **Pronto quando:** um usuário novo entra pelo celular, completa o onboarding em menos de 2 min, o perfil aparece no Firestore com `plano: "free"`, `proximoNumero: 1`, e os testes de regras passam.
 

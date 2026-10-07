@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Logo from "@/componentes/Logo";
+import InstalarApp from "@/componentes/InstalarApp";
 import { useAuth } from "@/hooks/useAuth";
 import { sair } from "@/lib/auth";
 import { buscarLogo } from "@/lib/usuario";
@@ -55,6 +56,10 @@ export default function Painel() {
           <p className="tabular mt-1 text-2xl font-bold text-pago">{formatarReais(0)}</p>
         </div>
       </section>
+
+      <div className="mt-5">
+        <InstalarApp />
+      </div>
 
       <section className="documento mt-6 flex flex-1 flex-col items-center justify-center p-8 text-center">
         <p className="text-lg font-semibold">Seu primeiro orçamento leva 1 minuto.</p>
