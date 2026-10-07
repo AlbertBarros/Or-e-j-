@@ -33,7 +33,7 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 - [x] Guardas de rota: sem login → `/entrar`; sem perfil → `/comecar`
 - [x] Onboarding em 3 passos (T2), com detecção e normalização da chave Pix e logo comprimida no navegador (≤ 100 KB) gravada em `logos/{uid}` (sem Storage: exige Blaze)
 - [ ] Testes das regras do Firestore (`firebase/regras.test.ts`) com os casos da ARQUITETURA.md — escritos; rodar `npm run test:regras` depois de instalar Java
-- [ ] Publicar o app no Cloudflare Pages (2º projeto), autorizar o domínio no Firebase Auth e ligar o site (`PUBLIC_APP_PRONTO=true`, `PUBLIC_APP_URL`)
+- [x] Publicar o app no Cloudflare Pages (https://orca-ja-app.pages.dev), autorizar o domínio no Firebase Auth e ligar o site
 
 **Pronto quando:** um usuário novo entra pelo celular, completa o onboarding em menos de 2 min, o perfil aparece no Firestore com `plano: "free"`, `proximoNumero: 1`, e os testes de regras passam.
 

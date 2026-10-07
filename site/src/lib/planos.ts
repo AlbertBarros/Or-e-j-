@@ -17,5 +17,7 @@ export const CHECKOUT_MENSAL = import.meta.env.PUBLIC_CHECKOUT_URL_MENSAL || "";
 export const CHECKOUT_ANUAL = import.meta.env.PUBLIC_CHECKOUT_URL_ANUAL || "";
 
 /** Quando o app estiver no ar, os botões passam a levar ao cadastro em vez da lista de espera. */
-export const APP_PRONTO = import.meta.env.PUBLIC_APP_PRONTO === "true";
-export const URL_CADASTRO = `${import.meta.env.PUBLIC_APP_URL || "https://app.orcaja.com.br"}/entrar`;
+// O app está publicado desde 6 out 2026; PUBLIC_APP_PRONTO=false volta os botões para a lista de espera.
+export const APP_PRONTO = import.meta.env.PUBLIC_APP_PRONTO !== "false";
+export const URL_APP = import.meta.env.PUBLIC_APP_URL || "https://orca-ja-app.pages.dev";
+export const URL_CADASTRO = `${URL_APP}/entrar`;
