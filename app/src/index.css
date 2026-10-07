@@ -1,0 +1,83 @@
+/* Orça Já — estilos do app (tokens do docs/DESIGN.md, iguais aos do site) */
+@import "tailwindcss";
+@import "@fontsource-variable/archivo";
+
+@theme {
+  --font-sans: "Archivo Variable", Archivo, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --color-carbono: #1e3a8a;
+  --color-carbono-claro: #dce4f7;
+  --color-tinta: #1a1d23;
+  --color-grafite: #5b6270;
+  --color-pauta: #e4e7ec;
+  --color-folha: #ffffff;
+  --color-fundo: #f6f7f9;
+  --color-pago: #15803d;
+  --color-atraso: #b45309;
+  --color-recusado: #9f1239;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-tinta);
+    background-color: var(--color-fundo);
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    line-height: 1.5;
+    min-height: 100dvh;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-carbono);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .botao-primario {
+    @apply inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[10px] bg-carbono px-5 text-base font-semibold text-white hover:bg-[#172f70] active:bg-[#122659] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .botao-secundario {
+    @apply inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[10px] border border-pauta bg-folha px-5 text-base font-semibold text-carbono hover:bg-carbono-claro disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .botao-texto {
+    @apply inline-flex min-h-11 items-center justify-center px-3 text-sm font-medium text-grafite hover:text-carbono;
+  }
+  .campo {
+    @apply min-h-12 w-full rounded-[10px] border border-pauta bg-folha px-3 text-base text-tinta placeholder:text-grafite focus:border-carbono;
+  }
+  .campo-erro {
+    @apply border-recusado;
+  }
+  .rotulo {
+    @apply mb-1 block text-sm font-medium text-grafite;
+  }
+  .ajuda {
+    @apply mt-1 text-xs text-grafite;
+  }
+  .erro {
+    @apply mt-1 text-sm text-recusado;
+  }
+  .documento {
+    @apply rounded-lg border border-pauta bg-folha;
+  }
+  .opcao {
+    @apply flex min-h-12 items-center justify-center rounded-[10px] border border-pauta bg-folha px-3 text-center text-sm font-medium hover:border-carbono;
+  }
+  .opcao-ativa {
+    @apply border-carbono bg-carbono-claro text-carbono;
+  }
+}

@@ -32,7 +32,7 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 
 ### T2. Onboarding (3 passos com barra de progresso)
 1. **Profissão**: grade com as 10 profissões de `profissoes.json` + "Outra".
-2. **Seu negócio**: nome do negócio, seu WhatsApp, cidade e logo (opcional).
+2. **Seu negócio**: nome do negócio, seu nome, seu WhatsApp, cidade e logo (opcional; comprimida no navegador até 100 KB e guardada no Firestore; aparece no orçamento só no Pro).
 3. **Seu Pix**: chave Pix com tipo detectado automaticamente e confirmação do tipo; nome que aparece no Pix.
 - Aceite: a chave é salva normalizada (`normalizarChave`). É possível pular a logo. O usuário consegue terminar em menos de 2 minutos no celular.
 

@@ -17,7 +17,7 @@ Antes de adicionar dependência, tela ou coleção nova, pergunte ao Jonathan.
 ## Stack (não trocar sem pedir)
 
 - **App** (`app/`): React 18 + TypeScript (strict) + Vite + Tailwind CSS + React Router.
-- **Backend**: Firebase — Authentication (Google + e-mail/link mágico), Firestore, Storage. Sem Cloud Functions no MVP, exceto se a fase pedir.
+- **Backend**: Firebase — Authentication (Google + e-mail/link mágico) e Firestore. **Sem Storage** no MVP (exige plano Blaze): a logo fica comprimida (≤ 100 KB) em `logos/{uid}`. Sem Cloud Functions, exceto se a fase pedir.
 - **Site de SEO** (`site/`): Astro (estático), consumindo `shared/data/profissoes.json`. Deploy no Cloudflare Pages.
 - **Código compartilhado** (`shared/`): funções puras em TS (Pix, cálculos, mensagens) + dados. Testes com Vitest.
 - **PDF**: `@react-pdf/renderer`, gerado no navegador.
@@ -39,7 +39,7 @@ orca-ja/
     src/pix.ts          BR Code (testado contra o exemplo oficial do BCB) — NÃO reescrever sem rodar os testes
     src/mensagens.ts    cálculos, formatação, links wa.me e textos de cobrança
     data/profissoes.json  itens, preços de referência, SEO e FAQ por profissão
-  app/                  (criado na Fase 1)
+  app/                  Vite + React: src/lib (firebase, auth, usuario, logo, validacao), hooks, rotas, paginas
   site/                 (criado na Fase 0)
   firebase/             firestore.rules, storage.rules, firestore.indexes.json
   firebase.json         (criado na Fase 1, apontando para firebase/)
@@ -60,8 +60,9 @@ O `app/` e o `site/` importam de `shared/` por caminho relativo ou alias `@share
 
 ## Modelo de dados (resumo — detalhe em ARQUITETURA.md)
 
-- `users/{uid}`: perfil do negócio, chave Pix (normalizada), logo, `plano` ("free"|"pro", só o servidor altera), `proximoNumero`, `uso: { mes: "AAAA-MM", enviados: number }`.
-- `orcamentos/{id}`: `ownerId`, `numero`, `cliente {nome, whatsapp}`, `itens[]`, `desconto`, `total`, `validadeAte`, `vencimentoPagamento`, `observacoes`, `status`, timestamps e **snapshot `negocio`** (nome, logo, whatsapp, chavePix, cidade) para a página pública não ler `users/`.
+- `users/{uid}`: perfil do negócio (nomeNegocio, nomeResponsavel, nomePix, whatsapp, cidade), chave Pix (normalizada), `temLogo`, `plano` ("free"|"pro", só o servidor altera), `proximoNumero`, `uso: { mes: "AAAA-MM", enviados: number }`.
+- `logos/{uid}`: `dataUrl` da logo (≤ 100 KB, `data:image/*`), leitura pública, escrita só do dono.
+- `orcamentos/{id}`: `ownerId`, `numero`, `cliente {nome, whatsapp}`, `itens[]`, `desconto`, `total`, `validadeAte`, `vencimentoPagamento`, `observacoes`, `status`, timestamps e **snapshot `negocio`** (nome, nomePix, whatsapp, chavePix, cidade, mostrarMarca, mostrarLogo, mostrarPix) para a página pública não ler `users/`. Pix na página de aprovação só no Pro.
 - `leads/{id}`: lista de espera do site (só criação).
 - Status: `rascunho → enviado → aprovado | recusado → pago`. "Atrasado" é **calculado** (aprovado + vencimento passado), não salvo.
 
@@ -98,5 +99,6 @@ Além disso: abrir no navegador em largura de celular e percorrer o fluxo da tar
 - `npm run dev:site` — site de SEO local (http://localhost:4321)
 - `npm run dev:app` — app local (a partir da Fase 1)
 - `npm run test` / `npm run typecheck` / `npm run build` — rodam em todos os workspaces
+- `npm run test:regras` — testes das regras do Firestore no emulador (precisa de Java: `winget install Microsoft.OpenJDK.21`)
 - `firebase deploy --only firestore:rules,firestore:indexes` — regras e índices (Storage entra na Fase 1, quando for ativado)
 - Projeto Firebase: `orca-ja-aaf65` (Firestore em `southamerica-east1`). Chaves públicas do site em `site/.env.local` (modelo em `site/.env.example`).

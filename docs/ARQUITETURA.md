@@ -19,7 +19,7 @@
                        │ Firebase JS SDK
           ┌────────────▼────────────┐
           │ Firebase: Auth,         │
-          │ Firestore, Storage      │
+          │ Firestore (sem Storage) │
           └─────────────────────────┘
 ```
 
@@ -63,18 +63,25 @@ export type StatusOrcamento = "rascunho" | "enviado" | "aprovado" | "recusado" |
 
 export interface Usuario {
   nomeNegocio: string;
+  nomeResponsavel: string;    // nome da pessoa
   nomePix: string;            // nome do recebedor no BR Code
   profissao: string;          // slug de profissoes.json ou "outra"
   whatsapp: string;           // só dígitos com 55
   cidade: string;
   chavePix: string;           // normalizada
   tipoChavePix: "cpf" | "cnpj" | "telefone" | "email" | "aleatoria";
-  logoUrl?: string;
+  temLogo: boolean;           // a imagem fica em logos/{uid}
   plano: Plano;               // alterado só pelo servidor
   planoAte?: Timestamp;
   proximoNumero: number;      // começa em 1
   uso: { mes: string; enviados: number }; // mes = "AAAA-MM"
   criadoEm: Timestamp;
+}
+
+/** logos/{uid}: logo comprimida no navegador (WebP/JPEG, até 100 KB), leitura pública */
+export interface Logo {
+  dataUrl: string;
+  atualizadoEm: Timestamp;
 }
 
 export interface ItemOrcamento {
@@ -97,9 +104,11 @@ export interface Orcamento {
   observacoes: string;
   status: StatusOrcamento;
   negocio: {                  // snapshot gravado ao ENVIAR
-    nome: string; nomePix: string; logoUrl?: string;
+    nome: string; nomePix: string;
     whatsapp: string; chavePix: string; cidade: string;
     mostrarMarca: boolean;    // true no plano free
+    mostrarLogo: boolean;     // true no Pro com logo (imagem vem de logos/{ownerId})
+    mostrarPix: boolean;      // true no Pro (Pix na página de aprovação é exclusivo do Pro)
   };
   criadoEm: Timestamp;
   atualizadoEm: Timestamp;
@@ -126,6 +135,14 @@ O limite é verificado no front no MVP. A verificação no servidor (Cloud Funct
 
 **Pix.** `gerarPixCopiaECola({ chave: negocio.chavePix, nomeRecebedor: negocio.nomePix, cidade: negocio.cidade, valor: total, txid: "ORC" + numero })`. QR Code com a lib `qrcode` (gera data URL no navegador).
 
+## Logo sem Storage (decisão de 6 out 2026)
+
+O Firebase passou a exigir o plano Blaze (cartão) para ativar o Storage. Para o MVP, a logo é redimensionada
+(máx. 512 px) e comprimida no navegador até **100 KB** (`app/src/lib/logo.ts`) e gravada como data URL em
+`logos/{uid}`, coleção de leitura pública e escrita só do dono (regras limitam a 140.000 caracteres e a
+`data:image/*`). `users/{uid}.temLogo` evita uma leitura extra no painel. A página pública lê `logos/{ownerId}`
+quando `negocio.mostrarLogo` for true. Se um dia o volume justificar, migra-se para Storage/R2 sem mudar o modelo.
+
 ## PDF
 
 `@react-pdf/renderer` com dois documentos: `OrcamentoPDF` e `ReciboPDF`. Use lazy import, porque a lib é pesada e só deve carregar ao clicar em "Baixar PDF". O valor por extenso no recibo usa uma função própria em `shared/src/extenso.ts` (escrever com testes, cobrindo de R$ 0,01 a R$ 999.999,99).
@@ -149,6 +166,9 @@ Teste das regras em `firebase/regras.test.ts` com `@firebase/rules-unit-testing`
 - Anônimo aprova um orçamento "enviado", mas não altera o `total` nem aprova um "rascunho".
 - Usuário A não lê nem edita orçamentos do B.
 - Usuário não altera o próprio `plano`.
+- Logo: dono grava, qualquer um lê, outro usuário não grava, data URL grande demais ou que não é imagem é rejeitada.
+
+Rodar com `npm run test:regras` (sobe o emulador do Firestore, que precisa de Java instalado).
 
 ## Ativação do plano Pro (MVP)
 
@@ -158,5 +178,5 @@ O Pro é ativado por link de pagamento recorrente (Asaas, Mercado Pago ou Stripe
 
 - **App**: Cloudflare Pages, build `npm run build --workspace app`, saída `app/dist`, variáveis `VITE_*` no painel.
 - **Site**: Cloudflare Pages, build `npm run build --workspace site`, saída `site/dist`.
-- **Firebase**: `firebase deploy --only firestore:rules,firestore:indexes,storage`.
+- **Firebase**: `firebase deploy --only firestore:rules,firestore:indexes` (Storage não é usado no MVP).
 - Adicionar o domínio do app em Firebase Auth → Domínios autorizados.

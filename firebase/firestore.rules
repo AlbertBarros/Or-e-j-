@@ -15,6 +15,18 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Logo do profissional (data URL comprimida no navegador, até ~100 KB).
+    // Leitura pública: a página do orçamento mostra a logo sem ler users/.
+    match /logos/{uid} {
+      allow read: if true;
+      allow write: if dono(uid)
+        && request.resource.data.keys().hasOnly(["dataUrl", "atualizadoEm"])
+        && request.resource.data.dataUrl is string
+        && request.resource.data.dataUrl.size() < 140000
+        && request.resource.data.dataUrl.matches('data:image/.*');
+      allow delete: if dono(uid);
+    }
+
     // Orçamentos. O id é aleatório e longo: o link público é "não adivinhável".
     match /orcamentos/{id} {
       // Qualquer pessoa com o link lê UM documento; ninguém lista orçamentos alheios.

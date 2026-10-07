@@ -17,8 +17,6 @@
     "@react-pdf/renderer": "^4.9.0",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.6",
-    "firebase": "^12.19.0",
-    "oxc-transform-react": "^0.145.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwindcss": "^4.3.3"

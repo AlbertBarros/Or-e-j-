@@ -26,13 +26,14 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 
 ## Fase 1 — App base: login e onboarding (semana 2)
 
-- [ ] Criar `app/` (Vite + React + TS strict + Tailwind + React Router), com tokens e fonte do DESIGN.md
-- [ ] `app/src/lib/firebase.ts` (init + emuladores em dev), `firebase.json` na raiz
-- [ ] `tipos.ts` conforme ARQUITETURA.md
-- [ ] Login Google + link mágico por e-mail (T1)
-- [ ] Guardas de rota: sem login → `/entrar`; sem perfil → `/comecar`
-- [ ] Onboarding em 3 passos (T2), com detecção e normalização da chave Pix e upload de logo para o Storage (compressão no navegador para no máximo 300 KB)
-- [ ] Testes das regras do Firestore (`firebase/regras.test.ts`) com os casos da ARQUITETURA.md
+- [x] Criar `app/` (Vite + React + TS strict + Tailwind + React Router), com tokens e fonte do DESIGN.md
+- [x] `app/src/lib/firebase.ts` (init + emuladores em dev), `firebase.json` na raiz
+- [x] `tipos.ts` conforme ARQUITETURA.md
+- [x] Login Google + link mágico por e-mail (T1)
+- [x] Guardas de rota: sem login → `/entrar`; sem perfil → `/comecar`
+- [x] Onboarding em 3 passos (T2), com detecção e normalização da chave Pix e logo comprimida no navegador (≤ 100 KB) gravada em `logos/{uid}` (sem Storage: exige Blaze)
+- [ ] Testes das regras do Firestore (`firebase/regras.test.ts`) com os casos da ARQUITETURA.md — escritos; rodar `npm run test:regras` depois de instalar Java
+- [ ] Publicar o app no Cloudflare Pages (2º projeto), autorizar o domínio no Firebase Auth e ligar o site (`PUBLIC_APP_PRONTO=true`, `PUBLIC_APP_URL`)
 
 **Pronto quando:** um usuário novo entra pelo celular, completa o onboarding em menos de 2 min, o perfil aparece no Firestore com `plano: "free"`, `proximoNumero: 1`, e os testes de regras passam.
 

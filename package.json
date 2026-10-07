@@ -4,14 +4,21 @@
   "description": "Orça Já — orçamento, aprovação por link, Pix e recibo para autônomos",
   "workspaces": [
     "shared",
-    "site"
+    "site",
+    "app"
   ],
   "scripts": {
     "dev:site": "npm run dev --workspace site",
     "dev:app": "npm run dev --workspace app",
     "test": "npm run test --workspaces --if-present",
+    "test:regras": "firebase emulators:exec --only firestore \"npx vitest run --config firebase/vitest.config.ts\"",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "firebase": "^12.19.0",
+    "vitest": "^5.0.3"
   },
   "engines": {
     "node": ">=20"
