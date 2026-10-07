@@ -2,4 +2,4 @@
 export const NOME_SITE = "Orça Já";
 export const SLOGAN = "Orçamento com cara de empresa, aprovação pelo WhatsApp e cobrança por Pix.";
 export const URL_HUB = "/modelo-de-orcamento";
-export const URL_APP = import.meta.env.PUBLIC_APP_URL || "https://orca-ja-app.pages.dev";
+export { URL_APP } from "./planos";
