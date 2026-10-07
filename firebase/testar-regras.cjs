@@ -35,7 +35,8 @@ if (process.platform === "win32") {
 
 const resultado = spawnSync(
   "npx",
-  ["firebase", "emulators:exec", "--only", "firestore", "npx vitest run --config firebase/vitest.config.ts"],
+  // Com shell: true, o comando interno precisa ir entre aspas para chegar inteiro ao firebase.
+  ["firebase", "emulators:exec", "--only", "firestore", '"npx vitest run --config firebase/vitest.config.ts"'],
   { stdio: "inherit", shell: true, env, cwd: path.join(__dirname, "..") },
 );
 process.exit(resultado.status ?? 1);
