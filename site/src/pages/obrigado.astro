@@ -1,0 +1,38 @@
+---
+import Base from "../layouts/Base.astro";
+import { URL_CADASTRO } from "../lib/planos";
+
+const titulo = "Assinatura recebida | Orça Já";
+const descricao = "Obrigado por assinar o Orça Já Pro. Veja os próximos passos para liberar sua conta.";
+---
+
+<Base titulo={titulo} descricao={descricao} caminho="/obrigado">
+  <section class="mx-auto max-w-xl pt-12 text-center sm:pt-20">
+    <span class="inline-flex h-16 w-16 items-center justify-center rounded-full bg-pago text-3xl text-white" aria-hidden="true">✓</span>
+    <h1 class="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">Pagamento recebido. Obrigado!</h1>
+    <p class="mt-4 text-lg text-grafite">
+      Seu Pro é liberado em até <strong class="text-tinta">24 horas úteis</strong>, na conta que tem o mesmo e-mail
+      usado no pagamento. Você recebe um aviso quando estiver ativo.
+    </p>
+  </section>
+
+  <section class="mx-auto mt-10 max-w-xl rounded-lg border border-pauta bg-folha p-5">
+    <h2 class="text-xl font-semibold">Enquanto isso</h2>
+    <ol class="mt-3 list-decimal space-y-2 pl-5 text-grafite">
+      <li>
+        Se ainda não tem conta, <a href={URL_CADASTRO} class="font-medium text-carbono underline">crie a sua aqui</a>
+        com o mesmo e-mail do pagamento. Leva 2 minutos.
+      </li>
+      <li>Se já tem conta, pode continuar usando normalmente. O limite some assim que o Pro for ativado.</li>
+      <li>Ainda não aparecer em 24 horas úteis? Responda o e-mail de confirmação do pagamento que resolvemos.</li>
+    </ol>
+  </section>
+
+  <p class="mx-auto mt-8 max-w-xl text-center text-sm text-grafite">
+    Arrependeu-se? Você tem 7 dias de garantia. É só pedir o cancelamento que devolvemos o valor.
+  </p>
+
+  <div class="mt-8 text-center">
+    <a href={URL_CADASTRO} class="botao-primario !w-auto px-7">Ir para o app</a>
+  </div>
+</Base>
