@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useNavigate, useParams } from "react-router";
 import CabecalhoPagina from "@/componentes/CabecalhoPagina";
 import Campo from "@/componentes/Campo";
@@ -31,6 +31,8 @@ export default function NovoOrcamento() {
   const navegar = useNavigate();
   const { orcamentos: recentes } = useOrcamentos(usuario?.uid, "todos");
 
+  // Rascunho vindo do site: lido uma única vez (o efeito abaixo roda duas vezes no modo estrito do React)
+  const importadoRef = useRef(editando ? null : lerRascunhoImportado());
   const [carregandoExistente, setCarregandoExistente] = useState(editando);
   const [existente, setExistente] = useState<Orcamento | null>(null);
 
@@ -62,9 +64,8 @@ export default function NovoOrcamento() {
     if (!perfil) return;
     if (!editando) {
       setValidadeDias(String(validadeDiasPadrao(slug)));
-      setObservacoes(observacoesPadrao(slug));
       // Veio do gerador do site? Preenche com o que a pessoa já montou lá.
-      const importado = lerRascunhoImportado();
+      const importado = importadoRef.current;
       if (importado && importado.itens && importado.itens.length > 0) {
         if (importado.cliente) setClienteNome(importado.cliente);
         setItens(
@@ -78,10 +79,10 @@ export default function NovoOrcamento() {
         );
         setProximoId(importado.itens.length + 1);
         if (importado.desconto) setDesconto(paraTexto(importado.desconto));
-        if (importado.observacoes) setObservacoes(importado.observacoes);
-        limparRascunhoImportado();
+        setObservacoes(importado.observacoes || observacoesPadrao(slug));
         return;
       }
+      setObservacoes(observacoesPadrao(slug));
       setItens([{ id: 1, descricao: "", qtd: "1", unidade: "un", valorUnit: "" }]);
       setProximoId(2);
       return;
@@ -187,7 +188,8 @@ export default function NovoOrcamento() {
         navegar(`/orcamentos/${existente.id}`, { replace: true });
       } else {
         const novoId = await criarOrcamento(usuario.uid, perfil, dados);
-        registrarEvento("orcamento_criado", { uid: usuario.uid, orcamentoId: novoId });
+        registrarEvento("orcamento_criado", { uid: usuario.uid, orcamentoId: novoId, origem: importadoRef.current ? "site" : "app" });
+        limparRascunhoImportado();
         navegar(`/orcamentos/${novoId}`, { replace: true });
       }
     } catch (err) {
