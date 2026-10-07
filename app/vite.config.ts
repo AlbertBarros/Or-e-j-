@@ -12,7 +12,8 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  server: { host: "127.0.0.1", port: 5173 },
+  // Sem "host" fixo: o Vite atende em localhost (IPv4 e IPv6). O Firebase Auth só autoriza "localhost", não 127.0.0.1.
+  server: { port: 5173 },
   build: { target: "es2022" },
   test: {
     environment: "node",
