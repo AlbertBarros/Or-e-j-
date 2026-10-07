@@ -191,6 +191,7 @@ export default function ListaDeEspera({
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
