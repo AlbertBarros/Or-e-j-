@@ -292,3 +292,12 @@ details.faq[open] .resposta { animation: surgir-faq 0.3s ease-out; }
   .inclinavel { transition: none; transform: none !important; }
   .telefone > .tela > .trocador img { transition: none; }
 }
+
+/* Carrossel de telas: desliza devagar da direita para a esquerda, pausa ao passar o mouse */
+.marquee-galeria { mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.marquee-galeria > ul { gap: 2rem; animation-duration: 70s; }
+.marquee-galeria:hover > ul, .marquee-galeria:focus-within > ul { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .marquee-galeria { overflow-x: auto; mask-image: none; padding-left: 1rem; padding-right: 1rem; }
+  .marquee-galeria > ul { animation: none; }
+}

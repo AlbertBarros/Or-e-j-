@@ -147,13 +147,13 @@ const jsonLd = [
     <div class="revelar text-center">
       <p class="titulo-secao">Por dentro do app</p>
       <h2 id="gal-titulo" class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Bonito para você, claro para o cliente</h2>
-      <p class="mt-2 text-sm text-grafite">Arraste para o lado para ver mais telas.</p>
+      <p class="mt-2 text-sm text-grafite">As telas passam sozinhas. Pare o mouse em cima para olhar com calma.</p>
     </div>
-    <div class="revelar -mx-4 mt-10 overflow-x-auto px-4 pb-6 [scrollbar-width:thin]">
-      <ul class="flex w-max gap-8 pt-6">
-        {galeria.map((g) => (
-          <li class="w-[300px] shrink-0">
-            <Telefone tela={g.tela} alt={g.alt} mancha={false} class="cartao-hover" />
+    <div class="revelar marquee marquee-galeria -mx-4 mt-10 pb-6" aria-label="Telas do app em carrossel">
+      <ul class="pt-6">
+        {[...galeria, ...galeria].map((g, i) => (
+          <li class="w-[300px] shrink-0" aria-hidden={i >= galeria.length}>
+            <Telefone tela={g.tela} alt={i < galeria.length ? g.alt : ""} mancha={false} />
             <p class="mt-3 text-center text-sm text-grafite">{g.alt}</p>
           </li>
         ))}
