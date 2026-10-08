@@ -249,3 +249,52 @@
   .chip-ativo { background: linear-gradient(135deg, #1e40af, #2563eb) !important; color: #fff !important; border-color: transparent !important; }
   .opcao-ativa { background: #dce4f7 !important; border-color: #1e3a8a !important; color: #1e3a8a !important; }
 }
+
+/* ===== Tela de entrada: fundo vivo, cartões flutuando e janela de vidro ===== */
+.fundo-login { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.fundo-login-luz { position: absolute; border-radius: 999px; filter: blur(70px); opacity: 0.55; animation: luz-respira 12s ease-in-out infinite alternate; }
+.luz-1 { width: 55vmax; height: 55vmax; left: -15vmax; top: -20vmax; background: radial-gradient(circle, #3b82f6 0%, transparent 65%); }
+.luz-2 { width: 50vmax; height: 50vmax; right: -18vmax; top: 10vmax; background: radial-gradient(circle, #10b981 0%, transparent 65%); animation-delay: -4s; }
+.luz-3 { width: 45vmax; height: 45vmax; left: 25vmax; bottom: -22vmax; background: radial-gradient(circle, #818cf8 0%, transparent 65%); animation-delay: -8s; }
+@keyframes luz-respira {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(4vmax, 3vmax, 0) scale(1.12); }
+}
+.fundo-login-grade {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(30, 58, 138, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(30, 58, 138, 0.06) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+.fundo-login-camada { position: absolute; inset: 0; transition: transform 0.4s ease-out; }
+.flutuante {
+  position: absolute; display: flex; align-items: center; gap: 0.6rem;
+  border-radius: 1rem; padding: 0.6rem 0.8rem; white-space: nowrap;
+  animation: flutua 7s ease-in-out infinite;
+}
+.flutuante-a { left: max(2vw, calc(50% - 560px)); top: 16vh; animation-delay: 0s; }
+.flutuante-b { right: max(2vw, calc(50% - 560px)); top: 24vh; animation-delay: -2s; }
+.flutuante-c { left: max(3vw, calc(50% - 520px)); bottom: 18vh; animation-delay: -4s; }
+.flutuante-d { right: max(3vw, calc(50% - 520px)); bottom: 12vh; animation-delay: -5.5s; }
+@keyframes flutua {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-14px) rotate(1deg); }
+}
+.login-cartao { animation: surgir 0.5s ease-out both; }
+.login-logo { animation: surgir 0.4s ease-out both; }
+/* No celular os cartões ficam pequenos e nas bordas, sem cobrir a janela */
+@media (max-width: 700px) {
+  .flutuante { transform: scale(0.85); padding: 0.45rem 0.6rem; }
+  .flutuante-a { left: 0.25rem; top: 5vh; }
+  .flutuante-b { right: 0.25rem; top: auto; bottom: 4vh; }
+  .flutuante-c { left: -1.5rem; bottom: 9vh; }
+  .flutuante-d { right: -1.5rem; bottom: 4vh; }
+  .flutuante-c, .flutuante-d { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fundo-login-luz, .flutuante, .login-cartao, .login-logo { animation: none; }
+}
+/* Botão secundário precisa de borda visível sobre fundos claros */
+@layer components {
+  .botao-secundario { border-color: rgba(30, 58, 138, 0.18); }
+}

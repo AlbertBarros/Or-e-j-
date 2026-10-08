@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import Logo from "@/componentes/Logo";
 import Campo from "@/componentes/Campo";
 import InstalarApp from "@/componentes/InstalarApp";
+import FundoLogin from "@/componentes/FundoLogin";
 import {
   entrarComGoogle,
   enviarLinkPorEmail,
@@ -90,12 +91,13 @@ export default function Entrar() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-[560px] flex-col px-4 py-8">
-      <div className="flex justify-center pt-6">
-        <Logo tamanho={40} />
+    <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[560px] flex-col justify-center px-4 py-8">
+      <FundoLogin />
+      <div className="login-logo flex justify-center pt-2">
+        <Logo tamanho={44} />
       </div>
 
-      <section className="documento mt-8 p-5">
+      <section className="vidro-forte login-cartao mt-8 rounded-3xl p-6 sm:p-8">
         {etapa === "link-enviado" ? (
           <>
             <h1 className="text-2xl font-bold">Confira seu e-mail</h1>
