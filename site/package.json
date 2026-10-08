@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Site de SEO do Orça Fácil: páginas 'modelo de orçamento para {profissão}' com gerador grátis",
+  "description": "Site de SEO do Preço Fechado: páginas 'modelo de orçamento para {profissão}' com gerador grátis",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

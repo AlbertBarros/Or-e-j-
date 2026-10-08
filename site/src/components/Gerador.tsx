@@ -353,7 +353,7 @@ export default function Gerador({ profissao }: Props) {
             Salvar e enviar pelo WhatsApp
           </a>
         </div>
-        <p className="mt-2 text-center text-xs text-grafite">PDF grátis, com a marca "Feito com Orça Fácil". Para enviar por link e receber a aprovação, crie sua conta grátis: o orçamento vai junto.</p>
+        <p className="mt-2 text-center text-xs text-grafite">PDF grátis, com a marca "Feito com Preço Fechado". Para enviar por link e receber a aprovação, crie sua conta grátis: o orçamento vai junto.</p>
       </div>
 
     </section>

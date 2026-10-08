@@ -46,12 +46,12 @@ export async function onRequestGet(context) {
   let html = await indexResp.text();
   if (!html.includes("</head>")) return context.next();
 
-  let titulo = "Contrato — Orça Fácil";
+  let titulo = "Contrato — Preço Fechado";
   let descricao = "Leia o contrato de prestação de serviço e assine pelo celular.";
   try {
     const o = await buscarOrcamento(env, params.id);
     if (o && o.status && o.status !== "rascunho") {
-      titulo = `Contrato nº ${String(o.numero).padStart(4, "0")} — ${o.nomeNegocio || "Orça Fácil"}`;
+      titulo = `Contrato nº ${String(o.numero).padStart(4, "0")} — ${o.nomeNegocio || "Preço Fechado"}`;
       descricao = o.status === "assinado" ? `Valor ${reais(o.total)}. Contrato assinado.` : `Valor ${reais(o.total)}. Toque para ler e assinar.`;
     }
   } catch (e) {
@@ -65,7 +65,7 @@ export async function onRequestGet(context) {
     `<title>${escapar(titulo)}</title>`,
     `<meta name="description" content="${escapar(descricao)}">`,
     `<meta property="og:type" content="website">`,
-    `<meta property="og:site_name" content="Orça Fácil">`,
+    `<meta property="og:site_name" content="Preço Fechado">`,
     `<meta property="og:title" content="${escapar(titulo)}">`,
     `<meta property="og:description" content="${escapar(descricao)}">`,
     `<meta property="og:url" content="${escapar(urlPagina)}">`,

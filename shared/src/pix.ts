@@ -1,5 +1,5 @@
 /**
- * Orça Fácil — gerador de Pix "copia-e-cola" (BR Code estático, padrão EMV/BCB).
+ * Preço Fechado — gerador de Pix "copia-e-cola" (BR Code estático, padrão EMV/BCB).
  *
  * - Sem dependências, roda no navegador e no Node.
  * - Pix ESTÁTICO não confirma pagamento: o profissional marca "pago" manualmente no MVP.

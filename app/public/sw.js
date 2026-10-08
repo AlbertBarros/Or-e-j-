@@ -1,4 +1,4 @@
-/* Orça Fácil — service worker mínimo (PWA instalável + abertura rápida).
+/* Preço Fechado — service worker mínimo (PWA instalável + abertura rápida).
  * - Páginas (navegação): rede primeiro; sem rede, usa a última cópia do index.html.
  * - Arquivos /assets/ (nomes com hash, imutáveis) e ícones: cache primeiro.
  * - Nada do Firebase passa por aqui: dados sempre vêm da rede.

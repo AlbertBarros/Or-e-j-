@@ -86,7 +86,7 @@ export default function PreviaCartao({ cartao: c, logo, compacto = false }: Prop
           <p className={`mt-6 text-center text-xs ${suave}`}>
             Cartão feito com{" "}
             <a href={SITE} className="underline">
-              Orça Fácil
+              Preço Fechado
             </a>
           </p>
         )}

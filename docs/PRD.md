@@ -1,4 +1,4 @@
-# Orça Fácil — PRD do MVP
+# Preço Fechado — PRD do MVP
 
 ## Problema
 
@@ -66,7 +66,7 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 - Se for "aprovado", aparece o bloco de pagamento: QR Code, botão **Copiar código Pix** e valor.
 - Se for "pago", aparece o selo "Pago em dd/mm".
 - Se a validade expirou e ainda está "enviado", o aviso diz "Orçamento expirado — fale com {negócio}", com link para o WhatsApp do profissional.
-- Rodapé discreto: "Feito com Orça Fácil — crie o seu grátis" (aquisição viral).
+- Rodapé discreto: "Feito com Preço Fechado — crie o seu grátis" (aquisição viral).
 - Aceite: funciona sem login, carrega rápido em 3G e as regras impedem qualquer alteração além de aprovar ou recusar.
 
 ### T7. Cobrar
@@ -97,7 +97,7 @@ Autônomos e MEIs de serviço fazem orçamento em papel, Word ou mensagem solta 
 | Link de aprovação | Sim | Sim |
 | Pix (copia-e-cola + QR) na página de aprovação | Não | Sim |
 | Logo no orçamento | Não | Sim |
-| Marca "Feito com Orça Fácil" no PDF | Sim | Não |
+| Marca "Feito com Preço Fechado" no PDF | Sim | Não |
 | Mensagens de cobrança | Sim | Sim |
 | Recibo PDF (com logo, garantia, endereço e observações) | Não | Sim |
 

@@ -8,7 +8,7 @@ import { profissoes } from "../lib/profissoes";
 import { NOME_SITE } from "../lib/site";
 import { APP_PRONTO, URL_CADASTRO } from "../lib/planos";
 
-const titulo = "Como funciona o Orça Fácil — tour guiado e todas as funcionalidades";
+const titulo = "Como funciona o Preço Fechado — tour guiado e todas as funcionalidades";
 const descricao =
   "Veja passo a passo como cadastrar clientes, montar o orçamento com frete e catálogo, escolher o modelo, enviar pelo WhatsApp, receber a aprovação, o contrato assinado e o Pix.";
 const opcoes = profissoes.map((p) => ({ slug: p.slug, nome: p.nome }));
@@ -52,7 +52,7 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: "Como enviar um orçamento profissional com o Orça Fácil",
+    name: "Como enviar um orçamento profissional com o Preço Fechado",
     step: passos.map((p) => ({ "@type": "HowToStep", position: p.n, name: p.t, text: p.d })),
   },
 ];

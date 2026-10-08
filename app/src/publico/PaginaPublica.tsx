@@ -100,7 +100,7 @@ export default function PaginaPublica({ id }: { id: string }) {
             {erro ?? (estado === "indisponivel" ? "Peça ao profissional para enviá-lo de novo." : "O link pode estar errado ou o orçamento foi removido.")}
           </p>
           <a href={SITE} className="botao-secundario mt-6 !w-auto px-6">
-            Conhecer o Orça Fácil
+            Conhecer o Preço Fechado
           </a>
         </section>
       ) : (
@@ -189,7 +189,7 @@ export default function PaginaPublica({ id }: { id: string }) {
             <p className="mt-6 text-center text-xs text-grafite">
               Feito com{" "}
               <a href={SITE} className="font-medium text-carbono underline">
-                Orça Fácil
+                Preço Fechado
               </a>{" "}
               — crie o seu grátis
             </p>

@@ -1,7 +1,7 @@
 {
   "name": "orca-ja",
   "private": true,
-  "description": "Orça Fácil — orçamento, aprovação por link, Pix e recibo para autônomos",
+  "description": "Preço Fechado — orçamento, aprovação por link, Pix e recibo para autônomos",
   "workspaces": [
     "shared",
     "site",

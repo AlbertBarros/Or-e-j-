@@ -1,5 +1,5 @@
 /**
- * Orça Fácil — texto do contrato simples de prestação de serviço.
+ * Preço Fechado — texto do contrato simples de prestação de serviço.
  * Gera as cláusulas já preenchidas a partir do orçamento aprovado. É uma SUGESTÃO de modelo:
  * o profissional pode editar antes de enviar e deve revisar com um advogado para o seu caso.
  */

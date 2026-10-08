@@ -1,5 +1,5 @@
 ---
-/** Logo do Orça Fácil: símbolo em SVG inline + nome em texto (mesmo desenho dos ícones: scripts/gerar-marca.cjs). */
+/** Logo do Preço Fechado: etiqueta de preço com o check verde de "fechado" (mesmo desenho de scripts/gerar-marca.cjs). */
 interface Props {
   tamanho?: number; // altura do símbolo em px
   comNome?: boolean;
@@ -7,8 +7,8 @@ interface Props {
   claro?: boolean; // nome em branco (fundos escuros)
 }
 const { tamanho = 32, comNome = true, class: classe = "", claro = false } = Astro.props;
-const fonte = Math.round(tamanho * 0.72);
-const id = `of-g-${Math.random().toString(36).slice(2, 7)}`;
+const fonte = Math.round(tamanho * 0.66);
+const id = `pf-g-${Math.random().toString(36).slice(2, 7)}`;
 ---
 
 <span class={`inline-flex items-center gap-2 ${classe}`}>
@@ -20,18 +20,18 @@ const id = `of-g-${Math.random().toString(36).slice(2, 7)}`;
       </linearGradient>
     </defs>
     <rect width="96" height="96" rx="22" fill={`url(#${id})`}></rect>
-    <rect x="22" y="16" width="44" height="58" rx="8" fill="#FFFFFF"></rect>
-    <rect x="30" y="27" width="22" height="4" rx="2" fill="#DCE4F7"></rect>
-    <rect x="30" y="37" width="28" height="4" rx="2" fill="#DCE4F7"></rect>
-    <rect x="30" y="47" width="16" height="4" rx="2" fill="#DCE4F7"></rect>
-    <rect x="30" y="58" width="22" height="5" rx="2.5" fill="#1E3A8A"></rect>
+    <path d="M40 18 H70 a7 7 0 0 1 7 7 V55 a7 7 0 0 1 -7 7 H40 L17 40 Z" fill="#FFFFFF"></path>
+    <circle cx="34" cy="40" r="4.5" fill="#1E3A8A"></circle>
+    <rect x="46" y="31" width="22" height="4" rx="2" fill="#DCE4F7"></rect>
+    <rect x="46" y="40" width="16" height="4" rx="2" fill="#DCE4F7"></rect>
+    <rect x="46" y="49" width="20" height="5" rx="2.5" fill="#1E3A8A"></rect>
     <circle cx="66" cy="66" r="15" fill="#15803D" stroke="#FFFFFF" stroke-width="4"></circle>
     <path d="M59 66.5 L64 71.5 L73.5 61" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
   </svg>
   {
     comNome && (
       <span class={`whitespace-nowrap font-extrabold tracking-tight ${claro ? "text-white" : "text-tinta"}`} style={`font-size:${fonte}px;line-height:1`}>
-        Orça <span class={claro ? "text-[#9DB4F0]" : "text-carbono"}>Fácil</span>
+        Preço <span class={claro ? "text-[#9DB4F0]" : "text-carbono"}>Fechado</span>
       </span>
     )
   }

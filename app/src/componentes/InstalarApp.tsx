@@ -80,7 +80,7 @@ export default function InstalarApp({ compacto = false }: { compacto?: boolean }
         <img src="/icones/icone-192.png" alt="" width={44} height={44} className="h-11 w-11 shrink-0 rounded-[10px]" />
         <div className="min-w-0 flex-1">
           <p id="instalar-titulo" className="font-semibold leading-tight">
-            Baixe o app do Orça Fácil
+            Baixe o app do Preço Fechado
           </p>
           <p className="text-sm text-grafite">
             {iphone ? "Fica na tela inicial do seu iPhone, como um app." : "Abre direto da tela inicial, sem navegador."}
@@ -133,7 +133,7 @@ export default function InstalarApp({ compacto = false }: { compacto?: boolean }
                 <li className="flex gap-3">
                   <span className="tabular flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-carbono-claro font-bold text-carbono">3</span>
                   <p>
-                    Toque em <strong>Adicionar</strong>, no canto superior direito. O ícone do Orça Fácil aparece na sua tela inicial.
+                    Toque em <strong>Adicionar</strong>, no canto superior direito. O ícone do Preço Fechado aparece na sua tela inicial.
                   </p>
                 </li>
               </ol>

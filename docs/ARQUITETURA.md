@@ -1,4 +1,4 @@
-# Orça Fácil — Arquitetura
+# Preço Fechado — Arquitetura
 
 ## Visão geral
 

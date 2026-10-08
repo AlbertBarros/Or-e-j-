@@ -1,4 +1,4 @@
-# Orça Fácil — guia de lançamento e operação (passo a passo)
+# Preço Fechado — guia de lançamento e operação (passo a passo)
 
 Tudo o que depende de você, na ordem. Comandos são para o **PowerShell**, dentro da pasta do projeto:
 

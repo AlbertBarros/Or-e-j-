@@ -311,7 +311,7 @@ export default function Comecar() {
       {passo === 5 && (
         <form className="surgir mt-6" onSubmit={passo5} noValidate>
           <h1 className="text-2xl font-bold">Seu Pix</h1>
-          <p className="mt-1 text-grafite">O cliente paga direto para a sua chave. O dinheiro não passa pelo Orça Fácil.</p>
+          <p className="mt-1 text-grafite">O cliente paga direto para a sua chave. O dinheiro não passa pelo Preço Fechado.</p>
           <div className="mt-5 space-y-4">
             <Campo
               id="chavePix"

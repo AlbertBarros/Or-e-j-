@@ -1,4 +1,4 @@
-# Orça Fácil — instruções para o Claude Code
+# Preço Fechado — instruções para o Claude Code
 
 Leia este arquivo inteiro antes de qualquer tarefa. Ele é a fonte da verdade do projeto.
 Detalhes ficam em `docs/`: PRD.md (produto), ARQUITETURA.md (técnico), DESIGN.md (visual), SEO.md (site), ROADMAP.md (fases e tarefas).
@@ -106,7 +106,7 @@ Além disso: abrir no navegador em largura de celular e percorrer o fluxo da tar
 - `npm run emuladores` + `npm run dev:app:emulador` — app local contra os emuladores de Auth e Firestore (login por link: pegue o link em http://127.0.0.1:9099/emulator/v1/projects/orca-ja-aaf65/oobCodes)
 - `npm run test:regras` — testes das regras do Firestore no emulador (precisa de Java: `winget install Microsoft.OpenJDK.21`; o script ajusta a pasta temporária do Java, ver `firebase/testar-regras.cjs`)
 - `firebase deploy --only firestore:rules,firestore:indexes` — regras e índices (Storage entra na Fase 1, quando for ativado)
-- `node scripts/gerar-marca.cjs` — regenera logo/ícones (SVG + PNG) da marca Orça Fácil
+- `node scripts/gerar-marca.cjs` — regenera logo/ícones (SVG + PNG) da marca Preço Fechado
 - `node scripts/semear-demo.cjs` — dados de demonstração no EMULADOR (para telas do site)
 - `node scripts/ativar-pro.cjs <email> [meses|--free]` — libera/retira o Pro (precisa de `service-account.json` na raiz, ignorado pelo Git)
 - `worker-pagamentos/` — webhook do Mercado Pago (Cloudflare Worker) que libera o Pro sozinho; ver README da pasta

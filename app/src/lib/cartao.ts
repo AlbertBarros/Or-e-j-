@@ -243,7 +243,7 @@ export async function gerarCardPng(modelo: 1 | 2 | 3, d: DadosCard, logoDataUrl:
   if (d.mostrarMarca) {
     ctx.fillStyle = corSuave;
     ctx.font = `500 22px ${FONTE}`;
-    ctx.fillText("Feito com Orça Fácil", L / 2, L - 36);
+    ctx.fillText("Feito com Preço Fechado", L / 2, L - 36);
   }
 
   return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Falha ao gerar imagem"))), "image/png"));

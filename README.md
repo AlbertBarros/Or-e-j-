@@ -1,4 +1,4 @@
-# Orça Fácil — kit de partida para o Claude Code
+# Preço Fechado — kit de partida para o Claude Code
 
 Este pacote tem tudo o que o Claude Code precisa para construir o MVP: a especificação do produto, a arquitetura, o design, o roadmap em fases, regras de segurança do Firebase e o código mais delicado (Pix) já escrito e testado.
 
@@ -49,7 +49,7 @@ cd C:\projetos            # ou a pasta onde você guarda seus projetos
 cd orca-ja
 git init
 git add .
-git commit -m "chore: kit inicial do Orça Fácil"
+git commit -m "chore: kit inicial do Preço Fechado"
 git branch -M main
 git remote add origin https://github.com/SEU-USUARIO/orca-ja.git
 git push -u origin main

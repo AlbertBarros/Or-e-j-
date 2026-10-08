@@ -60,12 +60,12 @@ export async function onRequestGet(context) {
   let html = await indexResp.text();
   if (!html.includes("</head>")) return context.next();
 
-  let titulo = "Orçamento — Orça Fácil";
+  let titulo = "Orçamento — Preço Fechado";
   let descricao = "Veja o orçamento e aprove com um toque. Sem cadastro, sem baixar nada.";
   try {
     const o = await buscarOrcamento(env, params.id);
     if (o && o.status && o.status !== "rascunho") {
-      titulo = `Orçamento nº ${String(o.numero).padStart(4, "0")} — ${o.nomeNegocio || "Orça Fácil"}`;
+      titulo = `Orçamento nº ${String(o.numero).padStart(4, "0")} — ${o.nomeNegocio || "Preço Fechado"}`;
       const validade = dataCurta(o.validadeAte);
       const partes = [`Total ${reais(o.total)}`];
       if (o.status === "enviado" && validade) partes.push(`válido até ${validade}`);
@@ -86,7 +86,7 @@ export async function onRequestGet(context) {
     `<title>${escapar(titulo)}</title>`,
     `<meta name="description" content="${escapar(descricao)}">`,
     `<meta property="og:type" content="website">`,
-    `<meta property="og:site_name" content="Orça Fácil">`,
+    `<meta property="og:site_name" content="Preço Fechado">`,
     `<meta property="og:title" content="${escapar(titulo)}">`,
     `<meta property="og:description" content="${escapar(descricao)}">`,
     `<meta property="og:url" content="${escapar(urlPagina)}">`,
