@@ -225,9 +225,15 @@
 /* Celular: tamanho único e tela com área da barra de status (o notch não cobre o app) */
 .telefone {
   max-width: 320px;
-  padding: 10px;
-  border-radius: 2.8rem;
+  padding: 7px;
+  border-radius: 2.6rem;
+  box-shadow:
+    0 0 0 1.5px #2a3042,
+    0 30px 60px -30px rgba(30, 58, 138, 0.55),
+    0 20px 40px -24px rgba(0, 0, 0, 0.5);
 }
+.telefone::before { top: 13px; width: 86px; height: 22px; }
+.telefone-grande { max-width: 330px; }
 .telefone > .tela {
   position: relative;
   border-radius: 2.2rem;
@@ -344,3 +350,45 @@ details.faq[open] .resposta { animation: surgir-faq 0.3s ease-out; }
 header.sticky { background: rgba(255, 255, 255, 0.6) !important; border-color: rgba(255, 255, 255, 0.8) !important; }
 .telefone > .tela { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4); }
 .chip-ativo { background: linear-gradient(135deg, #1e40af, #2563eb) !important; color: #fff !important; border-color: transparent !important; }
+
+/* Cards de funcionalidades: sobem, acendem e os itens deslizam ao passar o mouse */
+.cartao-recurso {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+.cartao-recurso::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(37, 99, 235, 0.14), rgba(16, 185, 129, 0.06) 45%, transparent 70%);
+}
+.cartao-recurso:hover {
+  transform: translateY(-6px) scale(1.015);
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 1px 2px rgba(26, 29, 35, 0.04), 0 32px 64px -28px rgba(30, 58, 138, 0.5);
+}
+.cartao-recurso:hover::after { opacity: 1; }
+.cartao-recurso .icone-recurso { transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.35s ease, color 0.35s ease, box-shadow 0.35s ease; }
+.cartao-recurso:hover .icone-recurso {
+  transform: rotate(-8deg) scale(1.12);
+  background: linear-gradient(135deg, #1e40af, #2563eb 60%, #10b981 160%);
+  color: #fff;
+  box-shadow: 0 10px 20px -10px rgba(37, 99, 235, 0.7);
+}
+.cartao-recurso li { transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.cartao-recurso:hover li { transform: translateX(5px); }
+.cartao-recurso:hover li:nth-child(2) { transition-delay: 0.05s; }
+.cartao-recurso:hover li:nth-child(3) { transition-delay: 0.1s; }
+.cartao-recurso:hover li:nth-child(4) { transition-delay: 0.15s; }
+.cartao-recurso .check-recurso { transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s ease, color 0.35s ease; }
+.cartao-recurso:hover .check-recurso { transform: scale(1.25); background: #16a34a; color: #fff; }
+.cartao-recurso > * { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .cartao-recurso, .cartao-recurso::after, .cartao-recurso .icone-recurso, .cartao-recurso li, .cartao-recurso .check-recurso { transition: none; }
+  .cartao-recurso:hover { transform: none; }
+  .cartao-recurso:hover li { transform: none; }
+}

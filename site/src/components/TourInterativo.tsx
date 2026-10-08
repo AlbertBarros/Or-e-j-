@@ -117,7 +117,7 @@ export default function TourInterativo() {
   const tem = (k: string) => estado.has(k);
 
   return (
-    <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+    <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
       {/* Painel de texto */}
       <div className="order-2 lg:order-1">
         <p className="titulo-secao">Tour guiado · passo {i + 1} de {PASSOS.length}</p>
@@ -150,10 +150,10 @@ export default function TourInterativo() {
 
       {/* Celular */}
       <div className="order-1 flex justify-center lg:order-2">
-        <div className="relative">
+        <div className="relative w-full max-w-[330px]">
           <span className="mancha" aria-hidden="true" />
-          <div className="telefone" style={{ maxWidth: 300 }}>
-            <div ref={telaRef} className="tela relative select-none text-[13px] leading-snug">
+          <div className="telefone telefone-grande">
+            <div ref={telaRef} className="tela relative select-none text-[14px] leading-snug">
               {/* Cursor e onda */}
               {cursor.visivel && (
                 <svg className={`cursor-tour ${cursor.clicando ? "clicando" : ""}`} style={{ left: cursor.x, top: cursor.y }} viewBox="0 0 24 24" aria-hidden="true">
@@ -163,7 +163,7 @@ export default function TourInterativo() {
               {onda && <span key={onda.k} className="onda-clique" style={{ left: onda.x, top: onda.y }} aria-hidden="true" />}
 
               {/* Barra de status */}
-              <div className="flex h-10 items-end justify-between px-5 pb-1 text-[10px] font-semibold text-grafite">
+              <div className="flex h-7 items-center justify-between px-5 text-[10px] font-semibold text-grafite">
                 <span>9:41</span>
                 <span>●●● ▲ ▮</span>
               </div>
@@ -410,11 +410,11 @@ export default function TourInterativo() {
 function Abas({ ativa }: { ativa: string }) {
   const abas = ["Início", "Orçamentos", "Clientes", "Contratos", "Mais"];
   return (
-    <div className="absolute inset-x-0 bottom-0 grid grid-cols-5 border-t border-pauta bg-folha py-2 text-[8px] font-semibold leading-none">
+    <div className="absolute inset-x-0 bottom-0 grid grid-cols-5 border-t border-pauta bg-folha px-1 pb-3 pt-2 text-[9px] font-semibold leading-none">
       {abas.map((a) => (
-        <span key={a} className={`flex flex-col items-center gap-0.5 ${a === ativa ? "text-carbono" : "text-grafite"}`}>
-          <span className={`h-4 w-6 rounded-full ${a === ativa ? "bg-carbono-claro" : ""}`} />
-          {a}
+        <span key={a} className={`flex min-w-0 flex-col items-center gap-1 ${a === ativa ? "text-carbono" : "text-grafite"}`}>
+          <span className={`h-4 w-7 rounded-full ${a === ativa ? "bg-carbono-claro" : "bg-pauta/60"}`} />
+          <span className="w-full truncate text-center">{a}</span>
         </span>
       ))}
     </div>

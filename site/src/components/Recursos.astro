@@ -85,9 +85,9 @@ const lista = completo ? AREAS : AREAS.map((a) => ({ ...a, itens: a.itens.slice(
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
   {
     lista.map((a, i) => (
-      <article class={`cartao revelar revelar-atraso-${(i % 3) + 1} p-5`}>
+      <article class={`cartao cartao-recurso revelar revelar-atraso-${(i % 3) + 1} p-5`}>
         <div class="flex items-center gap-3">
-          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-carbono-claro text-carbono">
+          <span class="icone-recurso flex h-10 w-10 items-center justify-center rounded-xl bg-carbono-claro text-carbono">
             <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" set:html={ICONES[a.icone]} />
           </span>
           <h3 class="text-lg font-semibold">{a.area}</h3>
@@ -95,7 +95,7 @@ const lista = completo ? AREAS : AREAS.map((a) => ({ ...a, itens: a.itens.slice(
         <ul class="mt-4 space-y-3">
           {a.itens.map(([t, d]) => (
             <li class="flex gap-2.5">
-              <span class="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#E6F4EA] text-[10px] font-bold text-pago" aria-hidden="true">✓</span>
+              <span class="check-recurso mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#E6F4EA] text-[10px] font-bold text-pago" aria-hidden="true">✓</span>
               <span>
                 <span class="block text-sm font-semibold">{t}</span>
                 {completo && <span class="block text-sm text-grafite">{d}</span>}
@@ -107,3 +107,14 @@ const lista = completo ? AREAS : AREAS.map((a) => ({ ...a, itens: a.itens.slice(
     ))
   }
 </div>
+
+<script>
+  // Luz que segue o mouse dentro do card (só decoração)
+  for (const card of document.querySelectorAll<HTMLElement>(".cartao-recurso")) {
+    card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      card.style.setProperty("--my", `${e.clientY - r.top}px`);
+    });
+  }
+</script>
