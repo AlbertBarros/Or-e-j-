@@ -158,3 +158,9 @@ cartão de visita virtual (3 modelos) e cards em imagem (3 modelos).
 - [x] Marquee de profissões com ícones, contadores animados, FAQ em acordeão, cards com elevação ao passar o mouse
 - [x] Página de modelos repaginada (grade de cards com ícone por profissão) e páginas de profissão com cabeçalho e seções novas
 - [x] Revelar ao rolar com reforço por rolagem e tempo máximo (nada fica invisível)
+
+## Visual vidro (8 out 2026)
+
+- [x] App: fundo com luzes suaves; `.cartao`, `.vidro`, `.vidro-forte`, `.barra-fixa` com backdrop-blur; janelas, abas, barras fixas, chips e campos translúcidos; botões em degradê
+- [x] Site: `.cartao` e planos em vidro, cabeçalho translúcido, fundo com luzes; galeria em carrossel contínuo
+- [x] Telas do app recapturadas após o redesenho (manter este hábito: mudou o app, recapturar `site/public/app`)
