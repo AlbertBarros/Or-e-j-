@@ -343,12 +343,32 @@ details.faq[open] .resposta { animation: surgir-faq 0.3s ease-out; }
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
+  /* Botão secundário sempre visível sobre o vidro: borda azul, sombra leve e realce ao passar o mouse */
   .botao-secundario {
-    background: rgba(255, 255, 255, 0.7);
-    border-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid rgba(30, 64, 175, 0.35);
+    color: #1e40af;
+    box-shadow: 0 1px 2px rgba(26, 29, 35, 0.06), 0 10px 24px -14px rgba(30, 58, 138, 0.45);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   }
+  .botao-secundario:hover {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(30, 64, 175, 0.7);
+    box-shadow: 0 2px 4px rgba(26, 29, 35, 0.06), 0 16px 30px -14px rgba(30, 58, 138, 0.55);
+    transform: translateY(-1px);
+  }
+  /* Botão principal com o degradê da marca e sombra: é o que mais chama atenção no card */
+  .botao-primario {
+    background: linear-gradient(90deg, #1e40af 0%, #2563eb 60%, #10b981 140%);
+    background-size: 200% 100%;
+    background-position: 0% 0%;
+    box-shadow: 0 14px 30px -12px rgba(37, 99, 235, 0.6);
+    transition: background-position 0.5s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .botao-primario:hover { background-position: 100% 0%; transform: translateY(-1px); box-shadow: 0 18px 34px -12px rgba(37, 99, 235, 0.7); }
+  .botao-primario:active { transform: translateY(0); }
 }
 header.sticky { background: rgba(255, 255, 255, 0.6) !important; border-color: rgba(255, 255, 255, 0.8) !important; }
 .telefone > .tela { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4); }

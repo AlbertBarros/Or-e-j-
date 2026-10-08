@@ -296,5 +296,6 @@
 }
 /* Botão secundário precisa de borda visível sobre fundos claros */
 @layer components {
-  .botao-secundario { border-color: rgba(30, 58, 138, 0.18); }
+  .botao-secundario { border: 1.5px solid rgba(30, 64, 175, 0.35); color: #1e40af; box-shadow: 0 1px 2px rgba(26, 29, 35, 0.06), 0 10px 24px -14px rgba(30, 58, 138, 0.45); }
+.botao-secundario:hover { border-color: rgba(30, 64, 175, 0.7); background: rgba(255, 255, 255, 0.98); }
 }
