@@ -148,3 +148,13 @@ cartão de visita virtual (3 modelos) e cards em imagem (3 modelos).
 - [x] Escolhido **Preço Fechado**: sem empresa/app com o nome; precofechado.com.br, .com e .app.br livres na data
 - [x] Logo: etiqueta de preço branca com check verde, no selo em degradê; nome em todo o código, manifest, ícones e imagem social
 - [ ] Dono: registrar precofechado.com.br, pesquisar "preço fechado" no INPI (marca mista com a logo), renomear projeto no Firebase e tela de consentimento do Google
+
+## Site v2 e logo v3 (8 out 2026)
+
+- [x] Logo definitiva: balão de conversa com check verde e selo "R$", em degradê azul→verde (aprovado no WhatsApp)
+- [x] Celulares do site em tamanho único (320px) com área da barra de status (o notch não cobre o app)
+- [x] Herói interativo: telas que se alternam, inclinação 3D que segue o mouse, botão em degradê
+- [x] "Como funciona" interativo (PassosInterativos): avança sozinho com barra de progresso; toque troca a tela; celular fixo na rolagem
+- [x] Marquee de profissões com ícones, contadores animados, FAQ em acordeão, cards com elevação ao passar o mouse
+- [x] Página de modelos repaginada (grade de cards com ícone por profissão) e páginas de profissão com cabeçalho e seções novas
+- [x] Revelar ao rolar com reforço por rolagem e tempo máximo (nada fica invisível)

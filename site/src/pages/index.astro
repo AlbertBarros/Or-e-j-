@@ -2,10 +2,14 @@
 import Base from "../layouts/Base.astro";
 import Cta from "../components/Cta";
 import Telefone from "../components/Telefone.astro";
+import HeroTelefones from "../components/HeroTelefones";
+import PassosInterativos from "../components/PassosInterativos";
+import Contador from "../components/Contador";
 import Recursos from "../components/Recursos.astro";
 import Planos from "../components/Planos.astro";
 import Faq from "../components/Faq.astro";
 import { profissoes, urlProfissao } from "../lib/profissoes";
+import { iconeProfissao } from "../lib/icones";
 import { NOME_SITE, URL_HUB } from "../lib/site";
 import { APP_PRONTO, URL_CADASTRO, LIMITE_FREE, textoMensal, textoAnualPorMes } from "../lib/planos";
 
@@ -20,6 +24,15 @@ const passos = [
   { n: 2, t: "Escolha o modelo e veja a prévia", d: "Simples, Detalhado ou Completo, com sua logo. Você vê exatamente como o cliente vai receber antes de tocar em Enviar.", tela: "previa", alt: "Prévia do orçamento em moldura de celular" },
   { n: 3, t: "O cliente aprova e paga pelo Pix", d: "Ele abre o link no WhatsApp, toca em Aprovar e o QR Code do Pix aparece na mesma página. Você recebe a notificação.", tela: "aprovado", alt: "Página do cliente com carimbo de aprovado" },
   { n: 4, t: "Contrato assinado e recibo", d: "O app sugere o contrato já preenchido, o cliente assina pelo celular, e no fim o recibo em PDF sai com garantia e valor por extenso.", tela: "contrato-assinado", alt: "Contrato assinado pelo cliente" },
+];
+
+const galeria = [
+  { tela: "orcamentos", alt: "Lista de orçamentos com status" },
+  { tela: "detalhe", alt: "Detalhe do orçamento com frete e dois valores" },
+  { tela: "clientes", alt: "Banco de clientes" },
+  { tela: "contratos", alt: "Contratos assinados e pendentes" },
+  { tela: "pix", alt: "Pix na página de aprovação" },
+  { tela: "cartao", alt: "Cartão de visita virtual" },
 ];
 
 const faq = [
@@ -54,22 +67,22 @@ const jsonLd = [
 
 <Base titulo={titulo} descricao={descricao} caminho="/" jsonLd={jsonLd} largura="larga">
   <!-- Herói -->
-  <section class="relative grid items-center gap-10 pt-10 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-6 lg:pt-16">
+  <section class="relative grid items-center gap-12 pt-10 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-8 lg:pt-16">
+    <div class="fundo-grade pointer-events-none absolute -inset-x-10 -top-10 bottom-0 -z-10" aria-hidden="true"></div>
     <div class="revelar visivel">
       <p class="inline-flex items-center gap-2 rounded-full border border-pauta bg-folha px-3 py-1 text-sm font-medium text-carbono shadow-sm">
-        <span class="h-2 w-2 rounded-full bg-pago" aria-hidden="true"></span>
+        <span class="relative flex h-2 w-2" aria-hidden="true"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-pago opacity-75"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-pago"></span></span>
         Novo: contratos com assinatura pelo celular
       </p>
       <h1 class="mt-5 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.6rem]">
-        Orçamento com cara de empresa.
-        <span class="texto-gradiente">Aprovação, contrato e Pix em um link.</span>
+        Orçamento com cara de empresa. <span class="texto-gradiente">Aprovado, assinado e pago em um link.</span>
       </h1>
       <p class="mt-5 max-w-xl text-lg text-grafite">
         Monte o orçamento no celular em 1 minuto, envie pelo WhatsApp e acompanhe tudo: o cliente aprova, assina o contrato e paga no Pix. Clientes, recibos em PDF e cartão de visita no mesmo app.
       </p>
       <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-        <Cta client:load variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="home:heroi" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="!min-h-12 !px-7 text-base shadow-[0_12px_30px_-12px_rgba(30,58,138,0.6)]" />
-        <a href="/como-funciona" class="botao-secundario !min-h-12 !px-7 text-base">Ver como funciona</a>
+        <Cta client:load variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="home:heroi" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="botao-vivo !rounded-xl" />
+        <a href="/como-funciona" class="botao-secundario !min-h-12 !rounded-xl !px-7 text-base">Ver como funciona</a>
       </div>
       <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-grafite">
         <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> {LIMITE_FREE} orçamentos grátis por mês</li>
@@ -77,48 +90,40 @@ const jsonLd = [
         <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> O cliente não precisa de app</li>
       </ul>
     </div>
-    <div class="relative mx-auto flex w-full max-w-[520px] items-end justify-center gap-4 px-2 pt-6 lg:pt-0">
-      <Telefone tela="inicio" alt="Tela inicial do app com totais, pendências e gráficos" largura={290} flutuar prioridade />
-      <div class="hidden w-[200px] shrink-0 sm:block">
-        <Telefone tela="aprovado" alt="Página do cliente com o orçamento aprovado" largura={200} mancha={false} class="flutuar-2 translate-y-10" />
-      </div>
+    <div class="pt-4 lg:pt-0">
+      <HeroTelefones client:load />
     </div>
   </section>
 
-  <!-- Faixa de profissões -->
+  <!-- Marquee de profissões -->
   <section aria-label="Profissões atendidas" class="revelar mt-16">
-    <p class="text-center text-sm text-grafite">Com itens prontos para</p>
-    <ul class="mt-3 flex flex-wrap justify-center gap-2">
-      {profissoes.map((p) => (
-        <li><a href={urlProfissao(p.slug)} class="chip hover:border-carbono hover:text-carbono">{p.nome}</a></li>
-      ))}
-    </ul>
+    <p class="text-center text-sm text-grafite">Com serviços prontos para</p>
+    <div class="marquee mt-4">
+      <ul>
+        {[...profissoes, ...profissoes].map((p) => (
+          <li>
+            <a href={urlProfissao(p.slug)} class="chip !min-h-11 gap-2 !px-4 hover:border-carbono hover:text-carbono">
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" class="text-carbono" set:html={iconeProfissao(p.slug)} />
+              {p.nome}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
 
-  <!-- Como funciona (4 passos com telas reais) -->
+  <!-- Como funciona (passos interativos) -->
   <section id="como-funciona" aria-labelledby="cf-titulo" class="mt-24 scroll-mt-24">
     <div class="revelar text-center">
       <p class="titulo-secao">Como funciona</p>
       <h2 id="cf-titulo" class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Do orçamento ao recibo em 4 passos</h2>
-      <p class="mx-auto mt-3 max-w-2xl text-lg text-grafite">Tudo no seu celular. O cliente só precisa do WhatsApp.</p>
+      <p class="mx-auto mt-3 max-w-2xl text-lg text-grafite">Toque num passo para ver a tela. Tudo no seu celular; o cliente só precisa do WhatsApp.</p>
     </div>
-    <ol class="mt-12 space-y-20">
-      {passos.map((p, i) => (
-        <li class={`revelar grid items-center gap-8 lg:grid-cols-2 lg:gap-16 ${i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}>
-          <div class="mx-auto w-full max-w-[300px]">
-            <Telefone tela={p.tela} alt={p.alt} largura={280} />
-          </div>
-          <div>
-            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-carbono text-lg font-bold text-white">{p.n}</span>
-            <p class="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-carbono">Passo {p.n}</p>
-            <h3 class="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">{p.t}</h3>
-            <p class="mt-3 max-w-md text-lg text-grafite">{p.d}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
+    <div class="revelar mt-12">
+      <PassosInterativos client:visible passos={passos} />
+    </div>
     <div class="revelar mt-12 text-center">
-      <a href="/como-funciona" class="botao-secundario !min-h-12 !px-7 text-base">Ver o tour interativo e todas as funcionalidades →</a>
+      <a href="/como-funciona" class="botao-secundario !min-h-12 !rounded-xl !px-7 text-base">Ver o tour guiado e todas as funcionalidades →</a>
     </div>
   </section>
 
@@ -129,7 +134,7 @@ const jsonLd = [
       <h2 id="rec-titulo" class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Tudo o que você precisa, nada do que atrapalha</h2>
       <p class="mx-auto mt-3 max-w-2xl text-lg text-grafite">Sem agenda, sem estoque, sem relatório complicado. Só o que faz o orçamento virar dinheiro na conta.</p>
     </div>
-    <div class="mt-10">
+    <div class="mt-10 [&_article]:cartao-hover">
       <Recursos />
     </div>
     <p class="revelar mt-6 text-center">
@@ -142,41 +147,40 @@ const jsonLd = [
     <div class="revelar text-center">
       <p class="titulo-secao">Por dentro do app</p>
       <h2 id="gal-titulo" class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Bonito para você, claro para o cliente</h2>
+      <p class="mt-2 text-sm text-grafite">Arraste para o lado para ver mais telas.</p>
     </div>
-    <div class="revelar -mx-4 mt-10 overflow-x-auto px-4 pb-4 [scrollbar-width:thin]">
-      <ul class="flex w-max gap-6 pt-6">
-        {[
-          ["orcamentos", "Lista de orçamentos com status"],
-          ["detalhe", "Detalhe do orçamento com frete e dois valores"],
-          ["clientes", "Banco de clientes"],
-          ["contratos", "Contratos assinados e pendentes"],
-          ["pix", "Pix na página de aprovação"],
-          ["cartao", "Cartão de visita virtual"],
-        ].map(([tela = "", alt = ""]) => (
-          <li class="w-[220px] shrink-0">
-            <Telefone tela={tela} alt={alt} largura={220} mancha={false} />
-            <p class="mt-3 text-center text-sm text-grafite">{alt}</p>
+    <div class="revelar -mx-4 mt-10 overflow-x-auto px-4 pb-6 [scrollbar-width:thin]">
+      <ul class="flex w-max gap-8 pt-6">
+        {galeria.map((g) => (
+          <li class="w-[300px] shrink-0">
+            <Telefone tela={g.tela} alt={g.alt} mancha={false} class="cartao-hover" />
+            <p class="mt-3 text-center text-sm text-grafite">{g.alt}</p>
           </li>
         ))}
       </ul>
     </div>
   </section>
 
-  <!-- Conta rápida -->
-  <section aria-labelledby="conta-titulo" class="revelar mt-24 overflow-hidden rounded-3xl bg-gradient-to-br from-carbono to-[#2B4FB8] px-6 py-12 text-white sm:px-12">
+  <!-- Números -->
+  <section aria-labelledby="conta-titulo" class="revelar relative mt-24 overflow-hidden rounded-3xl px-6 py-12 text-white sm:px-12" style="background: linear-gradient(120deg, #1E40AF 0%, #2563EB 55%, #10B981 140%)">
+    <div class="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-white/10 blur-2xl" aria-hidden="true"></div>
     <h2 id="conta-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Faça a conta</h2>
-    <div class="mt-8 grid gap-8 md:grid-cols-3">
+    <div class="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
       <div>
-        <p class="tabular text-5xl font-extrabold">1</p>
+        <p class="text-5xl font-extrabold"><Contador client:visible ate={1} sufixo=" min" /></p>
+        <p class="mt-2 text-white/80">para montar e enviar um orçamento com cara de empresa.</p>
+      </div>
+      <div>
+        <p class="text-5xl font-extrabold"><Contador client:visible ate={1} /></p>
         <p class="mt-2 text-white/80">orçamento aprovado a mais no mês já paga o Pro inteiro, várias vezes.</p>
       </div>
       <div>
-        <p class="tabular text-5xl font-extrabold">{textoAnualPorMes}</p>
-        <p class="mt-2 text-white/80">por mês no plano anual. Menos do que um almoço, pelo mês todo de orçamentos.</p>
+        <p class="text-5xl font-extrabold"><Contador client:visible ate={19.9} prefixo="R$ " decimais={2} /></p>
+        <p class="mt-2 text-white/80">por mês no plano anual. Menos do que um almoço, pelo mês todo.</p>
       </div>
       <div>
-        <p class="tabular text-5xl font-extrabold">0</p>
-        <p class="mt-2 text-white/80">taxas sobre o que você recebe. O Pix é seu, direto na sua conta.</p>
+        <p class="text-5xl font-extrabold"><Contador client:visible ate={0} sufixo="%" /></p>
+        <p class="mt-2 text-white/80">de taxa sobre o que você recebe. O Pix é seu, direto na sua conta.</p>
       </div>
     </div>
   </section>
@@ -190,23 +194,23 @@ const jsonLd = [
         O grátis já resolve orçamento, aprovação, contratos e clientes. O Pro tira o limite e libera Pix na aprovação, recibo em PDF e sua marca, por {textoMensal} ao mês ou {textoAnualPorMes} por mês no anual.
       </p>
     </div>
-    <div class="revelar mt-10">
+    <div class="revelar mt-10 [&_article]:cartao-hover">
       <Planos origem="home" />
     </div>
   </section>
 
   <!-- Perguntas -->
-  <div id="perguntas" class="revelar scroll-mt-24">
+  <div id="perguntas" class="scroll-mt-24">
     <Faq perguntas={faq} titulo="Perguntas antes de começar" />
   </div>
 
   <!-- Chamada final -->
   <section aria-labelledby="final-titulo" class="revelar cartao mt-24 px-6 py-12 text-center sm:px-10">
-    <h2 id="final-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Seu próximo orçamento pode ser o primeiro com cara de empresa.</h2>
+    <h2 id="final-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Seu próximo orçamento pode ser o primeiro com <span class="texto-gradiente">preço fechado</span>.</h2>
     <p class="mx-auto mt-3 max-w-xl text-lg text-grafite">Leva 2 minutos para configurar: profissão, nome do negócio, serviços e chave Pix. Depois, cada orçamento leva 1.</p>
     <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-      <Cta client:visible variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="home:final" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="!min-h-12 !px-7 text-base" />
-      <a href={URL_HUB} class="botao-secundario !min-h-12 !px-7 text-base">Testar um modelo sem cadastro</a>
+      <Cta client:visible variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="home:final" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="botao-vivo !rounded-xl" />
+      <a href={URL_HUB} class="botao-secundario !min-h-12 !rounded-xl !px-7 text-base">Testar um modelo sem cadastro</a>
     </div>
   </section>
 </Base>

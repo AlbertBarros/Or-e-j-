@@ -1,9 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
 import Cta from "../components/Cta";
-import Telefone from "../components/Telefone.astro";
 import Recursos from "../components/Recursos.astro";
 import TourInterativo from "../components/TourInterativo";
+import PassosInterativos from "../components/PassosInterativos";
 import { profissoes } from "../lib/profissoes";
 import { NOME_SITE } from "../lib/site";
 import { APP_PRONTO, URL_CADASTRO } from "../lib/planos";
@@ -79,31 +79,11 @@ const jsonLd = [
   <section aria-labelledby="passos-titulo" class="mt-24">
     <div class="revelar text-center">
       <h2 id="passos-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Em 4 passos</h2>
-      <p class="mx-auto mt-3 max-w-2xl text-lg text-grafite">Telas reais do app.</p>
+      <p class="mx-auto mt-3 max-w-2xl text-lg text-grafite">Telas reais do app. Toque num passo para ver.</p>
     </div>
-    <ol class="mt-12 space-y-20">
-      {passos.map((p, i) => (
-        <li class={`revelar grid items-center gap-8 lg:grid-cols-2 lg:gap-16 ${i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}>
-          <div class="mx-auto w-full max-w-[300px]">
-            <Telefone tela={p.tela} alt={p.alt} largura={280} />
-          </div>
-          <div>
-            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-carbono text-lg font-bold text-white">{p.n}</span>
-            <p class="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-carbono">Passo {p.n}</p>
-            <h3 class="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">{p.t}</h3>
-            <p class="mt-3 max-w-md text-lg text-grafite">{p.d}</p>
-            <ul class="mt-4 space-y-2">
-              {p.pontos.map((x) => (
-                <li class="flex items-start gap-2.5">
-                  <span class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#E6F4EA] text-[11px] font-bold text-pago" aria-hidden="true">✓</span>
-                  <span class="font-medium">{x}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </li>
-      ))}
-    </ol>
+    <div class="revelar mt-12">
+      <PassosInterativos client:visible passos={passos} />
+    </div>
   </section>
 
   <!-- Todas as funcionalidades -->
@@ -127,7 +107,7 @@ const jsonLd = [
     <h2 id="cta-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Pronto para o primeiro orçamento com cara de empresa?</h2>
     <p class="mx-auto mt-3 max-w-xl text-lg text-white/80">Configure em 2 minutos. Sem cartão de crédito.</p>
     <div class="mt-7 flex justify-center">
-      <Cta client:visible variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="como-funciona:final" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="!min-h-12 !bg-white !px-8 text-base !text-carbono hover:!bg-carbono-claro" />
+      <Cta client:visible variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="como-funciona:final" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="!min-h-12 !rounded-xl !bg-white !px-8 text-base !text-carbono hover:!bg-carbono-claro" />
     </div>
   </section>
 </Base>

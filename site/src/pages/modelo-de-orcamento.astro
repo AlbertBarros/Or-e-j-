@@ -2,33 +2,28 @@
 import Base from "../layouts/Base.astro";
 import CardProfissao from "../components/CardProfissao.astro";
 import Faq from "../components/Faq.astro";
+import Cta from "../components/Cta";
+import Telefone from "../components/Telefone.astro";
 import { profissoes, urlProfissao } from "../lib/profissoes";
 import { URL_HUB } from "../lib/site";
+import { APP_PRONTO, URL_CADASTRO, LIMITE_FREE } from "../lib/planos";
 
 const titulo = "Modelo de orçamento simples e grátis para autônomos | Preço Fechado";
 const descricao =
   "Modelos de orçamento prontos para eletricista, pintor, encanador, diarista e outros serviços. Preencha online, baixe em PDF ou envie pelo WhatsApp. Grátis.";
+const opcoes = profissoes.map((p) => ({ slug: p.slug, nome: p.nome }));
 
 const faq = [
-  {
-    pergunta: "O que não pode faltar em um orçamento?",
-    resposta:
-      "Seus dados e contato, o nome do cliente, a lista de serviços com quantidade e valor, o total, a validade do orçamento e as observações sobre o que está ou não incluído.",
-  },
-  {
-    pergunta: "Preciso de CNPJ para fazer orçamento?",
-    resposta:
-      "Não. Autônomo sem CNPJ pode fazer orçamento normalmente. O CNPJ (como MEI) só é necessário para emitir nota fiscal.",
-  },
-  {
-    pergunta: "Orçamento tem validade?",
-    resposta:
-      "Deve ter. O padrão é 15 dias. Sem validade, o cliente pode voltar meses depois cobrando o mesmo preço, mesmo com o material mais caro.",
-  },
-  {
-    pergunta: "O PDF é grátis mesmo?",
-    resposta: "Sim. O PDF sai com uma marca discreta 'Feito com Preço Fechado' no rodapé. Não pedimos cadastro para baixar.",
-  },
+  { pergunta: "O que não pode faltar em um orçamento?", resposta: "Seus dados e contato, o nome do cliente, a lista de serviços com quantidade e valor, o total, a validade do orçamento e as observações sobre o que está ou não incluído." },
+  { pergunta: "Preciso de CNPJ para fazer orçamento?", resposta: "Não. Autônomo sem CNPJ pode fazer orçamento normalmente. O CNPJ (como MEI) só é necessário para emitir nota fiscal." },
+  { pergunta: "Orçamento tem validade?", resposta: "Deve ter. O padrão é 15 dias. Sem validade, o cliente pode voltar meses depois cobrando o mesmo preço, mesmo com o material mais caro." },
+  { pergunta: "O PDF é grátis mesmo?", resposta: "Sim. O PDF sai com uma marca discreta 'Feito com Preço Fechado' no rodapé. Não pedimos cadastro para baixar." },
+];
+
+const bomOrcamento = [
+  { t: "Lido em 30 segundos", d: "Seu nome e contato, o nome do cliente, cada serviço em uma linha com quantidade e valor, e o total em destaque.", icone: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>' },
+  { t: "Observações que evitam discussão", d: "Material incluído ou não, garantia, o que fica de fora e como quer receber. Frases curtas e diretas.", icone: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9 12h6M9 16h4"/>' },
+  { t: "Numerado e com validade", d: "“Orçamento nº 0012, válido até dia 22” passa confiança e protege você quando o material sobe de preço.", icone: '<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>' },
 ];
 
 const jsonLd = [
@@ -44,26 +39,13 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "Modelos de orçamento por profissão",
-    itemListElement: profissoes.map((p, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      name: p.seo.h1,
-      url: new URL(urlProfissao(p.slug), Astro.site).href,
-    })),
+    itemListElement: profissoes.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.seo.h1, url: new URL(urlProfissao(p.slug), Astro.site).href })),
   },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faq.map((f) => ({
-      "@type": "Question",
-      name: f.pergunta,
-      acceptedAnswer: { "@type": "Answer", text: f.resposta },
-    })),
-  },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.pergunta, acceptedAnswer: { "@type": "Answer", text: f.resposta } })) },
 ];
 ---
 
-<Base titulo={titulo} descricao={descricao} caminho={URL_HUB} jsonLd={jsonLd}>
+<Base titulo={titulo} descricao={descricao} caminho={URL_HUB} jsonLd={jsonLd} largura="larga">
   <nav aria-label="Você está em" class="pt-4 text-sm text-grafite">
     <ol class="flex gap-1">
       <li><a href="/" class="hover:text-carbono">Início</a> ›</li>
@@ -71,58 +53,95 @@ const jsonLd = [
     </ol>
   </nav>
 
-  <h1 class="mt-3 text-3xl font-bold leading-tight sm:text-4xl">Modelo de orçamento grátis para o seu serviço</h1>
-  <p class="mt-2 text-lg text-grafite">
-    Escolha a sua profissão. O modelo já vem com os serviços mais comuns e preços de referência, e você edita tudo
-    antes de baixar o PDF.
-  </p>
-
-  <section aria-labelledby="lista-titulo" class="mt-6">
-    <h2 id="lista-titulo" class="sr-only">Profissões</h2>
-    <div class="overflow-hidden rounded-lg border border-pauta">
-      {profissoes.map((p) => <CardProfissao profissao={p} />)}
+  <!-- Herói -->
+  <section class="relative mt-6 grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+    <div class="fundo-grade pointer-events-none absolute -inset-x-10 -top-10 bottom-0 -z-10" aria-hidden="true"></div>
+    <div class="revelar visivel">
+      <p class="titulo-secao">Modelos grátis</p>
+      <h1 class="mt-3 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
+        Modelo de orçamento grátis <span class="texto-gradiente">para o seu serviço</span>
+      </h1>
+      <p class="mt-4 max-w-xl text-lg text-grafite">
+        Escolha a profissão. O modelo já vem com os serviços mais comuns e preços de referência. Você edita tudo, baixa o PDF na hora ou leva para o app e envia por link com aprovação.
+      </p>
+      <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-grafite">
+        <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> Sem cadastro para o PDF</li>
+        <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> {profissoes.length} profissões</li>
+        <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> Total calculado ao vivo</li>
+      </ul>
+      <a href="#profissoes" class="botao-vivo mt-7 !rounded-xl">Escolher minha profissão ↓</a>
+    </div>
+    <div class="hidden justify-center lg:flex">
+      <Telefone tela="novo" alt="Formulário de orçamento no app" flutuar prioridade />
     </div>
   </section>
 
-  <section aria-labelledby="bom-titulo" class="mt-12">
-    <h2 id="bom-titulo" class="text-2xl font-semibold">O que um bom orçamento tem</h2>
-    <div class="mt-4 space-y-4 text-[17px] leading-relaxed">
-      <p>
-        Um orçamento bom é aquele que o cliente lê em 30 segundos e entende o que vai pagar. Ele tem o seu nome e
-        contato, o nome do cliente, cada serviço em uma linha com quantidade e valor, o total em destaque e a data
-        até quando o preço vale.
-      </p>
-      <p>
-        As observações são a parte que evita discussão depois. É ali que você diz se o material está incluído, qual
-        é a garantia, o que fica de fora e como quer receber. Escreva frases curtas e diretas.
-      </p>
-      <p>
-        Numere os orçamentos. Um "Orçamento nº 0012" passa mais confiança do que uma mensagem solta, e ajuda você a
-        achar o combinado quando o cliente ligar meses depois.
-      </p>
+  <!-- Grade de profissões -->
+  <section id="profissoes" aria-labelledby="lista-titulo" class="mt-20 scroll-mt-24">
+    <div class="revelar text-center">
+      <h2 id="lista-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Qual é a sua profissão?</h2>
+      <p class="mt-2 text-lg text-grafite">Cada modelo vem com os serviços e preços de referência da área.</p>
+    </div>
+    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {profissoes.map((p, i) => <CardProfissao profissao={p} atraso={i} />)}
+      <a href={APP_PRONTO ? URL_CADASTRO : "#"} class="cartao cartao-hover revelar flex flex-col items-start justify-center gap-3 border-dashed p-5">
+        <span class="icone-profissao" style="background: linear-gradient(135deg, #5B6270, #1A1D23)">
+          <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14" /></svg>
+        </span>
+        <span>
+          <span class="block text-lg font-bold">Outra profissão</span>
+          <span class="block text-sm text-grafite">No app você cadastra seus próprios serviços e preços.</span>
+        </span>
+        <span class="text-sm font-semibold text-carbono">Criar conta grátis →</span>
+      </a>
     </div>
   </section>
 
-  <section aria-labelledby="como-titulo" class="mt-12">
-    <h2 id="como-titulo" class="text-2xl font-semibold">Como funciona</h2>
-    <ol class="mt-4 grid gap-3 sm:grid-cols-3">
-      <li class="rounded-lg border border-pauta bg-folha p-4">
-        <span class="tabular text-2xl font-bold text-carbono">1</span>
-        <p class="mt-1 font-semibold">Escolha a profissão</p>
-        <p class="text-sm text-grafite">Os serviços mais comuns já vêm preenchidos.</p>
-      </li>
-      <li class="rounded-lg border border-pauta bg-folha p-4">
-        <span class="tabular text-2xl font-bold text-carbono">2</span>
-        <p class="mt-1 font-semibold">Ajuste itens e valores</p>
-        <p class="text-sm text-grafite">O total atualiza sozinho enquanto você digita.</p>
-      </li>
-      <li class="rounded-lg border border-pauta bg-folha p-4">
-        <span class="tabular text-2xl font-bold text-carbono">3</span>
-        <p class="mt-1 font-semibold">Baixe o PDF</p>
-        <p class="text-sm text-grafite">Ou entre na lista para enviar por link e receber aprovação.</p>
-      </li>
+  <!-- O que um bom orçamento tem -->
+  <section aria-labelledby="bom-titulo" class="mt-24">
+    <div class="revelar text-center">
+      <p class="titulo-secao">Antes de preencher</p>
+      <h2 id="bom-titulo" class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">O que um bom orçamento tem</h2>
+    </div>
+    <div class="mt-10 grid gap-4 md:grid-cols-3">
+      {bomOrcamento.map((b, i) => (
+        <article class={`cartao cartao-hover revelar revelar-atraso-${i + 1} p-6`}>
+          <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-carbono-claro text-carbono">
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" set:html={b.icone} />
+          </span>
+          <h3 class="mt-4 text-lg font-bold">{b.t}</h3>
+          <p class="mt-2 text-grafite">{b.d}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Como funciona -->
+  <section aria-labelledby="como-titulo" class="revelar mt-24 overflow-hidden rounded-3xl px-6 py-12 text-white sm:px-12" style="background: linear-gradient(120deg, #1E40AF 0%, #2563EB 55%, #10B981 140%)">
+    <h2 id="como-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Como funciona</h2>
+    <ol class="mt-8 grid gap-6 sm:grid-cols-3">
+      {[
+        ["Escolha a profissão", "Os serviços mais comuns já vêm preenchidos, com preço de referência."],
+        ["Ajuste itens e valores", "O total atualiza sozinho enquanto você digita. Adicione observações."],
+        ["Baixe o PDF ou envie por link", "PDF na hora, grátis. Ou crie a conta: o orçamento vai junto e o cliente aprova pelo WhatsApp."],
+      ].map(([t, d], i) => (
+        <li class="rounded-2xl bg-white/10 p-5 backdrop-blur-sm">
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-base font-bold text-carbono">{i + 1}</span>
+          <p class="mt-3 text-lg font-bold">{t}</p>
+          <p class="mt-1 text-white/85">{d}</p>
+        </li>
+      ))}
     </ol>
   </section>
 
-  <Faq perguntas={faq} />
+  <Faq perguntas={faq} titulo="Dúvidas sobre orçamento" />
+
+  <section aria-labelledby="cta-titulo" class="revelar cartao mt-24 px-6 py-12 text-center sm:px-10">
+    <h2 id="cta-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Quer mais do que um PDF?</h2>
+    <p class="mx-auto mt-3 max-w-xl text-lg text-grafite">No app, o orçamento vai por link, o cliente aprova com um toque, assina o contrato e paga no Pix. Grátis para começar, com {LIMITE_FREE} orçamentos por mês.</p>
+    <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+      <Cta client:visible variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="hub:cta" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="botao-vivo !rounded-xl" />
+      <a href="/como-funciona" class="botao-secundario !min-h-12 !rounded-xl !px-7 text-base">Ver como funciona</a>
+    </div>
+  </section>
 </Base>

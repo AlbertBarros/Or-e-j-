@@ -196,3 +196,99 @@
   .revelar { opacity: 1; transform: none; transition: none; }
   .cursor-tour { transition: none; }
 }
+
+/* ===== Repaginação 2: celulares uniformes, interação e vida ===== */
+@layer components {
+  .texto-marca {
+    background: linear-gradient(90deg, #2563eb 0%, #10b981 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .botao-vivo {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-7 text-base font-semibold text-white shadow-[0_14px_30px_-12px_rgba(37,99,235,0.6)] transition-transform hover:-translate-y-0.5 active:translate-y-0;
+    background: linear-gradient(90deg, #1e40af 0%, #2563eb 60%, #10b981 140%);
+    background-size: 200% 100%;
+    background-position: 0% 0%;
+    transition: background-position 0.5s ease, transform 0.15s ease;
+  }
+  .botao-vivo:hover { background-position: 100% 0%; }
+  .cartao-hover {
+    @apply transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgba(30,58,138,0.45)];
+  }
+  .icone-profissao {
+    @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-white shadow-md;
+    background: linear-gradient(135deg, #1e40af, #2563eb 60%, #10b981 160%);
+  }
+}
+
+/* Celular: tamanho único e tela com área da barra de status (o notch não cobre o app) */
+.telefone {
+  max-width: 320px;
+  padding: 10px;
+  border-radius: 2.8rem;
+}
+.telefone > .tela {
+  position: relative;
+  border-radius: 2.2rem;
+  padding-top: 28px;
+  background: #f6f7f9;
+}
+.telefone > .tela > img,
+.telefone > .tela > .trocador img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+.telefone > .tela > .trocador {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.telefone > .tela > .trocador img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.telefone > .tela > .trocador img.ativa { opacity: 1; }
+
+/* Inclinação 3D suave que segue o mouse */
+.inclinavel { transform-style: preserve-3d; transition: transform 0.25s ease; will-change: transform; }
+
+/* Marquee das profissões */
+.marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.marquee > ul { display: flex; gap: 0.5rem; width: max-content; animation: marquee 32s linear infinite; }
+.marquee:hover > ul { animation-play-state: paused; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* Barra de progresso dos passos */
+.progresso { height: 3px; background: #e4e7ec; border-radius: 999px; overflow: hidden; }
+.progresso > span { display: block; height: 100%; background: linear-gradient(90deg, #2563eb, #10b981); width: 0; }
+.progresso.ativo > span { animation: encher var(--duracao, 5s) linear forwards; }
+@keyframes encher { to { width: 100%; } }
+
+/* Acordeão do FAQ */
+details.faq summary { list-style: none; cursor: pointer; }
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq .seta { transition: transform 0.25s ease; }
+details.faq[open] .seta { transform: rotate(180deg); }
+details.faq[open] .resposta { animation: surgir-faq 0.3s ease-out; }
+@keyframes surgir-faq { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* Fundo em grade sutil do herói */
+.fundo-grade {
+  background-image:
+    linear-gradient(rgba(30, 58, 138, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 58, 138, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at center, #000 40%, transparent 75%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee > ul { animation: none; }
+  .inclinavel { transition: none; transform: none !important; }
+  .telefone > .tela > .trocador img { transition: none; }
+}

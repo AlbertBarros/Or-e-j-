@@ -1,16 +1,30 @@
 ---
 import { urlProfissao, type Profissao } from "../lib/profissoes";
+import { iconeProfissao } from "../lib/icones";
 
 interface Props {
   profissao: Profissao;
+  atraso?: number;
 }
-const { profissao } = Astro.props;
+const { profissao, atraso = 0 } = Astro.props;
+const destaque = profissao.itens.slice(0, 3).map((i) => i.descricao);
 ---
 
-<a
-  href={urlProfissao(profissao.slug)}
-  class="flex min-h-11 items-center justify-between gap-3 border-b border-pauta bg-folha px-4 py-3 hover:bg-carbono-claro"
->
-  <span class="font-medium">{profissao.nome}</span>
-  <span class="text-sm text-grafite">{profissao.itens.length} itens prontos →</span>
+<a href={urlProfissao(profissao.slug)} class={`cartao cartao-hover revelar revelar-atraso-${(atraso % 3) + 1} group flex flex-col gap-4 p-5`}>
+  <div class="flex items-center gap-3">
+    <span class="icone-profissao">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" set:html={iconeProfissao(profissao.slug)} />
+    </span>
+    <div class="min-w-0">
+      <h3 class="truncate text-lg font-bold">{profissao.nome}</h3>
+      <p class="text-xs text-grafite">{profissao.itens.length} serviços prontos · validade {profissao.validadeDiasPadrao} dias</p>
+    </div>
+  </div>
+  <ul class="flex flex-wrap gap-1.5">
+    {destaque.map((d) => <li class="rounded-full bg-fundo px-2.5 py-1 text-xs text-grafite">{d}</li>)}
+  </ul>
+  <span class="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-carbono">
+    Abrir modelo grátis
+    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+  </span>
 </a>

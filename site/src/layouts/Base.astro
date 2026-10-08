@@ -70,7 +70,7 @@ const atual = (p: string) => (caminho === p ? "text-carbono" : "text-grafite hov
           <span class="hidden sm:inline-flex">
             <Cta client:idle variante="link" texto="Entrar" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="menu:entrar" titulo="O acesso ao app está quase pronto" opcoesProfissao={opcoes} />
           </span>
-          <Cta client:idle variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="menu:comecar" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="!min-h-10 whitespace-nowrap !px-3 text-sm sm:!px-4" />
+          <Cta client:idle variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="menu:comecar" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="botao-vivo !min-h-10 whitespace-nowrap !rounded-lg !px-3 text-sm !shadow-none sm:!px-4" />
           <details class="relative md:hidden">
             <summary class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-[10px] text-carbono hover:bg-carbono-claro" aria-label="Abrir menu">
               <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
@@ -131,24 +131,42 @@ const atual = (p: string) => (caminho === p ? "text-carbono" : "text-grafite hov
     </footer>
 
     <script>
-      // Revela as seções conforme entram na tela (sem biblioteca).
-      const alvos = document.querySelectorAll<HTMLElement>(".revelar");
+      // Revela as seções conforme entram na tela (sem biblioteca), com reforço por rolagem.
+      const alvos = Array.from(document.querySelectorAll<HTMLElement>(".revelar"));
+      const mostrar = (el: HTMLElement) => el.classList.add("visivel");
+      const naTela = (el: HTMLElement) => {
+        const r = el.getBoundingClientRect();
+        return r.top < window.innerHeight * 0.92 && r.bottom > 0;
+      };
+      const varrer = () => alvos.forEach((a) => !a.classList.contains("visivel") && naTela(a) && mostrar(a));
       if ("IntersectionObserver" in window) {
         const obs = new IntersectionObserver(
           (entradas) => {
             for (const e of entradas) {
               if (e.isIntersecting) {
-                e.target.classList.add("visivel");
+                mostrar(e.target as HTMLElement);
                 obs.unobserve(e.target);
               }
             }
           },
-          { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
         );
         alvos.forEach((a) => obs.observe(a));
-      } else {
-        alvos.forEach((a) => a.classList.add("visivel"));
       }
+      varrer();
+      let agendado = false;
+      const aoRolar = () => {
+        if (agendado) return;
+        agendado = true;
+        requestAnimationFrame(() => {
+          agendado = false;
+          varrer();
+        });
+      };
+      window.addEventListener("scroll", aoRolar, { passive: true });
+      window.addEventListener("resize", aoRolar);
+      // Garantia: nada fica invisível para sempre
+      setTimeout(() => alvos.forEach(mostrar), 4000);
     </script>
   </body>
 </html>

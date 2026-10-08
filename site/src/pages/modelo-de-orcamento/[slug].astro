@@ -7,6 +7,7 @@ import Cta from "../../components/Cta";
 import { profissoes, relacionadas, urlProfissao, type Profissao } from "../../lib/profissoes";
 import { NOME_SITE, URL_HUB } from "../../lib/site";
 import { APP_PRONTO, URL_CADASTRO, LIMITE_FREE } from "../../lib/planos";
+import { iconeProfissao } from "../../lib/icones";
 
 export function getStaticPaths() {
   return profissoes.map((p) => ({ params: { slug: p.slug }, props: { profissao: p } }));
@@ -55,7 +56,7 @@ const jsonLd = [
 ];
 ---
 
-<Base titulo={profissao.seo.titulo} descricao={profissao.seo.descricao} caminho={caminho} jsonLd={jsonLd}>
+<Base titulo={profissao.seo.titulo} descricao={profissao.seo.descricao} caminho={caminho} jsonLd={jsonLd} largura="larga">
   <nav aria-label="Você está em" class="pt-4 text-sm text-grafite">
     <ol class="flex flex-wrap gap-1">
       <li><a href="/" class="hover:text-carbono">Início</a> ›</li>
@@ -64,10 +65,21 @@ const jsonLd = [
     </ol>
   </nav>
 
-  <h1 class="mt-3 text-3xl font-bold leading-tight sm:text-4xl">{profissao.seo.h1}</h1>
-  <p class="mt-2 text-lg text-grafite">Preencha, baixe em PDF ou envie pelo WhatsApp. Grátis, sem cadastro.</p>
+  <header class="relative mt-6">
+    <div class="fundo-grade pointer-events-none absolute -inset-x-10 -top-10 bottom-0 -z-10" aria-hidden="true"></div>
+    <div class="flex items-center gap-4">
+      <span class="icone-profissao !h-14 !w-14">
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" set:html={iconeProfissao(profissao.slug)} />
+      </span>
+      <div>
+        <p class="titulo-secao">Modelo grátis · {profissao.itens.length} serviços prontos</p>
+        <h1 class="mt-1 text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">{profissao.seo.h1}</h1>
+      </div>
+    </div>
+    <p class="mt-4 max-w-2xl text-lg text-grafite">Preencha abaixo, baixe em PDF ou leve para o app e envie por link com aprovação. Grátis, sem cadastro.</p>
+  </header>
 
-  <div class="mt-6">
+  <div class="mt-8">
     <Gerador client:visible profissao={{
       slug: profissao.slug,
       nome: profissao.nome,
@@ -79,11 +91,12 @@ const jsonLd = [
 
   {
     paragrafos.length > 0 && (
-      <section aria-labelledby="como-titulo" class="mt-12">
-        <h2 id="como-titulo" class="text-2xl font-semibold">
+      <section aria-labelledby="como-titulo" class="revelar cartao mt-16 p-6 sm:p-8">
+        <p class="titulo-secao">Guia rápido</p>
+        <h2 id="como-titulo" class="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
           Como preencher o orçamento de {profissao.nome.toLowerCase()}
         </h2>
-        <div class="mt-4 space-y-4 text-[17px] leading-relaxed">
+        <div class="mt-4 max-w-3xl space-y-4 text-[17px] leading-relaxed">
           {paragrafos.map((p) => (
             <p>{p}</p>
           ))}
@@ -92,9 +105,10 @@ const jsonLd = [
     )
   }
 
-  <section aria-labelledby="exemplo-titulo" class="mt-12">
-    <h2 id="exemplo-titulo" class="text-2xl font-semibold">Como fica o orçamento pronto</h2>
-    <p class="mt-2 mb-4 text-grafite">
+  <section aria-labelledby="exemplo-titulo" class="revelar mt-16">
+    <p class="titulo-secao">Exemplo</p>
+    <h2 id="exemplo-titulo" class="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">Como fica o orçamento pronto</h2>
+    <p class="mt-2 mb-6 max-w-2xl text-grafite">
       Um exemplo com os itens mais comuns de {profissao.plural}. No gerador acima você troca tudo: itens, valores e
       observações.
     </p>
@@ -103,9 +117,9 @@ const jsonLd = [
 
   <Faq perguntas={profissao.faq} />
 
-  <section aria-labelledby="cta-titulo" class="mt-12 rounded-lg border border-pauta bg-folha p-5">
-    <h2 id="cta-titulo" class="text-xl font-semibold">Cansou de orçamento no papel ou em mensagem solta?</h2>
-    <p class="mt-2 text-grafite">
+  <section aria-labelledby="cta-titulo" class="revelar mt-16 overflow-hidden rounded-3xl px-6 py-10 text-white sm:px-10" style="background: linear-gradient(120deg, #1E40AF 0%, #2563EB 55%, #10B981 140%)">
+    <h2 id="cta-titulo" class="text-2xl font-extrabold tracking-tight sm:text-3xl">Cansou de orçamento no papel ou em mensagem solta?</h2>
+    <p class="mt-2 max-w-2xl text-white/85">
       Com o Preço Fechado você manda o orçamento por um link, o cliente aprova com um toque e paga por Pix. Depois, o recibo
       sai em PDF. Grátis para começar, com {LIMITE_FREE} orçamentos por mês.
     </p>
@@ -119,28 +133,32 @@ const jsonLd = [
         titulo="Comece grátis assim que o app abrir"
         opcoesProfissao={opcoes}
       />
-      <a href="/precos" class="botao-secundario">Ver planos e preços</a>
+      <a href="/precos" class="botao-secundario !rounded-xl">Ver planos e preços</a>
     </div>
   </section>
 
-  <section aria-labelledby="rel-titulo" class="mt-12">
-    <h2 id="rel-titulo" class="text-xl font-semibold">Outros modelos de orçamento</h2>
-    <ul class="mt-3 divide-y divide-pauta rounded-lg border border-pauta bg-folha">
+  <section aria-labelledby="rel-titulo" class="revelar mt-16">
+    <h2 id="rel-titulo" class="text-2xl font-extrabold tracking-tight">Outros modelos de orçamento</h2>
+    <ul class="mt-5 grid gap-4 sm:grid-cols-3">
       {
         outras.map((o) => (
           <li>
-            <a href={urlProfissao(o.slug)} class="flex min-h-11 items-center justify-between px-4 py-3 hover:bg-carbono-claro">
-              <span>Modelo de orçamento para {o.nome.toLowerCase()}</span>
-              <span aria-hidden="true">→</span>
+            <a href={urlProfissao(o.slug)} class="cartao cartao-hover group flex items-center gap-3 p-4">
+              <span class="icone-profissao !h-10 !w-10">
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" set:html={iconeProfissao(o.slug)} />
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block font-semibold">{o.nome}</span>
+                <span class="block text-xs text-grafite">{o.itens.length} serviços prontos</span>
+              </span>
+              <span aria-hidden="true" class="text-carbono transition-transform group-hover:translate-x-1">→</span>
             </a>
           </li>
         ))
       }
-      <li>
-        <a href={URL_HUB} class="flex min-h-11 items-center px-4 py-3 text-carbono hover:bg-carbono-claro">
-          Ver todas as profissões
-        </a>
-      </li>
     </ul>
+    <p class="mt-4">
+      <a href={URL_HUB} class="font-semibold text-carbono hover:underline">Ver todas as profissões →</a>
+    </p>
   </section>
 </Base>

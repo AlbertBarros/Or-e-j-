@@ -8,16 +8,24 @@ interface Props {
 const { perguntas, titulo = "Perguntas frequentes" } = Astro.props;
 ---
 
-<section aria-labelledby="faq-titulo" class="mt-12">
-  <h2 id="faq-titulo" class="text-2xl font-semibold">{titulo}</h2>
-  <dl class="mt-4 divide-y divide-pauta rounded-lg border border-pauta bg-folha">
+<section aria-labelledby="faq-titulo" class="mt-24">
+  <div class="revelar text-center">
+    <p class="titulo-secao">Dúvidas</p>
+    <h2 id="faq-titulo" class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">{titulo}</h2>
+  </div>
+  <div class="revelar mx-auto mt-8 max-w-3xl space-y-3">
     {
-      perguntas.map((f) => (
-        <div class="px-4 py-4">
-          <dt class="font-semibold">{f.pergunta}</dt>
-          <dd class="mt-1 text-grafite">{f.resposta}</dd>
-        </div>
+      perguntas.map((f, i) => (
+        <details class="faq cartao group px-5" open={i === 0}>
+          <summary class="flex min-h-14 items-center justify-between gap-4 py-4 text-left font-semibold">
+            <span>{f.pergunta}</span>
+            <span class="seta flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-carbono-claro text-carbono" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+            </span>
+          </summary>
+          <p class="resposta pb-5 text-grafite">{f.resposta}</p>
+        </details>
       ))
     }
-  </dl>
+  </div>
 </section>
