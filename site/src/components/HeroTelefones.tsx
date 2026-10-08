@@ -48,7 +48,7 @@ export default function HeroTelefones() {
         </div>
       </div>
       <div className="hidden w-[220px] shrink-0 translate-y-6 sm:block">
-        <div className="telefone flutuar-2" style={{ maxWidth: 220, borderRadius: "2.2rem", padding: 8 }}>
+        <div className="telefone flutuar-2" style={{ maxWidth: 220, borderRadius: "2.2rem", padding: 7 }}>
           <div className="tela" style={{ borderRadius: "1.7rem", paddingTop: 20 }}>
             <img src="/app/aprovado.webp" alt="Página do cliente com o orçamento aprovado" width={780} height={1688} loading="lazy" decoding="async" />
           </div>

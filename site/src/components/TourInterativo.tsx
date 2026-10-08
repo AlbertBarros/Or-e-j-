@@ -263,7 +263,7 @@ export default function TourInterativo() {
                       </p>
                     )}
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 border-t-2 border-double border-tinta bg-folha p-3">
+                  <div className="absolute inset-x-0 bottom-0 border-t-2 border-double border-tinta bg-folha p-3 pb-6">
                     <div className="flex items-baseline justify-between">
                       <span className="text-[12px] font-medium">Total</span>
                       <span className="text-xl font-bold">{tem("item-adicionado") ? (tem("frete-on") ? "R$ 198,25" : "R$ 120,00") : "R$ 0,00"}</span>
@@ -311,7 +311,7 @@ export default function TourInterativo() {
                     </div>
                     <div className="mt-1.5 flex h-6 items-center justify-center rounded-lg bg-pago text-[9px] font-semibold text-white">Aprovar orçamento</div>
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 space-y-1.5 border-t border-pauta bg-folha p-3">
+                  <div className="absolute inset-x-0 bottom-0 space-y-1.5 border-t border-pauta bg-folha p-3 pb-6">
                     <div data-alvo="enviar-whats" className={`flex h-9 items-center justify-center gap-1.5 rounded-lg text-[12px] font-semibold text-white ${tem("enviado") ? "bg-pago" : "bg-carbono"}`}>
                       {tem("enviado") ? "Enviado ✓" : "Enviar no WhatsApp"}
                     </div>
@@ -362,7 +362,7 @@ export default function TourInterativo() {
                       </div>
                     </div>
                   ) : (
-                    <div className="absolute inset-x-0 bottom-0 space-y-1.5 border-t border-pauta bg-folha p-3">
+                    <div className="absolute inset-x-0 bottom-0 space-y-1.5 border-t border-pauta bg-folha p-3 pb-6">
                       <div data-alvo="aprovar" className="flex h-9 items-center justify-center rounded-lg bg-pago text-[12px] font-semibold text-white">Aprovar orçamento</div>
                       <p className="text-center text-[11px] text-grafite">Recusar</p>
                     </div>
@@ -388,7 +388,7 @@ export default function TourInterativo() {
                     <p className="text-xl font-bold">R$ 198,25</p>
                     {tem("pago") && <p className="mt-1 font-semibold text-pago">Recibo nº 0003 emitido · enviar no WhatsApp</p>}
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 space-y-1.5 border-t border-pauta bg-folha p-3">
+                  <div className="absolute inset-x-0 bottom-0 space-y-1.5 border-t border-pauta bg-folha p-3 pb-6">
                     <div data-alvo="marcar-pago" className={`flex h-9 items-center justify-center rounded-lg text-[12px] font-semibold text-white ${tem("pago") ? "bg-carbono" : "bg-pago"}`}>
                       {tem("pago") ? "Gerar recibo" : "Marcar como pago"}
                     </div>
@@ -410,7 +410,7 @@ export default function TourInterativo() {
 function Abas({ ativa }: { ativa: string }) {
   const abas = ["Início", "Orçamentos", "Clientes", "Contratos", "Mais"];
   return (
-    <div className="absolute inset-x-0 bottom-0 grid grid-cols-5 border-t border-pauta bg-folha px-1 pb-3 pt-2 text-[9px] font-semibold leading-none">
+    <div className="absolute inset-x-0 bottom-0 grid grid-cols-5 border-t border-pauta bg-folha px-1 pb-5 pt-2 text-[9px] font-semibold leading-none">
       {abas.map((a) => (
         <span key={a} className={`flex min-w-0 flex-col items-center gap-1 ${a === ativa ? "text-carbono" : "text-grafite"}`}>
           <span className={`h-4 w-7 rounded-full ${a === ativa ? "bg-carbono-claro" : "bg-pauta/60"}`} />
