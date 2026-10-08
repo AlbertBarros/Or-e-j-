@@ -19,11 +19,12 @@ export interface Endereco {
 }
 
 /** users/{uid} — perfil do profissional. "plano" e "planoAte" só o servidor altera. */
-export interface Usuario {
+export interface Usuario extends PerfilV2 {
   email?: string; // e-mail do login, usado para casar o pagamento do Pro
   documento?: string; // CPF ou CNPJ do emissor (recibo), opcional
   endereco?: Endereco; // dados do recibo, opcionais
   proximoRecibo?: number; // numeração própria dos recibos; começa em 1
+  proximoContrato?: number; // numeração própria dos contratos; começa em 1
   nomeNegocio: string;
   nomeResponsavel: string;
   nomePix: string; // nome do recebedor no BR Code (como está no banco)
@@ -102,4 +103,91 @@ export interface Orcamento {
   respondidoEm?: Timestamp;
   pagoEm?: Timestamp;
   recibo?: Recibo;
+}
+
+// ---------------------------------------------------------------------------
+// V2: catálogo, clientes, contratos e cartão de visita
+// ---------------------------------------------------------------------------
+
+/** Campos extras do perfil (V2). Todos opcionais para não quebrar contas antigas. */
+export interface PerfilV2 {
+  descricao?: string; // frase curta do negócio ("Instalações elétricas residenciais em Brasília")
+  instagram?: string; // só o @usuario
+  site?: string;
+  cadastroCompleto?: boolean; // passou pelo onboarding completo (V2)
+  modeloCartao?: 1 | 2 | 3;
+}
+
+/** users/{uid}/catalogo/{id} — produto ou serviço do profissional. */
+export interface ItemCatalogo {
+  id: string;
+  tipo: "servico" | "produto";
+  nome: string;
+  descricao: string;
+  unidade: string;
+  preco: number;
+  ativo: boolean;
+  criadoEm: Timestamp;
+  atualizadoEm: Timestamp;
+}
+
+/** clientes/{ownerId}_{whatsapp} — banco de clientes do profissional (identidade; números vêm dos orçamentos). */
+export interface Cliente {
+  id: string;
+  ownerId: string;
+  nome: string;
+  whatsapp: string; // só dígitos, com 55
+  email?: string;
+  documento?: string;
+  endereco?: Endereco;
+  observacoes?: string;
+  criadoEm: Timestamp;
+  atualizadoEm: Timestamp;
+}
+
+export type StatusContrato = "rascunho" | "enviado" | "assinado" | "cancelado";
+
+/** contratos/{id} — contrato simples de prestação de serviço, gerado a partir de um orçamento aprovado. */
+export interface Contrato {
+  id: string;
+  ownerId: string;
+  numero: number;
+  orcamentoId: string;
+  orcamentoNumero: number;
+  status: StatusContrato;
+  contratante: { nome: string; whatsapp: string; documento?: string; endereco?: string };
+  contratado: { nome: string; responsavel: string; whatsapp: string; documento?: string; endereco?: string; cidade: string };
+  objeto: ItemOrcamento[];
+  valor: number;
+  formaPagamento: string;
+  prazoExecucao: string;
+  garantiaDias: number;
+  texto: string; // cláusulas completas, editáveis antes do envio
+  mostrarMarca: boolean;
+  assinatura?: {
+    nome: string;
+    imagem: string; // data URL PNG do desenho
+    assinadoEm: Timestamp;
+    agente: string; // navegador/aparelho
+  };
+  criadoEm: Timestamp;
+  atualizadoEm: Timestamp;
+  enviadoEm?: Timestamp;
+}
+
+/** cartoes/{uid} — cartão de visita virtual público (snapshot do perfil + catálogo). */
+export interface CartaoVirtual {
+  modelo: 1 | 2 | 3;
+  nome: string;
+  responsavel: string;
+  profissao: string;
+  descricao: string;
+  cidade: string;
+  whatsapp: string;
+  instagram?: string;
+  site?: string;
+  servicos: { nome: string; preco?: number; unidade?: string }[];
+  temLogo: boolean;
+  mostrarMarca: boolean;
+  atualizadoEm: Timestamp;
 }

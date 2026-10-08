@@ -15,6 +15,43 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Catálogo de produtos e serviços: só o dono.
+    match /users/{uid}/catalogo/{itemId} {
+      allow read, write: if dono(uid);
+    }
+
+    // Banco de clientes: só o dono lê e escreve os seus.
+    match /clientes/{id} {
+      allow read: if logado() && resource.data.ownerId == request.auth.uid;
+      allow create: if logado() && request.resource.data.ownerId == request.auth.uid;
+      allow update, delete: if logado() && resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerId == resource.data.ownerId;
+    }
+
+    // Contratos: link público lê um; o cliente (sem login) só assina um contrato enviado.
+    match /contratos/{id} {
+      allow get: if true;
+      allow list: if logado() && resource.data.ownerId == request.auth.uid;
+      allow create: if logado() && request.resource.data.ownerId == request.auth.uid;
+      allow update: if
+        (logado() && resource.data.ownerId == request.auth.uid
+          && request.resource.data.ownerId == resource.data.ownerId)
+        ||
+        (resource.data.status == "enviado"
+          && request.resource.data.status == "assinado"
+          && mudou().hasOnly(["status", "assinatura", "atualizadoEm"])
+          && request.resource.data.assinatura.nome is string
+          && request.resource.data.assinatura.imagem is string
+          && request.resource.data.assinatura.imagem.size() < 80000);
+      allow delete: if logado() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Cartão de visita virtual: leitura pública, escrita só do dono.
+    match /cartoes/{uid} {
+      allow read: if true;
+      allow write: if dono(uid);
+    }
+
     // Logo do profissional (data URL comprimida no navegador, até ~100 KB).
     // Leitura pública: a página do orçamento mostra a logo sem ler users/.
     match /logos/{uid} {

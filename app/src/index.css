@@ -115,3 +115,51 @@
 }
 .bloco-pix-animado { animation: deslizar-pix 0.4s ease-out 0.35s both; }
 @media (prefers-reduced-motion: reduce) { .bloco-pix-animado { animation: none; } }
+
+/* ===== V2: visual mais elegante ===== */
+@layer components {
+  .cartao {
+    @apply rounded-2xl border border-pauta bg-folha shadow-[0_1px_2px_rgba(26,29,35,0.04),0_8px_24px_-16px_rgba(30,58,138,0.25)];
+  }
+  .cartao-destaque {
+    @apply rounded-2xl bg-gradient-to-br from-carbono to-[#2B4FB8] text-white shadow-[0_12px_32px_-16px_rgba(30,58,138,0.6)];
+  }
+  .chip {
+    @apply inline-flex min-h-9 items-center gap-1 rounded-full border border-pauta bg-folha px-3 text-xs font-semibold text-grafite;
+  }
+  .chip-ativo {
+    @apply border-carbono bg-carbono text-white;
+  }
+  .titulo-secao {
+    @apply text-xs font-semibold uppercase tracking-wider text-grafite;
+  }
+  .botao-icone {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-xl text-carbono hover:bg-carbono-claro;
+  }
+  .lista-item {
+    @apply flex items-center gap-3 px-4 py-3 transition-colors hover:bg-fundo active:bg-carbono-claro/60;
+  }
+  .pb-abas {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+  .pb-abas-acao {
+    padding-bottom: calc(10.5rem + env(safe-area-inset-bottom));
+  }
+  .barra-acao-abas {
+    bottom: calc(4.25rem + env(safe-area-inset-bottom));
+  }
+}
+.documento {
+  border-radius: 1rem;
+}
+@keyframes surgir {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.surgir { animation: surgir 0.28s ease-out both; }
+.surgir-2 { animation: surgir 0.28s ease-out 0.06s both; }
+.surgir-3 { animation: surgir 0.28s ease-out 0.12s both; }
+@media (prefers-reduced-motion: reduce) { .surgir, .surgir-2, .surgir-3 { animation: none; } }
+.barra-crescer { transform-origin: bottom; animation: crescer 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes crescer { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { .barra-crescer { animation: none; } }
