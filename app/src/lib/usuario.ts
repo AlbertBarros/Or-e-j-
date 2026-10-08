@@ -74,6 +74,7 @@ export interface DadosCadastro {
   documento?: string;
   endereco?: Endereco | null;
   cadastroCompleto?: boolean;
+  frete?: { fixo: number; porKm: number } | null;
 }
 
 /** Cria o perfil (plano free, numeração em 1) e, se houver, a logo, numa única gravação. */
@@ -94,6 +95,7 @@ export async function criarPerfil(uid: string, dados: DadosCadastro): Promise<vo
     ...(dados.documento?.trim() ? { documento: dados.documento.trim() } : {}),
     ...(dados.endereco ? { endereco: dados.endereco } : {}),
     ...(dados.cadastroCompleto ? { cadastroCompleto: true } : {}),
+    ...(dados.frete && (dados.frete.fixo > 0 || dados.frete.porKm > 0) ? { frete: { fixo: dados.frete.fixo, porKm: dados.frete.porKm } } : {}),
     plano: "free" as const,
     proximoNumero: 1,
     uso: { mes: mesAtual(), enviados: 0 },
@@ -153,12 +155,14 @@ export async function atualizarDadosRecibo(
 }
 
 /** Campos da V2 do perfil (descrição, Instagram, site, modelo do cartão). Vazio remove. */
-export async function atualizarPerfilV2(uid: string, dados: Partial<PerfilV2>): Promise<void> {
+export async function atualizarPerfilV2(uid: string, dados: Partial<Omit<PerfilV2, "frete">> & { frete?: PerfilV2["frete"] | null }): Promise<void> {
   const m: Record<string, unknown> = {};
   if (dados.descricao !== undefined) m.descricao = dados.descricao.trim() || deleteField();
   if (dados.instagram !== undefined) m.instagram = dados.instagram.trim().replace(/^@/, "") || deleteField();
   if (dados.site !== undefined) m.site = dados.site.trim() || deleteField();
   if (dados.modeloCartao !== undefined) m.modeloCartao = dados.modeloCartao;
+  if (dados.modeloDocumento !== undefined) m.modeloDocumento = dados.modeloDocumento;
+  if (dados.frete !== undefined) m.frete = dados.frete && (dados.frete.fixo > 0 || dados.frete.porKm > 0) ? { fixo: Math.max(0, dados.frete.fixo), porKm: Math.max(0, dados.frete.porKm) } : deleteField();
   if (dados.cadastroCompleto !== undefined) m.cadastroCompleto = dados.cadastroCompleto;
   if (Object.keys(m).length) await updateDoc(doc(db, "users", uid), m);
 }

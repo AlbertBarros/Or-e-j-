@@ -48,6 +48,8 @@ export default function Comecar() {
   const [bairro, setBairro] = useState("");
   const [uf, setUf] = useState("");
   const [cep, setCep] = useState("");
+  const [freteFixo, setFreteFixo] = useState("");
+  const [fretePorKm, setFretePorKm] = useState("");
   // 4 Logo
   const [logo, setLogo] = useState<string | null>(null);
   const [processandoLogo, setProcessandoLogo] = useState(false);
@@ -149,6 +151,7 @@ export default function Comecar() {
         documento,
         endereco: temEndereco ? { logradouro: logradouro.trim(), bairro: bairro.trim(), cidade: cidade.trim(), uf: uf.trim().toUpperCase(), cep: cep.trim() } : null,
         cadastroCompleto: true,
+        frete: paraNumero(freteFixo) > 0 || paraNumero(fretePorKm) > 0 ? { fixo: paraNumero(freteFixo), porKm: paraNumero(fretePorKm) } : null,
       });
       if (!pularCatalogo && itens) {
         const escolhidos = itens.filter((i) => i.marcado && i.nome.trim()).map((i) => ({ tipo: i.tipo, nome: i.nome, descricao: i.descricao, unidade: i.unidade, preco: paraNumero(i.precoTexto) }));
@@ -254,6 +257,14 @@ export default function Comecar() {
             </div>
             <div className="w-24">
               <Campo id="uf" rotulo="UF" maxLength={2} value={uf} onChange={(e) => setUf(e.target.value.toUpperCase())} />
+            </div>
+            <div className="rounded-xl border border-pauta bg-folha p-3">
+              <p className="text-sm font-semibold">Cobra deslocamento?</p>
+              <p className="ajuda !mt-0">Defina um valor fixo e um valor por km. No orçamento, ao tocar em “Frete”, o app calcula a distância até o cliente.</p>
+              <div className="mt-2 grid grid-cols-2 gap-3">
+                <Campo id="freteFixo" rotulo="Valor fixo (R$)" inputMode="decimal" placeholder="0,00" value={freteFixo} onChange={(e) => setFreteFixo(e.target.value)} className="tabular" />
+                <Campo id="fretePorKm" rotulo="Por km (R$)" inputMode="decimal" placeholder="0,00" value={fretePorKm} onChange={(e) => setFretePorKm(e.target.value)} className="tabular" />
+              </div>
             </div>
           </div>
           <Rodape voltar={2}>

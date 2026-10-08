@@ -7,7 +7,7 @@ import { pdf, type DocumentProps } from "@react-pdf/renderer";
 import OrcamentoPDF from "./OrcamentoPDF";
 import ReciboPDF from "./ReciboPDF";
 import ContratoPDF from "./ContratoPDF";
-import type { Contrato, Orcamento, Recibo } from "@/tipos";
+import type { Contrato, ModeloDocumento, Orcamento, Recibo } from "@/tipos";
 
 const SITE = "orca-ja-6cz.pages.dev";
 
@@ -41,9 +41,9 @@ function nomeArquivo(prefixo: string, numero: number, cliente: string): string {
   return `${prefixo}-${String(numero).padStart(4, "0")}${slug ? "-" + slug : ""}.pdf`;
 }
 
-export async function gerarPdfOrcamento(orcamento: Orcamento, logo?: string | null): Promise<File> {
+export async function gerarPdfOrcamento(orcamento: Orcamento, logo?: string | null, modelo?: ModeloDocumento): Promise<File> {
   const logoPng = await logoParaPng(logo);
-  const el = createElement(OrcamentoPDF, { orcamento, logoPng, siteUrl: SITE }) as unknown as ReactElement<DocumentProps>;
+  const el = createElement(OrcamentoPDF, { orcamento, logoPng, siteUrl: SITE, modelo }) as unknown as ReactElement<DocumentProps>;
   const blob = await pdf(el).toBlob();
   return new File([blob], nomeArquivo("orcamento", orcamento.numero, orcamento.cliente.nome), { type: "application/pdf" });
 }

@@ -23,7 +23,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { inicioDoDia, paraDate, somarDias } from "./datas";
-import type { ItemOrcamento, Orcamento, StatusOrcamento, Usuario } from "@/tipos";
+import type { FreteOrcamento, ItemOrcamento, ModeloDocumento, Orcamento, PagamentoOrcamento, StatusOrcamento, Usuario } from "@/tipos";
 import { total as calcularTotal } from "@shared/src/mensagens";
 import { comPlanoEfetivo } from "./usuario";
 import { normalizarWhatsapp } from "@shared/src/mensagens";
@@ -35,6 +35,23 @@ export interface DadosOrcamento {
   validadeDias: number;
   vencimentoPagamento: Date | null;
   observacoes: string;
+  pagamento?: PagamentoOrcamento | null;
+  frete?: FreteOrcamento | null;
+}
+
+/** Total à vista: itens − desconto + frete. */
+export function totalComFrete(itens: ItemOrcamento[], desconto: number, frete?: FreteOrcamento | null): number {
+  return Math.round((calcularTotal(itens, desconto) + (frete?.valor ?? 0)) * 100) / 100;
+}
+
+function limparPagamento(p?: PagamentoOrcamento | null): PagamentoOrcamento | undefined {
+  if (!p) return undefined;
+  return {
+    metodos: p.metodos,
+    aCombinar: Boolean(p.aCombinar),
+    ...(p.valorCartao && p.valorCartao > 0 ? { valorCartao: Math.round(p.valorCartao * 100) / 100 } : {}),
+    ...(p.observacao?.trim() ? { observacao: p.observacao.trim() } : {}),
+  };
 }
 
 export type Filtro = "todos" | "rascunho" | "enviado" | "aprovado" | "atrasado" | "pago";
@@ -95,7 +112,10 @@ export async function criarOrcamento(uid: string, perfil: Usuario, dados: DadosO
       cliente: { nome: dados.cliente.nome.trim(), whatsapp: normalizarWhatsapp(dados.cliente.whatsapp) },
       itens,
       desconto: Math.max(0, dados.desconto),
-      total: calcularTotal(itens, dados.desconto),
+      total: totalComFrete(itens, dados.desconto, dados.frete),
+      ...(dados.frete ? { frete: dados.frete } : {}),
+      ...(limparPagamento(dados.pagamento) ? { pagamento: limparPagamento(dados.pagamento) } : {}),
+      ...(perfil.modeloDocumento ? { modelo: perfil.modeloDocumento } : {}),
       validadeDias: dados.validadeDias,
       validadeAte: Timestamp.fromDate(somarDias(agora, dados.validadeDias)),
       ...(dados.vencimentoPagamento ? { vencimentoPagamento: Timestamp.fromDate(dados.vencimentoPagamento) } : {}),
@@ -118,13 +138,20 @@ export async function atualizarOrcamento(orcamento: Orcamento, dados: DadosOrcam
     cliente: { nome: dados.cliente.nome.trim(), whatsapp: normalizarWhatsapp(dados.cliente.whatsapp) },
     itens,
     desconto: Math.max(0, dados.desconto),
-    total: calcularTotal(itens, dados.desconto),
+    total: totalComFrete(itens, dados.desconto, dados.frete),
+    frete: dados.frete ?? deleteField(),
+    pagamento: limparPagamento(dados.pagamento) ?? deleteField(),
     validadeDias: dados.validadeDias,
     validadeAte: Timestamp.fromDate(somarDias(base, dados.validadeDias)),
     vencimentoPagamento: dados.vencimentoPagamento ? Timestamp.fromDate(dados.vencimentoPagamento) : deleteField(),
     observacoes: dados.observacoes.trim(),
     atualizadoEm: serverTimestamp(),
   });
+}
+
+/** Modelo do documento (simples, detalhado, completo), escolhido antes de enviar. */
+export async function definirModelo(id: string, modelo: ModeloDocumento): Promise<void> {
+  await updateDoc(doc(db, "orcamentos", id), { modelo, atualizadoEm: serverTimestamp() });
 }
 
 export async function excluirOrcamento(id: string): Promise<void> {

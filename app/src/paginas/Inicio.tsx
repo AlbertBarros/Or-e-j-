@@ -5,6 +5,8 @@ import BarraAbas from "@/componentes/BarraAbas";
 import InstalarApp from "@/componentes/InstalarApp";
 import Selo from "@/componentes/Selo";
 import { BarrasMensais, Rosca } from "@/componentes/Graficos";
+import Sino from "@/componentes/Sino";
+import { useNotificacoes } from "@/hooks/useNotificacoes";
 import { IconeAlerta, IconeCartao, IconeCatalogo, IconeClientes, IconeContratos, IconeMais1, IconeSeta } from "@/componentes/Icones";
 import { useAuth } from "@/hooks/useAuth";
 import { useCatalogo, useContratos, useTodosOrcamentos } from "@/hooks/useDados";
@@ -30,6 +32,7 @@ export default function Inicio() {
   const { orcamentos, carregando } = useTodosOrcamentos(uid);
   const { itens: catalogo, carregando: carregandoCatalogo } = useCatalogo(uid);
   const { contratos } = useContratos(uid);
+  const { notificacoes, naoVistas, marcarVistas } = useNotificacoes(orcamentos, contratos);
 
   useEffect(() => {
     if (perfil && lerRascunhoImportado()) navegar("/orcamentos/novo", { replace: true });
@@ -64,6 +67,7 @@ export default function Inicio() {
         <Link to="/conta#plano" className={`chip ${pro ? "!border-carbono !bg-carbono-claro !text-carbono" : ""}`}>
           {pro ? "PRO" : `${perfil.uso.enviados}/${LIMITE_FREE} grátis`}
         </Link>
+        <Sino notificacoes={notificacoes} naoVistas={naoVistas} aoAbrir={marcarVistas} />
       </header>
 
       {/* Destaque: dinheiro */}

@@ -11,6 +11,8 @@ import { LIMITE_FREE } from "@/lib/firebase";
 import { registrarEvento } from "@/lib/eventos";
 import { nomeProfissao } from "@/lib/profissoes";
 import { validarNome, validarWhatsapp, validarChavePix, ROTULO_TIPO_CHAVE } from "@/lib/validacao";
+import { MODELOS_DOCUMENTO } from "@/lib/pagamento";
+import { paraNumero, paraTexto } from "@shared/src/numero";
 import { CHECKOUT_MENSAL, CHECKOUT_ANUAL, CHECKOUT_ANUAL_PIX, PRECO_MENSAL, PRECO_ANUAL_POR_MES, PRECO_ANUAL_TOTAL, URL_SITE } from "@/lib/planos";
 import { detectarTipoChave, type TipoChavePix } from "@shared/src/pix";
 import { formatarReais, formatarWhatsapp, formatarData } from "@shared/src/mensagens";
@@ -30,6 +32,8 @@ export default function Conta() {
   const [descricao, setDescricao] = useState("");
   const [instagram, setInstagram] = useState("");
   const [site, setSite] = useState("");
+  const [freteFixo, setFreteFixo] = useState("");
+  const [fretePorKm, setFretePorKm] = useState("");
   const [chavePix, setChavePix] = useState("");
   const [tipoManual, setTipoManual] = useState<TipoChavePix | null>(null);
   const [nomePix, setNomePix] = useState("");
@@ -58,6 +62,8 @@ export default function Conta() {
     setDescricao(perfil.descricao ?? "");
     setInstagram(perfil.instagram ?? "");
     setSite(perfil.site ?? "");
+    setFreteFixo(perfil.frete ? paraTexto(perfil.frete.fixo) : "");
+    setFretePorKm(perfil.frete ? paraTexto(perfil.frete.porKm) : "");
     setChavePix(perfil.chavePix);
     setTipoManual(perfil.tipoChavePix);
     setNomePix(perfil.nomePix);
@@ -98,7 +104,7 @@ export default function Conta() {
     setErroGeral(null);
     try {
       await atualizarPerfil(uid!, { nomeNegocio, nomeResponsavel, whatsapp, cidade });
-      await atualizarPerfilV2(uid!, { descricao, instagram, site });
+      await atualizarPerfilV2(uid!, { descricao, instagram, site, frete: paraNumero(freteFixo) > 0 || paraNumero(fretePorKm) > 0 ? { fixo: paraNumero(freteFixo), porKm: paraNumero(fretePorKm) } : null });
       setAviso("Dados do negócio salvos");
     } catch (err) {
       console.error(err);
@@ -264,6 +270,25 @@ export default function Conta() {
         <div className="grid grid-cols-2 gap-3">
           <Campo id="c-instagram" rotulo="Instagram (opcional)" placeholder="@seuperfil" value={instagram} onChange={(e) => setInstagram(e.target.value)} />
           <Campo id="c-site" rotulo="Site (opcional)" placeholder="seusite.com.br" inputMode="url" value={site} onChange={(e) => setSite(e.target.value)} />
+        </div>
+        <div>
+          <span className="rotulo">Frete / deslocamento padrão</span>
+          <div className="grid grid-cols-2 gap-3">
+            <Campo id="c-freteFixo" rotulo="Valor fixo (R$)" inputMode="decimal" placeholder="0,00" value={freteFixo} onChange={(e) => setFreteFixo(e.target.value)} className="tabular" />
+            <Campo id="c-fretePorKm" rotulo="Por km (R$)" inputMode="decimal" placeholder="0,00" value={fretePorKm} onChange={(e) => setFretePorKm(e.target.value)} className="tabular" />
+          </div>
+          <p className="ajuda">Usados quando você toca em “Frete” no orçamento. A distância é calculada a partir do seu endereço (Dados do recibo).</p>
+        </div>
+        <div>
+          <span className="rotulo">Modelo padrão do orçamento</span>
+          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Modelo do documento">
+            {MODELOS_DOCUMENTO.map((m) => (
+              <button key={m.modelo} type="button" role="radio" aria-checked={(perfil.modeloDocumento ?? 2) === m.modelo} onClick={() => atualizarPerfilV2(uid!, { modeloDocumento: m.modelo }).then(() => setAviso(`Modelo ${m.nome} como padrão`))} className={`opcao !min-h-11 text-sm ${(perfil.modeloDocumento ?? 2) === m.modelo ? "opcao-ativa" : ""}`}>
+                {m.nome}
+              </button>
+            ))}
+          </div>
+          <p className="ajuda">Você ainda escolhe o modelo a cada envio, com a prévia de como o cliente vê.</p>
         </div>
         <button type="submit" className="botao-secundario" disabled={salvando !== null}>
           {salvando === "negocio" ? "Salvando…" : "Salvar dados do negócio"}

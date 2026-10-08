@@ -10,7 +10,11 @@ import { registrarEvento } from "@/lib/eventos";
 import { lerRascunhoImportado, limparRascunhoImportado } from "@/lib/rascunhoImportado";
 import { itensSugeridos, observacoesPadrao, validadeDiasPadrao } from "@/lib/profissoes";
 import { useCatalogo, useClientes } from "@/hooks/useDados";
-import { garantirCliente } from "@/lib/clientes";
+import { enderecoEmLinha, garantirCliente } from "@/lib/clientes";
+import { calcularKm, valorFrete } from "@/lib/frete";
+import { METODOS } from "@/lib/pagamento";
+import { atualizarPerfilV2 } from "@/lib/usuario";
+import type { MetodoPagamento } from "@/tipos";
 import { validarNome, validarWhatsapp } from "@/lib/validacao";
 import { dataParaInput, inputParaData, paraDate } from "@/lib/datas";
 import type { Orcamento } from "@/tipos";
@@ -50,6 +54,20 @@ export default function NovoOrcamento() {
   const [validadeDias, setValidadeDias] = useState("15");
   const [vencimento, setVencimento] = useState("");
   const [observacoes, setObservacoes] = useState("");
+  // Pagamento (V3)
+  const [metodos, setMetodos] = useState<MetodoPagamento[]>(["pix"]);
+  const [aCombinar, setACombinar] = useState(false);
+  const [doisValores, setDoisValores] = useState(false);
+  const [valorCartao, setValorCartao] = useState("");
+  const [obsPagamento, setObsPagamento] = useState("");
+  // Frete (V3)
+  const [freteAtivo, setFreteAtivo] = useState(false);
+  const [freteEndereco, setFreteEndereco] = useState("");
+  const [freteKm, setFreteKm] = useState("");
+  const [freteFixo, setFreteFixo] = useState("");
+  const [fretePorKm, setFretePorKm] = useState("");
+  const [calculandoFrete, setCalculandoFrete] = useState(false);
+  const [erroFrete, setErroFrete] = useState<string | null>(null);
   const [mostrarSugeridos, setMostrarSugeridos] = useState(false);
   const [erros, setErros] = useState<Record<string, string | null>>({});
   const [erroGeral, setErroGeral] = useState<string | null>(null);
@@ -83,6 +101,10 @@ export default function NovoOrcamento() {
     if (!perfil) return;
     if (!editando) {
       setValidadeDias(String(validadeDiasPadrao(slug)));
+      if (perfil.frete) {
+        setFreteFixo(paraTexto(perfil.frete.fixo));
+        setFretePorKm(paraTexto(perfil.frete.porKm));
+      }
       // Veio do gerador do site? Preenche com o que a pessoa já montou lá.
       const importado = importadoRef.current;
       if (importado && importado.itens && importado.itens.length > 0) {
@@ -130,6 +152,20 @@ export default function NovoOrcamento() {
           );
           setProximoId(o.itens.length + 1);
           setDesconto(o.desconto ? paraTexto(o.desconto) : "");
+          if (o.pagamento) {
+            setMetodos(o.pagamento.metodos);
+            setACombinar(o.pagamento.aCombinar);
+            setDoisValores(Boolean(o.pagamento.valorCartao));
+            setValorCartao(o.pagamento.valorCartao ? paraTexto(o.pagamento.valorCartao) : "");
+            setObsPagamento(o.pagamento.observacao ?? "");
+          }
+          if (o.frete) {
+            setFreteAtivo(true);
+            setFreteEndereco(o.frete.endereco);
+            setFreteKm(paraTexto(o.frete.km));
+            setFreteFixo(paraTexto(o.frete.fixo));
+            setFretePorKm(paraTexto(o.frete.porKm));
+          }
           setValidadeDias(String(o.validadeDias ?? 15));
           const venc = paraDate(o.vencimentoPagamento);
           setVencimento(venc ? dataParaInput(venc) : "");
@@ -161,7 +197,35 @@ export default function NovoOrcamento() {
   );
   const valorDesconto = paraNumero(desconto);
   const valorSubtotal = subtotal(itensNumericos);
-  const valorTotal = total(itensNumericos, valorDesconto);
+  const kmFrete = paraNumero(freteKm);
+  const freteValor = freteAtivo ? valorFrete(kmFrete, paraNumero(freteFixo), paraNumero(fretePorKm)) : 0;
+  const valorTotal = Math.round((total(itensNumericos, valorDesconto) + freteValor) * 100) / 100;
+
+  function alternarMetodo(m: MetodoPagamento) {
+    setMetodos((l) => (l.includes(m) ? l.filter((x) => x !== m) : [...l, m]));
+  }
+
+  async function calcularDistancia() {
+    if (!perfil) return;
+    setErroFrete(null);
+    if (!perfil.endereco?.logradouro) {
+      setErroFrete("Cadastre seu endereço em Conta → Dados do recibo para calcular a distância. Ou digite os km à mão.");
+      return;
+    }
+    if (freteEndereco.trim().length < 8) {
+      setErroFrete("Digite o endereço do cliente com rua, número, bairro e cidade.");
+      return;
+    }
+    setCalculandoFrete(true);
+    try {
+      const km = await calcularKm(enderecoEmLinha(perfil.endereco), freteEndereco.trim());
+      setFreteKm(paraTexto(km));
+    } catch (e) {
+      setErroFrete(e instanceof Error ? e.message : "Não deu para calcular. Digite os km à mão.");
+    } finally {
+      setCalculandoFrete(false);
+    }
+  }
 
   function atualizar(itemId: number, campo: keyof ItemEmEdicao, valor: string) {
     setItens((lista) => lista.map((i) => (i.id === itemId ? { ...i, [campo]: valor } : i)));
@@ -200,7 +264,13 @@ export default function NovoOrcamento() {
       validadeDias: Number(validadeDias),
       vencimentoPagamento: vencimento ? inputParaData(vencimento) : null,
       observacoes,
+      pagamento: aCombinar || metodos.length > 0 || obsPagamento.trim() ? { metodos, aCombinar, valorCartao: doisValores ? paraNumero(valorCartao) : undefined, observacao: obsPagamento } : null,
+      frete: freteAtivo ? { endereco: freteEndereco.trim(), km: kmFrete, fixo: paraNumero(freteFixo), porKm: paraNumero(fretePorKm), valor: freteValor } : null,
     };
+    // Guarda os valores de frete como padrão do perfil, para a próxima vez.
+    if (freteAtivo && (paraNumero(freteFixo) > 0 || paraNumero(fretePorKm) > 0) && (perfil.frete?.fixo !== paraNumero(freteFixo) || perfil.frete?.porKm !== paraNumero(fretePorKm))) {
+      void atualizarPerfilV2(usuario.uid, { frete: { fixo: paraNumero(freteFixo), porKm: paraNumero(fretePorKm) } });
+    }
     try {
       if (existente) {
         await atualizarOrcamento(existente, dados);
@@ -278,6 +348,7 @@ export default function NovoOrcamento() {
                     <input
                       id={`desc-${item.id}`}
                       className="campo"
+                      list="lista-catalogo"
                       placeholder="Descrição do serviço"
                       value={item.descricao}
                       onChange={(e) => atualizar(item.id, "descricao", e.target.value)}
@@ -360,6 +431,12 @@ export default function NovoOrcamento() {
           )}
         </section>
 
+        <datalist id="lista-catalogo">
+          {catalogo.filter((i) => i.ativo).map((i) => (
+            <option key={i.id} value={i.nome} />
+          ))}
+        </datalist>
+
         <section className="documento space-y-3 p-4" aria-labelledby="sec-cond">
           <h2 id="sec-cond" className="text-sm font-semibold uppercase tracking-wide text-grafite">
             Condições
@@ -385,6 +462,78 @@ export default function NovoOrcamento() {
           </div>
         </section>
 
+        <section className="documento space-y-3 p-4" aria-labelledby="sec-pag">
+          <div className="flex items-center justify-between">
+            <h2 id="sec-pag" className="text-sm font-semibold uppercase tracking-wide text-grafite">
+              Formas de pagamento
+            </h2>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={aCombinar} onChange={(e) => setACombinar(e.target.checked)} className="h-4 w-4" /> A combinar
+            </label>
+          </div>
+          {!aCombinar && (
+            <div className="grid grid-cols-2 gap-2" role="group" aria-label="Métodos aceitos">
+              {METODOS.map((m) => (
+                <button key={m.valor} type="button" aria-pressed={metodos.includes(m.valor)} onClick={() => alternarMetodo(m.valor)} className={`opcao !min-h-11 !justify-start gap-2 px-3 ${metodos.includes(m.valor) ? "opcao-ativa" : ""}`}>
+                  <span className={`flex h-5 w-5 items-center justify-center rounded border text-xs ${metodos.includes(m.valor) ? "border-carbono bg-carbono text-white" : "border-pauta"}`} aria-hidden="true">
+                    {metodos.includes(m.valor) && "✓"}
+                  </span>
+                  {m.rotulo}
+                </button>
+              ))}
+            </div>
+          )}
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={doisValores} onChange={(e) => setDoisValores(e.target.checked)} className="h-4 w-4" /> Mostrar dois valores: à vista e no cartão
+          </label>
+          {doisValores && (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <span className="rotulo">À vista (calculado)</span>
+                <p className="tabular campo flex items-center bg-fundo">{formatarReais(valorTotal)}</p>
+              </div>
+              <Campo id="valorCartao" rotulo="No cartão (R$)" inputMode="decimal" placeholder="0,00" value={valorCartao} onChange={(e) => setValorCartao(e.target.value)} className="tabular" />
+            </div>
+          )}
+          <Campo id="obsPag" rotulo="Condição (opcional)" placeholder="Ex.: 50% na aprovação e 50% na entrega" value={obsPagamento} onChange={(e) => setObsPagamento(e.target.value)} maxLength={120} />
+        </section>
+
+        <section className="documento p-4" aria-labelledby="sec-frete">
+          <div className="flex items-center justify-between">
+            <h2 id="sec-frete" className="text-sm font-semibold uppercase tracking-wide text-grafite">
+              Frete / deslocamento
+            </h2>
+            <button type="button" onClick={() => setFreteAtivo((v) => !v)} aria-pressed={freteAtivo} className={`chip !min-h-9 ${freteAtivo ? "chip-ativo" : "hover:border-carbono"}`}>
+              {freteAtivo ? "Remover frete" : "+ Adicionar frete"}
+            </button>
+          </div>
+          {freteAtivo && (
+            <div className="mt-3 space-y-3">
+              <Campo id="freteEnd" rotulo="Endereço do cliente (local do serviço)" placeholder="Rua, número, bairro, cidade" value={freteEndereco} onChange={(e) => setFreteEndereco(e.target.value)} autoComplete="off" />
+              <div className="flex items-end gap-2">
+                <div className="w-28">
+                  <Campo id="freteKm" rotulo="Distância (km)" inputMode="decimal" placeholder="0" value={freteKm} onChange={(e) => setFreteKm(e.target.value)} className="tabular" />
+                </div>
+                <button type="button" onClick={calcularDistancia} disabled={calculandoFrete} className="botao-secundario !min-h-12 flex-1 text-sm">
+                  {calculandoFrete ? "Calculando…" : "Calcular distância pelo mapa"}
+                </button>
+              </div>
+              {erroFrete && (
+                <p role="alert" className="erro">
+                  {erroFrete}
+                </p>
+              )}
+              <div className="grid grid-cols-2 gap-3">
+                <Campo id="freteFixo" rotulo="Valor fixo (R$)" inputMode="decimal" placeholder="0,00" value={freteFixo} onChange={(e) => setFreteFixo(e.target.value)} className="tabular" />
+                <Campo id="fretePorKm" rotulo="Por km (R$)" inputMode="decimal" placeholder="0,00" value={fretePorKm} onChange={(e) => setFretePorKm(e.target.value)} className="tabular" />
+              </div>
+              <p className="ajuda">
+                Frete = fixo + km × valor por km = <strong className="tabular text-tinta">{formatarReais(freteValor)}</strong>. Os valores fixo e por km ficam salvos como seu padrão.
+              </p>
+            </div>
+          )}
+        </section>
+
         {erroGeral && (
           <p role="alert" className="rounded-[10px] bg-[#FDECEF] px-3 py-2 text-sm text-recusado">
             {erroGeral}
@@ -395,9 +544,12 @@ export default function NovoOrcamento() {
       {/* Barra de total fixa no rodapé (DESIGN.md) */}
       <div className="fixed inset-x-0 bottom-0 border-t-2 border-double border-tinta bg-folha p-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
         <div className="mx-auto max-w-[560px]">
-          {valorDesconto > 0 && (
+          {(valorDesconto > 0 || freteValor > 0) && (
             <div className="flex items-baseline justify-between text-sm text-grafite">
-              <span>Subtotal</span>
+              <span>
+                Subtotal{valorDesconto > 0 ? ` − desconto ${formatarReais(valorDesconto)}` : ""}
+                {freteValor > 0 ? ` + frete ${formatarReais(freteValor)}` : ""}
+              </span>
               <span className="tabular">{formatarReais(valorSubtotal)}</span>
             </div>
           )}

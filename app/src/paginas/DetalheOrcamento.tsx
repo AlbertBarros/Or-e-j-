@@ -6,12 +6,15 @@ import Campo from "@/componentes/Campo";
 import Carregando from "@/componentes/Carregando";
 import Confirmar from "@/componentes/Confirmar";
 import DocumentoOrcamento from "@/componentes/DocumentoOrcamento";
+import EscolherModelo from "@/componentes/EscolherModelo";
+import type { ModeloDocumento } from "@/tipos";
 import Selo from "@/componentes/Selo";
 import { useAuth } from "@/hooks/useAuth";
 import { useOrcamento } from "@/hooks/useOrcamentos";
 import { useContratos } from "@/hooks/useDados";
 import { IconeContratos } from "@/componentes/Icones";
 import {
+  definirModelo,
   desfazerPago,
   enviarOrcamento,
   estaAtrasado,
@@ -54,6 +57,7 @@ export default function DetalheOrcamento() {
   const [limiteAtingido, setLimiteAtingido] = useState(false);
   const [linkPendente, setLinkPendente] = useState<string | null>(null);
   const [gerandoPdf, setGerandoPdf] = useState(false);
+  const [escolhendoModelo, setEscolhendoModelo] = useState<"enviar" | "reenviar" | null>(null);
 
   useEffect(() => {
     if (usuario && perfil?.temLogo) buscarLogo(usuario.uid).then(setLogo).catch(() => setLogo(null));
@@ -70,12 +74,14 @@ export default function DetalheOrcamento() {
     if (!janela) setLinkPendente(link);
   }
 
-  async function enviar() {
+  async function enviar(modelo?: ModeloDocumento) {
     if (!orcamento || !usuario) return;
     setErroAcao(null);
     setOcupado(true);
     try {
+      if (modelo && modelo !== orcamento.modelo) await definirModelo(orcamento.id, modelo);
       await enviarOrcamento(usuario.uid, orcamento);
+      setEscolhendoModelo(null);
       registrarEvento("orcamento_enviado", { uid: usuario.uid, orcamentoId: orcamento.id });
       abrirWhatsapp(linkEnvioWhatsapp(orcamento));
     } catch (e) {
@@ -102,13 +108,14 @@ export default function DetalheOrcamento() {
     }
   }
 
-  async function baixarPdf() {
+  async function baixarPdf(modelo?: ModeloDocumento) {
     if (!orcamento) return;
     setGerandoPdf(true);
     setErroAcao(null);
     try {
+      if (modelo && modelo !== orcamento.modelo && orcamento.status === "rascunho") await definirModelo(orcamento.id, modelo);
       const { gerarPdfOrcamento, baixarArquivo } = await import("@/pdf/gerarPdf");
-      baixarArquivo(await gerarPdfOrcamento(orcamento, logo));
+      baixarArquivo(await gerarPdfOrcamento(orcamento, logo, modelo));
     } catch (e) {
       console.error(e);
       setErroAcao("Não deu para gerar o PDF. Tente de novo.");
@@ -186,7 +193,7 @@ export default function DetalheOrcamento() {
   const pro = perfil?.plano === "pro";
 
   const botaoPdf = (
-    <button type="button" onClick={baixarPdf} disabled={gerandoPdf} className="botao-texto w-full">
+    <button type="button" onClick={() => baixarPdf()} disabled={gerandoPdf} className="botao-texto w-full">
       {gerandoPdf ? "Gerando PDF…" : "Baixar PDF do orçamento"}
     </button>
   );
@@ -238,7 +245,7 @@ export default function DetalheOrcamento() {
 
           {status === "rascunho" && (
             <>
-              <button type="button" onClick={enviar} disabled={ocupado} className="botao-primario">
+              <button type="button" onClick={() => setEscolhendoModelo("enviar")} disabled={ocupado} className="botao-primario">
                 <IconeWhatsapp /> {ocupado ? "Enviando…" : "Enviar no WhatsApp"}
               </button>
               <div className="flex gap-2">
@@ -255,7 +262,7 @@ export default function DetalheOrcamento() {
 
           {status === "enviado" && (
             <>
-              <button type="button" onClick={() => abrirWhatsapp(linkEnvioWhatsapp(orcamento))} className="botao-primario">
+              <button type="button" onClick={() => setEscolhendoModelo("reenviar")} className="botao-primario">
                 <IconeWhatsapp /> Reenviar no WhatsApp
               </button>
               <div className="flex gap-2">
@@ -347,6 +354,26 @@ export default function DetalheOrcamento() {
           document.body,
         )}
 
+      {escolhendoModelo && (
+        <EscolherModelo
+          orcamento={orcamento}
+          logo={logo}
+          modeloInicial={orcamento.modelo ?? perfil?.modeloDocumento ?? 2}
+          ocupado={ocupado || gerandoPdf}
+          textoEnviar={escolhendoModelo === "enviar" ? "Enviar no WhatsApp" : "Reenviar no WhatsApp"}
+          aoEnviar={async (m) => {
+            if (escolhendoModelo === "enviar") {
+              await enviar(m);
+            } else {
+              if (m !== orcamento.modelo) await definirModelo(orcamento.id, m).catch(console.error);
+              setEscolhendoModelo(null);
+              abrirWhatsapp(linkEnvioWhatsapp(orcamento));
+            }
+          }}
+          aoBaixarPdf={(m) => baixarPdf(m)}
+          aoFechar={() => setEscolhendoModelo(null)}
+        />
+      )}
       {confirmacao === "excluir" && (
         <Confirmar
           titulo={`Excluir o orçamento nº ${numero}?`}

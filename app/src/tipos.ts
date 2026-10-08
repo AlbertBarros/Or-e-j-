@@ -80,7 +80,10 @@ export interface Orcamento {
   cliente: { nome: string; whatsapp: string };
   itens: ItemOrcamento[];
   desconto: number;
-  total: number;
+  frete?: FreteOrcamento;
+  pagamento?: PagamentoOrcamento;
+  modelo?: ModeloDocumento;
+  total: number; // itens - desconto + frete (valor à vista)
   validadeDias: number; // usado na edição; validadeAte = criadoEm + validadeDias
   validadeAte: Timestamp;
   vencimentoPagamento?: Timestamp;
@@ -116,6 +119,31 @@ export interface PerfilV2 {
   site?: string;
   cadastroCompleto?: boolean; // passou pelo onboarding completo (V2)
   modeloCartao?: 1 | 2 | 3;
+  /** Frete padrão: valor fixo + valor por km (V3) */
+  frete?: { fixo: number; porKm: number };
+  /** Modelo padrão do documento de orçamento (V3): 1 simples, 2 detalhado, 3 completo */
+  modeloDocumento?: ModeloDocumento;
+}
+
+export type ModeloDocumento = 1 | 2 | 3;
+export type MetodoPagamento = "pix" | "dinheiro" | "debito" | "credito" | "transferencia" | "outro";
+
+/** Condições de pagamento do orçamento (V3). */
+export interface PagamentoOrcamento {
+  metodos: MetodoPagamento[];
+  aCombinar: boolean;
+  /** Segundo valor, no cartão (o total é o valor à vista) */
+  valorCartao?: number;
+  observacao?: string; // ex.: "50% na aprovação e 50% na entrega"
+}
+
+/** Frete do orçamento (V3): endereço do cliente, km e composição do valor. */
+export interface FreteOrcamento {
+  endereco: string;
+  km: number;
+  fixo: number;
+  porKm: number;
+  valor: number;
 }
 
 /** users/{uid}/catalogo/{id} — produto ou serviço do profissional. */
