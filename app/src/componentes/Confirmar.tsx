@@ -23,12 +23,12 @@ export default function Confirmar({ titulo, texto, textoConfirmar, perigo, ocupa
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/50 sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/40 backdrop-blur-sm sm:items-center sm:p-4"
       onClick={(e) => {
         if (e.target === e.currentTarget) aoCancelar();
       }}
     >
-      <div role="alertdialog" aria-modal="true" aria-labelledby="conf-titulo" className="w-full max-w-md rounded-t-2xl bg-folha p-5 shadow-xl sm:rounded-2xl">
+      <div role="alertdialog" aria-modal="true" aria-labelledby="conf-titulo" className="w-full max-w-md vidro-forte rounded-t-2xl p-5 sm:rounded-2xl">
         <h2 id="conf-titulo" className="text-xl font-semibold">
           {titulo}
         </h2>

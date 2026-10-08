@@ -75,7 +75,7 @@ export default function InstalarApp({ compacto = false }: { compacto?: boolean }
     <>
       <section
         aria-labelledby="instalar-titulo"
-        className={`documento flex items-center gap-3 ${compacto ? "p-3" : "p-4"}`}
+        className={`cartao flex items-center gap-3 ${compacto ? "p-3" : "p-4"}`}
       >
         <img src="/icones/icone-192.png" alt="" width={44} height={44} className="h-11 w-11 shrink-0 rounded-[10px]" />
         <div className="min-w-0 flex-1">
@@ -99,7 +99,7 @@ export default function InstalarApp({ compacto = false }: { compacto?: boolean }
       {guiaIphone &&
         createPortal(
           <div
-            className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/50 sm:items-center sm:p-4"
+            className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/40 backdrop-blur-sm sm:items-center sm:p-4"
             onClick={(e) => {
               if (e.target === e.currentTarget) setGuiaIphone(false);
             }}
@@ -108,7 +108,7 @@ export default function InstalarApp({ compacto = false }: { compacto?: boolean }
               role="dialog"
               aria-modal="true"
               aria-labelledby="guia-titulo"
-              className="w-full max-w-md rounded-t-2xl bg-folha p-5 shadow-xl sm:rounded-2xl"
+              className="w-full max-w-md vidro-forte rounded-t-2xl p-5 sm:rounded-2xl"
             >
               <h2 id="guia-titulo" className="text-xl font-semibold">
                 Instalar no iPhone

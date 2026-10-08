@@ -167,7 +167,7 @@ export default function Comecar() {
   }
 
   const Rodape = ({ voltar, children }: { voltar?: number; children: React.ReactNode }) => (
-    <div className="fixed inset-x-0 bottom-0 border-t border-pauta bg-folha p-4">
+    <div className="fixed inset-x-0 bottom-0 barra-fixa p-4">
       <div className="mx-auto flex max-w-[560px] gap-2">
         {voltar && (
           <button type="button" onClick={() => irPara(voltar)} className="botao-secundario !w-auto px-4" disabled={salvando}>

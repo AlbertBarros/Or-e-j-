@@ -38,8 +38,8 @@ export default function Sino({ notificacoes, naoVistas, aoAbrir }: Props) {
 
       {aberto &&
         createPortal(
-          <div className="fixed inset-0 z-50 flex items-start justify-center bg-tinta/50 sm:p-4" onClick={(e) => e.target === e.currentTarget && setAberto(false)}>
-            <div role="dialog" aria-modal="true" aria-labelledby="not-t" className="mt-0 flex max-h-[85dvh] w-full max-w-md flex-col rounded-b-3xl bg-folha shadow-2xl sm:mt-10 sm:rounded-3xl">
+          <div className="fixed inset-0 z-50 flex items-start justify-center bg-tinta/40 backdrop-blur-sm sm:p-4" onClick={(e) => e.target === e.currentTarget && setAberto(false)}>
+            <div role="dialog" aria-modal="true" aria-labelledby="not-t" className="mt-0 flex max-h-[85dvh] w-full max-w-md flex-col vidro-forte rounded-b-3xl sm:mt-10 sm:rounded-3xl">
               <header className="flex items-center justify-between px-5 pt-4">
                 <h2 id="not-t" className="text-lg font-semibold">
                   Notificações

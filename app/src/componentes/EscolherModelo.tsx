@@ -33,8 +33,8 @@ export default function EscolherModelo({ orcamento, logo, modeloInicial, ocupado
   }, [aoFechar]);
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/60 sm:items-center sm:p-4" onClick={(e) => e.target === e.currentTarget && !ocupado && aoFechar()}>
-      <div role="dialog" aria-modal="true" aria-labelledby="mod-t" className="flex max-h-[94dvh] w-full max-w-lg flex-col rounded-t-3xl bg-fundo shadow-2xl sm:rounded-3xl">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/40 backdrop-blur-sm sm:items-center sm:p-4" onClick={(e) => e.target === e.currentTarget && !ocupado && aoFechar()}>
+      <div role="dialog" aria-modal="true" aria-labelledby="mod-t" className="flex max-h-[94dvh] w-full max-w-lg flex-col vidro-forte rounded-t-3xl sm:rounded-3xl">
         <header className="flex items-center justify-between px-5 pt-4">
           <h2 id="mod-t" className="text-lg font-semibold">
             Como o cliente vai ver
@@ -74,7 +74,7 @@ export default function EscolherModelo({ orcamento, logo, modeloInicial, ocupado
           </div>
         </div>
 
-        <footer className="space-y-2 border-t border-pauta bg-folha p-4" style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}>
+        <footer className="space-y-2 border-t border-white/60 bg-folha/60 p-4" style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom))" }}>
           <button type="button" onClick={() => aoEnviar(modelo)} disabled={ocupado} className="botao-primario">
             <IconeWhatsapp /> {ocupado ? "Enviando…" : textoEnviar}
           </button>

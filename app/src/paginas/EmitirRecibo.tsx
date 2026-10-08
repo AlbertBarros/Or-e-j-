@@ -288,10 +288,10 @@ export default function EmitirRecibo() {
         </p>
       )}
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-pauta bg-folha p-4">
+      <div className="fixed inset-x-0 bottom-0 barra-fixa p-4">
         <div className="mx-auto max-w-[560px] space-y-2">
           {aviso && (
-            <p role="status" className="rounded-[10px] bg-[#E6F4EA] px-3 py-2 text-center text-sm font-medium text-pago">
+            <p role="status" className="rounded-xl bg-[#E6F4EA]/80 px-3 py-2 text-center text-sm font-medium text-pago backdrop-blur">
               {aviso}
             </p>
           )}

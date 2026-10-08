@@ -200,7 +200,7 @@ export default function Conta() {
       />
 
       {aviso && (
-        <p role="status" className="sticky top-16 z-20 mt-3 rounded-[10px] bg-[#E6F4EA] px-3 py-2 text-center text-sm font-medium text-pago">
+        <p role="status" className="sticky top-16 z-20 mt-3 rounded-xl bg-[#E6F4EA]/80 px-3 py-2 text-center text-sm font-medium text-pago backdrop-blur">
           {aviso}
         </p>
       )}

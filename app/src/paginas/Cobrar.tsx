@@ -101,7 +101,7 @@ export default function Cobrar() {
         <p className="mt-2 whitespace-pre-line leading-relaxed">{mensagem}</p>
       </section>
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-pauta bg-folha p-4">
+      <div className="fixed inset-x-0 bottom-0 barra-fixa p-4">
         <div className="mx-auto max-w-[560px]">
           <a href={link} target="_blank" rel="noopener" className="botao-primario">
             Enviar no WhatsApp

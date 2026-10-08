@@ -12,7 +12,7 @@ const ABAS = [
 /** Barra de navegação fixa no rodapé (telas de primeiro nível). */
 export default function BarraAbas() {
   return (
-    <nav aria-label="Seções do app" className="fixed inset-x-0 bottom-0 z-40 border-t border-pauta bg-folha/95 backdrop-blur" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+    <nav aria-label="Seções do app" className="fixed inset-x-0 bottom-0 z-40 barra-fixa" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
       <ul className="mx-auto grid max-w-[560px] grid-cols-5">
         {ABAS.map(({ para, rotulo, Icone, exato }) => (
           <li key={para}>

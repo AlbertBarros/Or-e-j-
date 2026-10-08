@@ -235,10 +235,10 @@ export default function DetalheOrcamento() {
         </div>
       )}
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-pauta bg-folha p-4">
+      <div className="fixed inset-x-0 bottom-0 barra-fixa p-4">
         <div className="mx-auto max-w-[560px] space-y-2">
           {aviso && (
-            <p role="status" className="rounded-[10px] bg-[#E6F4EA] px-3 py-2 text-center text-sm font-medium text-pago">
+            <p role="status" className="rounded-xl bg-[#E6F4EA]/80 px-3 py-2 text-center text-sm font-medium text-pago backdrop-blur">
               {aviso}
             </p>
           )}
@@ -328,12 +328,12 @@ export default function DetalheOrcamento() {
       {marcandoPago &&
         createPortal(
           <div
-            className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/50 sm:items-center sm:p-4"
+            className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/40 backdrop-blur-sm sm:items-center sm:p-4"
             onClick={(e) => {
               if (e.target === e.currentTarget && !ocupado) setMarcandoPago(false);
             }}
           >
-            <div role="dialog" aria-modal="true" aria-labelledby="pago-titulo" className="w-full max-w-md rounded-t-2xl bg-folha p-5 shadow-xl sm:rounded-2xl">
+            <div role="dialog" aria-modal="true" aria-labelledby="pago-titulo" className="w-full max-w-md vidro-forte rounded-t-2xl p-5 sm:rounded-2xl">
               <h2 id="pago-titulo" className="text-xl font-semibold">
                 Marcar como pago
               </h2>

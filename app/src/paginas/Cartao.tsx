@@ -133,7 +133,7 @@ export default function Cartao() {
       <CabecalhoPagina titulo="Cartão de visita" voltarPara="/mais" />
 
       {aviso && (
-        <p role="status" className="mt-3 rounded-xl bg-[#E6F4EA] px-3 py-2 text-center text-sm font-medium text-pago">
+        <p role="status" className="mt-3 rounded-xl bg-[#E6F4EA]/80 px-3 py-2 text-center text-sm font-medium text-pago backdrop-blur">
           {aviso}
         </p>
       )}
@@ -199,7 +199,7 @@ export default function Cartao() {
         <p className="ajuda mt-2">As imagens usam sua logo, nome, profissão, serviços e WhatsApp. Mude os dados em Conta e em Produtos e serviços.</p>
       </section>
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-pauta bg-folha p-4">
+      <div className="fixed inset-x-0 bottom-0 barra-fixa p-4">
         <div className="mx-auto flex max-w-[560px] gap-2">
           <button type="button" onClick={compartilharLink} className="botao-primario">
             <IconeCompartilhar tamanho={18} /> Compartilhar link

@@ -542,7 +542,7 @@ export default function NovoOrcamento() {
       </form>
 
       {/* Barra de total fixa no rodapé (DESIGN.md) */}
-      <div className="fixed inset-x-0 bottom-0 border-t-2 border-double border-tinta bg-folha p-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+      <div className="fixed inset-x-0 bottom-0 barra-fixa border-t-2 border-double border-tinta p-4">
         <div className="mx-auto max-w-[560px]">
           {(valorDesconto > 0 || freteValor > 0) && (
             <div className="flex items-baseline justify-between text-sm text-grafite">

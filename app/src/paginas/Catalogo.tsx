@@ -119,7 +119,7 @@ export default function Catalogo() {
       />
 
       {aviso && (
-        <p role="status" className="mt-3 rounded-xl bg-[#E6F4EA] px-3 py-2 text-center text-sm font-medium text-pago">
+        <p role="status" className="mt-3 rounded-xl bg-[#E6F4EA]/80 px-3 py-2 text-center text-sm font-medium text-pago backdrop-blur">
           {aviso}
         </p>
       )}
@@ -176,8 +176,8 @@ export default function Catalogo() {
       {carregando && <p className="mt-3 text-center text-sm text-grafite">Carregando…</p>}
 
       {editando && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/50 sm:items-center sm:p-4" onClick={(e) => e.target === e.currentTarget && !ocupado && setEditando(null)}>
-          <form onSubmit={salvar} noValidate role="dialog" aria-modal="true" aria-labelledby="ed-t" className="max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-t-2xl bg-folha p-5 shadow-xl sm:rounded-2xl">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-tinta/40 backdrop-blur-sm sm:items-center sm:p-4" onClick={(e) => e.target === e.currentTarget && !ocupado && setEditando(null)}>
+          <form onSubmit={salvar} noValidate role="dialog" aria-modal="true" aria-labelledby="ed-t" className="max-h-[92dvh] w-full max-w-md overflow-y-auto vidro-forte rounded-t-2xl p-5 sm:rounded-2xl">
             <h2 id="ed-t" className="text-xl font-semibold">
               {editando === "novo" ? "Novo item" : "Editar item"}
             </h2>
