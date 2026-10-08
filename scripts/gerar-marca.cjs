@@ -80,7 +80,7 @@ function social() {
   <text x="270" y="200" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="80" letter-spacing="-2" fill="#1A1D23">Preço <tspan fill="${CARBONO}">Fechado</tspan></text>
   <text x="90" y="360" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-weight="700" font-size="54" letter-spacing="-1" fill="#1A1D23">Orçamento com cara de empresa.</text>
   <text x="90" y="430" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-weight="700" font-size="54" letter-spacing="-1" fill="${CARBONO}">Aprovado, assinado e pago em um link.</text>
-  <text x="90" y="520" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-size="28" fill="#5B6270">Orçamentos, contratos assinados, Pix, clientes, recibos e cartão de visita. Grátis para começar.</text>
+  <text x="90" y="520" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-size="30" fill="#5B6270">Orçamentos, contratos assinados, Pix, clientes e recibos. Grátis para começar.</text>
 </svg>`;
 }
 
