@@ -119,3 +119,14 @@ cartão de visita virtual (3 modelos) e cards em imagem (3 modelos).
 - [x] Cartão virtual `cartoes/{uid}` público em `/v/:uid` (3 modelos) e cards PNG gerados no navegador (3 modelos)
 - [x] Prévia Open Graph para /c/ e /v/ (Pages Functions)
 - [ ] Depois: recibo avulso, cancelamento automático da assinatura Pro, depoimentos reais
+
+## V3 (8 out 2026) — pagamento, frete, modelos de documento e notificações
+
+- [x] Formas de pagamento (chips) ou "a combinar"; condição livre; dois valores (à vista e no cartão)
+- [x] Frete: endereço do cliente, distância pelo mapa (Nominatim + OSRM, grátis, sem chave) e valor fixo + por km;
+      valores padrão no onboarding (passo 3) e em Conta
+- [x] Itens do orçamento com autocompletar do catálogo
+- [x] 3 modelos de documento (Simples, Detalhado, Completo) no app, na página pública e no PDF; modelo padrão em Conta
+- [x] Antes de enviar: escolha do modelo com prévia em moldura de celular + Enviar no WhatsApp / Baixar PDF
+- [x] Notificações no app (sininho) para aprovação, recusa e assinatura; aviso do sistema com o app aberto
+- [ ] Depois: avisos com o app fechado (precisa de Cloud Functions + FCM), período de teste Pro de 14 dias
