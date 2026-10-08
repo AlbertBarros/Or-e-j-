@@ -1,4 +1,4 @@
-# Orça Já — Arquitetura
+# Orça Fácil — Arquitetura
 
 ## Visão geral
 

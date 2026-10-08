@@ -153,7 +153,7 @@ export default function OrcamentoPDF({ orcamento: o, logoPng, siteUrl, modelo }:
         </View>
 
         <Text style={estilos.rodape} fixed>
-          {o.negocio.mostrarMarca ? `Feito com Orça Já — crie o seu grátis em ${siteUrl}` : `${o.negocio.nome} · ${formatarWhatsapp(o.negocio.whatsapp)}`}
+          {o.negocio.mostrarMarca ? `Feito com Orça Fácil — crie o seu grátis em ${siteUrl}` : `${o.negocio.nome} · ${formatarWhatsapp(o.negocio.whatsapp)}`}
         </Text>
       </Page>
     </Document>

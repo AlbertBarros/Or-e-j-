@@ -1,5 +1,5 @@
 /**
- * Orça Já — cálculos de orçamento, formatação e mensagens de WhatsApp.
+ * Orça Fácil — cálculos de orçamento, formatação e mensagens de WhatsApp.
  * Funções puras: usadas no app, na página pública e no site de SEO.
  */
 

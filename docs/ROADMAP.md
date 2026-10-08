@@ -1,4 +1,4 @@
-# Orça Já — Roadmap do MVP
+# Orça Fácil — Roadmap do MVP
 
 Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quando o "Pronto quando" for verificado.
 
@@ -58,7 +58,7 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 - [x] Rota pública `/o/:id` em chunk separado, sem Auth (T6)
 - [x] Aprovar / Recusar, com o carimbo animado do DESIGN.md
 - [x] Estados: expirado, aprovado, recusado, pago e não encontrado
-- [x] Rodapé "Feito com Orça Já" quando `mostrarMarca`
+- [x] Rodapé "Feito com Orça Fácil" quando `mostrarMarca`
 - [x] Meta tags Open Graph na página pública (título: "Orçamento nº X — {negócio}"), para a prévia do link no WhatsApp ficar boa
 - [x] Ações do detalhe para "enviado": Reenviar, Copiar link, Editar
 
@@ -130,3 +130,14 @@ cartão de visita virtual (3 modelos) e cards em imagem (3 modelos).
 - [x] Antes de enviar: escolha do modelo com prévia em moldura de celular + Enviar no WhatsApp / Baixar PDF
 - [x] Notificações no app (sininho) para aprovação, recusa e assinatura; aviso do sistema com o app aberto
 - [ ] Depois: avisos com o app fechado (precisa de Cloud Functions + FCM), período de teste Pro de 14 dias
+
+## Marca e site (8 out 2026) — "Orça Fácil"
+
+- [x] Novo nome **Orça Fácil** em todo o código, documentos, manifest e Pages Functions (domínios *.pages.dev continuam `orca-ja-*`)
+- [x] Logo nova (selo em degradê com folha e check verde) gerada por `scripts/gerar-marca.cjs`: SVGs, ícones PNG do PWA, imagem social
+- [x] Site repaginado: herói com telas reais do app em moldura de celular, manchas de cor animadas, revelar ao rolar,
+      4 passos alternados com telas, recursos por área, galeria, planos, FAQ, menu mobile
+- [x] Página `/como-funciona`: tour interativo com cursor animado (13 passos: cliente → orçamento → envio → aprovação → contrato/recibo),
+      4 passos detalhados e lista completa de funcionalidades
+- [x] Telas reais capturadas no emulador com dados de demonstração (`scripts/semear-demo.cjs`) em `site/public/app/*.webp`
+- [ ] Pendências do dono: renomear o projeto no console do Firebase e na tela de consentimento do Google para "Orça Fácil"; registrar domínio próprio

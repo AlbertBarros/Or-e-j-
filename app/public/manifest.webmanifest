@@ -1,6 +1,6 @@
 {
-  "name": "Orça Já",
-  "short_name": "Orça Já",
+  "name": "Orça Fácil",
+  "short_name": "Orça Fácil",
   "description": "Orçamento com cara de empresa, aprovação por link, Pix e recibo. Para quem trabalha por conta própria.",
   "lang": "pt-BR",
   "start_url": "/?origem=pwa",

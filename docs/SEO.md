@@ -1,4 +1,4 @@
-# Orça Já — Site de SEO (`site/`)
+# Orça Fácil — Site de SEO (`site/`)
 
 ## Objetivo
 
@@ -19,7 +19,7 @@ Fase 0 = 10 páginas de orçamento + hub + home. As de recibo e cobrança vêm d
 ## Anatomia da página de profissão
 
 1. **H1**: `seo.h1` (ex.: "Modelo de orçamento para eletricista"). Abaixo, uma linha: "Preencha, baixe em PDF ou envie pelo WhatsApp. Grátis, sem cadastro."
-2. **Gerador** (ilha React no Astro, `client:visible`): já vem com os itens da profissão e é editável. Os botões são **Baixar PDF** (grátis, com a marca "Feito com Orça Já") e **Salvar e enviar pelo WhatsApp**, que leva ao cadastro no app com o orçamento preenchido via `localStorage` ou parâmetro.
+2. **Gerador** (ilha React no Astro, `client:visible`): já vem com os itens da profissão e é editável. Os botões são **Baixar PDF** (grátis, com a marca "Feito com Orça Fácil") e **Salvar e enviar pelo WhatsApp**, que leva ao cadastro no app com o orçamento preenchido via `localStorage` ou parâmetro.
 3. **Como preencher** (3 a 4 parágrafos únicos por profissão): o que incluir, como cobrar (por m², por peça, visita técnica). Texto de verdade, escrito por profissão, nunca só com a variável trocada.
 4. **Prévia do documento** (imagem leve ou HTML estático), para o Google ver conteúdo.
 5. **FAQ** a partir de `faq` com schema `FAQPage`.

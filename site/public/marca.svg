@@ -1,15 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="Orça Já">
-  <!-- cópia carbono (folha de trás) -->
-  <rect x="22" y="18" width="56" height="70" rx="9" fill="#1E3A8A"/>
-  <!-- folha da frente -->
-  <rect x="12" y="8" width="56" height="70" rx="9" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="4"/>
-  <!-- pautas -->
-  <line x1="24" y1="26" x2="56" y2="26" stroke="#DCE4F7" stroke-width="4" stroke-linecap="round"/>
-  <line x1="24" y1="38" x2="56" y2="38" stroke="#DCE4F7" stroke-width="4" stroke-linecap="round"/>
-  <line x1="24" y1="50" x2="44" y2="50" stroke="#DCE4F7" stroke-width="4" stroke-linecap="round"/>
-  <!-- linha do total -->
-  <rect x="24" y="60" width="32" height="6" rx="3" fill="#1E3A8A"/>
-  <!-- carimbo de aprovado -->
-  <circle cx="68" cy="70" r="16" fill="#15803D"/>
-  <path d="M60 70.5 L65.5 76 L76 63.5" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 96" width="420" height="96">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E3A8A"/>
+      <stop offset="1" stop-color="#2B4FB8"/>
+    </linearGradient>
+  </defs>
+  <rect width="96" height="96" rx="22" fill="url(#g)"/>
+  <rect x="22" y="16" width="44" height="58" rx="8" fill="#FFFFFF"/>
+  <rect x="30" y="27" width="22" height="4" rx="2" fill="#DCE4F7"/>
+  <rect x="30" y="37" width="28" height="4" rx="2" fill="#DCE4F7"/>
+  <rect x="30" y="47" width="16" height="4" rx="2" fill="#DCE4F7"/>
+  <rect x="30" y="58" width="22" height="5" rx="2.5" fill="#1E3A8A"/>
+  <circle cx="66" cy="66" r="15" fill="#15803D" stroke="#FFFFFF" stroke-width="4"/>
+  <path d="M59 66.5 L64 71.5 L73.5 61" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="114" y="64" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="54" letter-spacing="-1.5" fill="#1A1D23">Orça <tspan fill="#1E3A8A">Fácil</tspan></text>
 </svg>

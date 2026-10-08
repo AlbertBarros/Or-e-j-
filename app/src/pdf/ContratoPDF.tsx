@@ -71,7 +71,7 @@ export default function ContratoPDF({ contrato: c, logoPng, assinaturaPng }: Pro
         )}
 
         <Text style={estilos.rodape} fixed>
-          {c.mostrarMarca ? "Contrato gerado com Orça Já — orca-ja-6cz.pages.dev" : `${c.contratado.nome} · contrato nº ${numero}`}
+          {c.mostrarMarca ? "Contrato gerado com Orça Fácil — orca-ja-6cz.pages.dev" : `${c.contratado.nome} · contrato nº ${numero}`}
         </Text>
       </Page>
     </Document>

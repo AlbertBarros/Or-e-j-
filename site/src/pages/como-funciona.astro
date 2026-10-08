@@ -1,0 +1,133 @@
+---
+import Base from "../layouts/Base.astro";
+import Cta from "../components/Cta";
+import Telefone from "../components/Telefone.astro";
+import Recursos from "../components/Recursos.astro";
+import TourInterativo from "../components/TourInterativo";
+import { profissoes } from "../lib/profissoes";
+import { NOME_SITE } from "../lib/site";
+import { APP_PRONTO, URL_CADASTRO } from "../lib/planos";
+
+const titulo = "Como funciona o Orça Fácil — tour guiado e todas as funcionalidades";
+const descricao =
+  "Veja passo a passo como cadastrar clientes, montar o orçamento com frete e catálogo, escolher o modelo, enviar pelo WhatsApp, receber a aprovação, o contrato assinado e o Pix.";
+const opcoes = profissoes.map((p) => ({ slug: p.slug, nome: p.nome }));
+
+const passos = [
+  {
+    n: 1,
+    t: "Configure uma vez",
+    d: "No primeiro acesso você cadastra a empresa, o endereço, a logo, a chave Pix e os produtos e serviços que oferece. Os itens comuns da sua profissão já vêm sugeridos; é só ajustar os preços.",
+    pontos: ["Dados da empresa, endereço e contato", "Logo, Pix e frete padrão (fixo + por km)", "Catálogo de produtos e serviços com preços"],
+    tela: "inicio",
+    alt: "Início do app com resumo financeiro e gráficos",
+  },
+  {
+    n: 2,
+    t: "Monte o orçamento",
+    d: "Escolha o cliente (ou cadastre na hora), toque nos itens do catálogo, defina formas de pagamento, dois valores se quiser e o frete calculado pelo mapa. O total aparece ao vivo.",
+    pontos: ["Itens do catálogo em 1 toque", "Pix, cartão, dinheiro ou a combinar", "Frete: endereço do cliente e distância automática"],
+    tela: "novo",
+    alt: "Formulário de novo orçamento",
+  },
+  {
+    n: 3,
+    t: "Escolha o modelo e envie",
+    d: "Antes de enviar, veja numa moldura de celular exatamente o que o cliente vai receber. Simples, Detalhado ou Completo, com sua logo. Envie pelo WhatsApp com a mensagem pronta ou baixe o PDF.",
+    pontos: ["3 modelos de documento", "Prévia fiel antes do envio", "WhatsApp ou PDF"],
+    tela: "previa",
+    alt: "Prévia do orçamento com escolha de modelo",
+  },
+  {
+    n: 4,
+    t: "O cliente aprova, assina e paga",
+    d: "Ele abre o link, toca em Aprovar e o Pix aparece. O app sugere o contrato já preenchido; o cliente assina pelo celular. Recebeu? Marque como pago e envie o recibo em PDF.",
+    pontos: ["Aprovação sem app nem cadastro", "Contrato com assinatura eletrônica", "Recibo com garantia e valor por extenso"],
+    tela: "contrato-assinado",
+    alt: "Contrato assinado pelo cliente",
+  },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "Como enviar um orçamento profissional com o Orça Fácil",
+    step: passos.map((p) => ({ "@type": "HowToStep", position: p.n, name: p.t, text: p.d })),
+  },
+];
+---
+
+<Base titulo={titulo} descricao={descricao} caminho="/como-funciona" jsonLd={jsonLd} largura="larga">
+  <section class="pt-10 text-center sm:pt-14">
+    <p class="titulo-secao">Como funciona</p>
+    <h1 class="mx-auto mt-3 max-w-3xl text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
+      Veja como é simples usar o <span class="texto-gradiente">{NOME_SITE}</span>
+    </h1>
+    <p class="mx-auto mt-4 max-w-2xl text-lg text-grafite">
+      Um tour guiado mostra onde tocar em cada etapa: cadastrar o cliente, montar o orçamento, enviar, receber a aprovação, o contrato e o pagamento.
+    </p>
+  </section>
+
+  <!-- Tour interativo -->
+  <section aria-labelledby="tour-titulo" class="cartao mt-10 p-6 sm:p-10">
+    <h2 id="tour-titulo" class="sr-only">Tour interativo</h2>
+    <TourInterativo client:visible />
+  </section>
+
+  <!-- 4 passos -->
+  <section aria-labelledby="passos-titulo" class="mt-24">
+    <div class="revelar text-center">
+      <h2 id="passos-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Em 4 passos</h2>
+      <p class="mx-auto mt-3 max-w-2xl text-lg text-grafite">Telas reais do app.</p>
+    </div>
+    <ol class="mt-12 space-y-20">
+      {passos.map((p, i) => (
+        <li class={`revelar grid items-center gap-8 lg:grid-cols-2 lg:gap-16 ${i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}>
+          <div class="mx-auto w-full max-w-[300px]">
+            <Telefone tela={p.tela} alt={p.alt} largura={280} />
+          </div>
+          <div>
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-carbono text-lg font-bold text-white">{p.n}</span>
+            <p class="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-carbono">Passo {p.n}</p>
+            <h3 class="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">{p.t}</h3>
+            <p class="mt-3 max-w-md text-lg text-grafite">{p.d}</p>
+            <ul class="mt-4 space-y-2">
+              {p.pontos.map((x) => (
+                <li class="flex items-start gap-2.5">
+                  <span class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#E6F4EA] text-[11px] font-bold text-pago" aria-hidden="true">✓</span>
+                  <span class="font-medium">{x}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- Todas as funcionalidades -->
+  <section id="funcionalidades" aria-labelledby="func-titulo" class="mt-24 scroll-mt-24">
+    <div class="revelar text-center">
+      <p class="titulo-secao">Lista completa</p>
+      <h2 id="func-titulo" class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">Todas as funcionalidades</h2>
+      <p class="mx-auto mt-3 max-w-2xl text-lg text-grafite">O que já está no app hoje, por área.</p>
+    </div>
+    <div class="mt-10">
+      <Recursos completo />
+    </div>
+    <p class="revelar mt-6 text-center text-sm text-grafite">
+      Grátis: até 3 orçamentos enviados por mês, com tudo acima exceto Pix na aprovação, recibo em PDF e logo nos documentos, que são do Pro.
+      <a href="/precos" class="font-semibold text-carbono hover:underline">Ver planos</a>.
+    </p>
+  </section>
+
+  <!-- CTA -->
+  <section aria-labelledby="cta-titulo" class="revelar mt-24 overflow-hidden rounded-3xl bg-gradient-to-br from-carbono to-[#2B4FB8] px-6 py-12 text-center text-white sm:px-12">
+    <h2 id="cta-titulo" class="text-3xl font-extrabold tracking-tight sm:text-4xl">Pronto para o primeiro orçamento com cara de empresa?</h2>
+    <p class="mx-auto mt-3 max-w-xl text-lg text-white/80">Configure em 2 minutos. Sem cartão de crédito.</p>
+    <div class="mt-7 flex justify-center">
+      <Cta client:visible variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="como-funciona:final" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="!min-h-12 !bg-white !px-8 text-base !text-carbono hover:!bg-carbono-claro" />
+    </div>
+  </section>
+</Base>

@@ -174,7 +174,7 @@ export default function DocumentoOrcamento({ orcamento: o, logoDataUrl, rodapeMa
         )}
       </section>
 
-      {o.negocio.mostrarMarca && rodapeMarca && <footer className="border-t border-pauta px-4 py-2 text-center text-xs text-grafite">Feito com Orça Já</footer>}
+      {o.negocio.mostrarMarca && rodapeMarca && <footer className="border-t border-pauta px-4 py-2 text-center text-xs text-grafite">Feito com Orça Fácil</footer>}
     </article>
   );
 }

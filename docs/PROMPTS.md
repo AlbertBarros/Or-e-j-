@@ -7,7 +7,7 @@ Cole na ordem. Entre um prompt e outro, leia o que o Claude Code propôs e respo
 ## Prompt 1 — Primeira sessão (contexto e conferência)
 
 ```
-Este repositório é o kit inicial do Orça Já. Leia CLAUDE.md e todos os arquivos em docs/.
+Este repositório é o kit inicial do Orça Fácil. Leia CLAUDE.md e todos os arquivos em docs/.
 Depois:
 1. Resuma em 5 linhas o que vamos construir e a ordem das fases.
 2. Aponte qualquer contradição ou lacuna entre PRD, ARQUITETURA, DESIGN, SEO e ROADMAP.

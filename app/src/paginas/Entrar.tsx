@@ -138,7 +138,7 @@ export default function Entrar() {
           </form>
         ) : (
           <>
-            <h1 className="text-2xl font-bold">Entrar no Orça Já</h1>
+            <h1 className="text-2xl font-bold">Entrar no Orça Fácil</h1>
             <p className="mt-2 text-grafite">Se é a primeira vez, sua conta é criada aqui mesmo. Leva 2 minutos.</p>
 
             <button

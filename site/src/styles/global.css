@@ -1,4 +1,4 @@
-/* Orça Já — estilos globais do site (tokens do docs/DESIGN.md) */
+/* Orça Fácil — estilos globais do site (tokens do docs/DESIGN.md) */
 @import "tailwindcss";
 @import "@fontsource-variable/archivo";
 
@@ -65,4 +65,134 @@
   .documento {
     @apply rounded-lg border border-pauta bg-folha;
   }
+}
+
+/* ===== Repaginação (out/2026): animações, moldura de celular, fundos ===== */
+@layer components {
+  .cartao {
+    @apply rounded-2xl border border-pauta bg-folha shadow-[0_1px_2px_rgba(26,29,35,0.04),0_12px_32px_-20px_rgba(30,58,138,0.35)];
+  }
+  .chip {
+    @apply inline-flex min-h-9 items-center gap-1.5 rounded-full border border-pauta bg-folha px-3 text-sm font-medium text-grafite;
+  }
+  .titulo-secao {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-carbono;
+  }
+  .texto-gradiente {
+    background: linear-gradient(90deg, #1e3a8a 0%, #2b4fb8 55%, #15803d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Moldura de celular */
+.telefone {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 390 / 844;
+  border-radius: 2.6rem;
+  background: #0b0f1a;
+  padding: 10px;
+  box-shadow:
+    0 0 0 2px #2a3042,
+    0 30px 60px -30px rgba(30, 58, 138, 0.55),
+    0 20px 40px -24px rgba(0, 0, 0, 0.5);
+}
+.telefone::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: 92px;
+  height: 24px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #0b0f1a;
+  z-index: 2;
+}
+.telefone > .tela {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 2rem;
+  background: #f6f7f9;
+}
+.telefone > .tela > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+/* Manchas de cor atrás dos celulares (como na referência) */
+.mancha {
+  position: absolute;
+  inset: -10% -20%;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(40px);
+  opacity: 0.55;
+  background:
+    radial-gradient(40% 45% at 30% 35%, rgba(30, 58, 138, 0.45), transparent 70%),
+    radial-gradient(35% 40% at 72% 60%, rgba(21, 128, 61, 0.35), transparent 70%),
+    radial-gradient(30% 35% at 60% 20%, rgba(245, 196, 81, 0.35), transparent 70%);
+  animation: respirar 9s ease-in-out infinite alternate;
+}
+@keyframes respirar {
+  from { transform: scale(1) rotate(0deg); }
+  to { transform: scale(1.08) rotate(6deg); }
+}
+.flutuar { animation: flutuar 6s ease-in-out infinite; }
+.flutuar-2 { animation: flutuar 7s ease-in-out 1s infinite; }
+@keyframes flutuar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Revelar ao rolar */
+.revelar {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.revelar.visivel { opacity: 1; transform: none; }
+.revelar-atraso-1 { transition-delay: 0.08s; }
+.revelar-atraso-2 { transition-delay: 0.16s; }
+.revelar-atraso-3 { transition-delay: 0.24s; }
+
+/* Cursor animado do tour */
+.cursor-tour {
+  position: absolute;
+  z-index: 20;
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+  transition: left 0.75s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.75s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.15s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+.cursor-tour.clicando { transform: scale(0.85); }
+.onda-clique {
+  position: absolute;
+  z-index: 19;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border-radius: 999px;
+  border: 2px solid #1e3a8a;
+  pointer-events: none;
+  animation: onda 0.6s ease-out forwards;
+}
+@keyframes onda {
+  from { transform: scale(0.3); opacity: 0.9; }
+  to { transform: scale(1.4); opacity: 0; }
+}
+.alvo-destaque { box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.35) !important; transition: box-shadow 0.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mancha, .flutuar, .flutuar-2 { animation: none; }
+  .revelar { opacity: 1; transform: none; transition: none; }
+  .cursor-tour { transition: none; }
 }

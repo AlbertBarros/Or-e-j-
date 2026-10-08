@@ -1,17 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <rect width="1200" height="630" fill="#F6F7F9"/>
-  <g transform="translate(80 110) scale(1.6)">
-    <rect x="22" y="18" width="56" height="70" rx="9" fill="#1E3A8A"/>
-    <rect x="12" y="8" width="56" height="70" rx="9" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="4"/>
-    <line x1="24" y1="26" x2="56" y2="26" stroke="#DCE4F7" stroke-width="4" stroke-linecap="round"/>
-    <line x1="24" y1="38" x2="56" y2="38" stroke="#DCE4F7" stroke-width="4" stroke-linecap="round"/>
-    <line x1="24" y1="50" x2="44" y2="50" stroke="#DCE4F7" stroke-width="4" stroke-linecap="round"/>
-    <rect x="24" y="60" width="32" height="6" rx="3" fill="#1E3A8A"/>
-    <circle cx="68" cy="70" r="16" fill="#15803D"/>
-    <path d="M60 70.5 L65.5 76 L76 63.5" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F6F7F9"/>
+      <stop offset="1" stop-color="#DCE4F7"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E3A8A"/>
+      <stop offset="1" stop-color="#2B4FB8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1040" cy="120" r="220" fill="#1E3A8A" opacity="0.08"/>
+  <circle cx="980" cy="560" r="160" fill="#15803D" opacity="0.10"/>
+  <g transform="translate(90 120) scale(1.5)">
+    <rect width="96" height="96" rx="22" fill="url(#g)"/>
+    <rect x="22" y="16" width="44" height="58" rx="8" fill="#FFFFFF"/>
+    <rect x="30" y="27" width="22" height="4" rx="2" fill="#DCE4F7"/>
+    <rect x="30" y="37" width="28" height="4" rx="2" fill="#DCE4F7"/>
+    <rect x="30" y="47" width="16" height="4" rx="2" fill="#DCE4F7"/>
+    <rect x="30" y="58" width="22" height="5" rx="2.5" fill="#1E3A8A"/>
+    <circle cx="66" cy="66" r="15" fill="#15803D" stroke="#FFFFFF" stroke-width="4"/>
+    <path d="M59 66.5 L64 71.5 L73.5 61" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <text x="250" y="200" font-family="Archivo, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="700" font-size="76" letter-spacing="-2" fill="#1A1D23">Orça <tspan fill="#1E3A8A">Já</tspan></text>
-  <text x="80" y="330" font-family="Archivo, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="700" font-size="54" letter-spacing="-1" fill="#1A1D23">Orçamento com cara de empresa.</text>
-  <text x="80" y="400" font-family="Archivo, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="700" font-size="54" letter-spacing="-1" fill="#1E3A8A">Aprovação em 1 toque. Pix na hora.</text>
-  <text x="80" y="480" font-family="Archivo, 'Segoe UI', Roboto, Arial, sans-serif" font-size="30" fill="#5B6270">Grátis para começar · feito para autônomos e MEIs</text>
+  <text x="270" y="200" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="84" letter-spacing="-2" fill="#1A1D23">Orça <tspan fill="#1E3A8A">Fácil</tspan></text>
+  <text x="90" y="360" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-weight="700" font-size="54" letter-spacing="-1" fill="#1A1D23">Orçamento com cara de empresa.</text>
+  <text x="90" y="430" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-weight="700" font-size="54" letter-spacing="-1" fill="#1E3A8A">Aprovação em 1 toque. Pix na hora.</text>
+  <text x="90" y="520" font-family="Archivo, 'Segoe UI', Arial, sans-serif" font-size="30" fill="#5B6270">Orçamentos, contratos com assinatura, clientes, recibos e cartão de visita. Grátis para começar.</text>
 </svg>

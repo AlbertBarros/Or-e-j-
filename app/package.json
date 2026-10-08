@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Orça Já — app do profissional (login, cadastro, orçamentos, página pública)",
+  "description": "Orça Fácil — app do profissional (login, cadastro, orçamentos, página pública)",
   "scripts": {
     "dev": "vite",
     "dev:emulador": "vite --mode emulador",

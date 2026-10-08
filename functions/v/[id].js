@@ -45,7 +45,7 @@ export async function onRequestGet(context) {
   let html = await indexResp.text();
   if (!html.includes("</head>")) return context.next();
 
-  let titulo = "Cartão de visita — Orça Já";
+  let titulo = "Cartão de visita — Orça Fácil";
   let descricao = "Serviços, contato e orçamento pelo WhatsApp.";
   try {
     const o = await buscarOrcamento(env, params.id);
@@ -64,7 +64,7 @@ export async function onRequestGet(context) {
     `<title>${escapar(titulo)}</title>`,
     `<meta name="description" content="${escapar(descricao)}">`,
     `<meta property="og:type" content="website">`,
-    `<meta property="og:site_name" content="Orça Já">`,
+    `<meta property="og:site_name" content="Orça Fácil">`,
     `<meta property="og:title" content="${escapar(titulo)}">`,
     `<meta property="og:description" content="${escapar(descricao)}">`,
     `<meta property="og:url" content="${escapar(urlPagina)}">`,

@@ -180,7 +180,7 @@ export default function PaginaContrato({ id }: { id: string }) {
         <p className="mt-6 text-center text-xs text-grafite">
           Contrato gerado com{" "}
           <a href={SITE} className="font-medium text-carbono underline">
-            Orça Já
+            Orça Fácil
           </a>
         </p>
       )}

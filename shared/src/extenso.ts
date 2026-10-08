@@ -1,5 +1,5 @@
 /**
- * Orça Já — valor em reais por extenso, para o recibo.
+ * Orça Fácil — valor em reais por extenso, para o recibo.
  * Cobre de R$ 0,01 a R$ 999.999,99 (e um pouco além, até 999 milhões).
  * Ex.: 1250.5 → "mil duzentos e cinquenta reais e cinquenta centavos"
  */

@@ -1,0 +1,109 @@
+---
+/** Todas as funcionalidades do Orça Fácil, por área. Usado na home (resumo) e em /como-funciona (completo). */
+interface Props {
+  completo?: boolean;
+}
+const { completo = false } = Astro.props;
+
+export const AREAS = [
+  {
+    area: "Orçamentos",
+    icone: "doc",
+    itens: [
+      ["Itens do seu catálogo em 1 toque", "Produtos e serviços cadastrados entram no orçamento com nome, unidade e preço."],
+      ["Formas de pagamento", "Pix, dinheiro, débito, crédito, transferência ou 'a combinar', com condição livre."],
+      ["Dois valores: à vista e no cartão", "Mostre os dois preços no mesmo documento."],
+      ["Frete calculado pelo mapa", "Endereço do cliente, distância automática e valor fixo + por km."],
+      ["3 modelos de documento", "Simples, Detalhado ou Completo, com sua logo. Prévia de como o cliente vê antes de enviar."],
+      ["Enviar no WhatsApp ou baixar PDF", "Mensagem pronta com o link do orçamento, ou PDF para anexar."],
+      ["Numeração automática", "Orçamentos, recibos e contratos numerados em sequência."],
+    ],
+  },
+  {
+    area: "Aprovação e pagamento",
+    icone: "check",
+    itens: [
+      ["Link de aprovação sem app", "O cliente abre no navegador, vê o documento e toca em Aprovar ou Recusar."],
+      ["Pix na mesma página", "Aprovou, apareceu o QR Code e o copia-e-cola. O dinheiro vai direto para a sua conta."],
+      ["Cobrança no tom certo", "Três mensagens prontas (gentil, firme, final), sugeridas pelos dias de atraso."],
+      ["Marcar como pago", "Com data editável. Entra no 'Recebido no mês' e libera o recibo."],
+      ["Notificações", "Aviso no app quando o cliente aprova, recusa ou assina."],
+    ],
+  },
+  {
+    area: "Contratos",
+    icone: "assinatura",
+    itens: [
+      ["Contrato sugerido ao aprovar", "Dez cláusulas já preenchidas com os dados do orçamento, do cliente e do seu negócio."],
+      ["Edição antes de enviar", "Ajuste prazo, pagamento, garantia e o texto que quiser."],
+      ["Assinatura pelo celular", "O cliente desenha a assinatura na tela; o app registra nome, data, hora e aparelho."],
+      ["PDF assinado e busca", "Aba de contratos assinados e pendentes, com busca por nome e telefone."],
+    ],
+  },
+  {
+    area: "Clientes",
+    icone: "pessoas",
+    itens: [
+      ["Banco de clientes automático", "Todo mundo que recebeu orçamento entra na lista, aprovando ou não."],
+      ["Ficha completa", "Contato, CPF/CNPJ, endereço, observações e histórico de orçamentos."],
+      ["Mensagem para vários", "Selecione clientes, escreva uma vez e envie um a um pelo WhatsApp, com card anexo."],
+    ],
+  },
+  {
+    area: "Recibos e marca",
+    icone: "recibo",
+    itens: [
+      ["Recibo em PDF", "Valor por extenso, garantia do serviço, endereço e sua logo. Enviado pelo WhatsApp."],
+      ["Cartão de visita virtual", "Página com seus serviços, contato e botão de orçamento. 3 modelos."],
+      ["Cards em imagem", "Três modelos para divulgar no WhatsApp e nas redes, gerados com seus dados."],
+      ["Sua logo em tudo", "Orçamento, página de aprovação, contrato, recibo e cartão."],
+    ],
+  },
+  {
+    area: "Painel",
+    icone: "grafico",
+    itens: [
+      ["A receber e recebido", "Totais do mês na primeira tela."],
+      ["Gráficos", "Enviados, aprovados e recusados por mês, e taxa de aprovação."],
+      ["Pendências", "Contratos para gerar, assinaturas aguardando, pagamentos atrasados."],
+      ["Funciona como app", "Instale na tela inicial do Android ou iPhone. Feito para usar com uma mão."],
+    ],
+  },
+];
+
+const ICONES: Record<string, string> = {
+  doc: '<rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>',
+  assinatura: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 17c1.2-1.6 2-1.6 2.6 0 .6 1.5 1.3 1.5 2.4-.4"/>',
+  pessoas: '<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2A4.5 4.5 0 0 1 21 18.5"/>',
+  recibo: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+  grafico: '<path d="M4 20h16"/><rect x="6" y="11" width="3" height="7" rx="0.8"/><rect x="11" y="6" width="3" height="12" rx="0.8"/><rect x="16" y="14" width="3" height="4" rx="0.8"/>',
+};
+const lista = completo ? AREAS : AREAS.map((a) => ({ ...a, itens: a.itens.slice(0, 3) }));
+---
+
+<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    lista.map((a, i) => (
+      <article class={`cartao revelar revelar-atraso-${(i % 3) + 1} p-5`}>
+        <div class="flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-carbono-claro text-carbono">
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" set:html={ICONES[a.icone]} />
+          </span>
+          <h3 class="text-lg font-semibold">{a.area}</h3>
+        </div>
+        <ul class="mt-4 space-y-3">
+          {a.itens.map(([t, d]) => (
+            <li class="flex gap-2.5">
+              <span class="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#E6F4EA] text-[10px] font-bold text-pago" aria-hidden="true">✓</span>
+              <span>
+                <span class="block text-sm font-semibold">{t}</span>
+                {completo && <span class="block text-sm text-grafite">{d}</span>}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </article>
+    ))
+  }
+</div>

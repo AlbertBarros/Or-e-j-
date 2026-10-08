@@ -1,5 +1,5 @@
 /**
- * Tipos de domínio do Orça Já (espelham docs/ARQUITETURA.md).
+ * Tipos de domínio do Orça Fácil (espelham docs/ARQUITETURA.md).
  * Datas ficam como Timestamp no Firestore e são convertidas na camada lib/.
  */
 import type { Timestamp } from "firebase/firestore";

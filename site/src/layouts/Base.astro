@@ -14,14 +14,18 @@ interface Props {
   jsonLd?: object[];
   /** Imagem para redes sociais (caminho absoluto no site) */
   imagem?: string;
+  /** Largura do conteúdo: "larga" para a home e páginas de produto */
+  largura?: "normal" | "larga";
 }
 
-const { titulo, descricao, caminho, jsonLd = [], imagem = "/social.svg" } = Astro.props;
+const { titulo, descricao, caminho, jsonLd = [], imagem = "/social.png", largura = "normal" } = Astro.props;
 const canonical = new URL(caminho, Astro.site).href;
 const imagemAbs = new URL(imagem, Astro.site).href;
 const ano = new Date().getFullYear();
 const opcoes = profissoes.map((p) => ({ slug: p.slug, nome: p.nome }));
 const populares = profissoes.slice(0, 5);
+const maxW = largura === "larga" ? "max-w-6xl" : "max-w-5xl";
+const atual = (p: string) => (caminho === p ? "text-carbono" : "text-grafite hover:text-carbono");
 ---
 
 <!doctype html>
@@ -33,6 +37,7 @@ const populares = profissoes.slice(0, 5);
     <meta name="description" content={descricao} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icone-512.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content="#1E3A8A" />
     <meta property="og:type" content="website" />
@@ -46,69 +51,59 @@ const populares = profissoes.slice(0, 5);
     {jsonLd.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
   </head>
   <body class="min-h-screen bg-fundo text-tinta">
-    <a
-      href="#conteudo"
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-[10px] focus:bg-folha focus:px-4 focus:py-2"
-    >
+    <a href="#conteudo" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-[10px] focus:bg-folha focus:px-4 focus:py-2">
       Pular para o conteúdo
     </a>
-    <header class="sticky top-0 z-40 border-b border-pauta bg-folha/95 backdrop-blur">
-      <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2">
-        <a href="/" class="flex min-h-11 items-center" aria-label="Orça Já, página inicial">
+
+    <header class="sticky top-0 z-40 border-b border-pauta/80 bg-folha/85 backdrop-blur-md">
+      <div class={`mx-auto flex ${maxW} items-center justify-between gap-3 px-4 py-2`}>
+        <a href="/" class="flex min-h-11 shrink-0 items-center" aria-label={`${NOME_SITE}, página inicial`}>
           <Logo tamanho={32} />
         </a>
         <nav aria-label="Principal" class="hidden items-center gap-1 md:flex">
-          <a href="/#como-funciona" class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-grafite hover:text-carbono">
-            Como funciona
-          </a>
-          <a href="/precos" class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-grafite hover:text-carbono">
-            Preços
-          </a>
-          <a href={URL_HUB} class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-grafite hover:text-carbono">
-            Modelos grátis
-          </a>
+          <a href="/como-funciona" class={`inline-flex min-h-11 items-center px-3 text-sm font-medium ${atual("/como-funciona")}`}>Como funciona</a>
+          <a href="/#recursos" class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-grafite hover:text-carbono">Recursos</a>
+          <a href="/precos" class={`inline-flex min-h-11 items-center px-3 text-sm font-medium ${atual("/precos")}`}>Preços</a>
+          <a href={URL_HUB} class={`inline-flex min-h-11 items-center px-3 text-sm font-medium ${atual(URL_HUB)}`}>Modelos grátis</a>
         </nav>
         <div class="flex items-center gap-1">
-          <Cta
-            client:idle
-            variante="link"
-            texto="Entrar"
-            href={APP_PRONTO ? URL_CADASTRO : undefined}
-            origem="menu:entrar"
-            titulo="O acesso ao app está quase pronto"
-            opcoesProfissao={opcoes}
-          />
-          <Cta
-            client:idle
-            variante="primario"
-            texto="Começar grátis"
-            href={APP_PRONTO ? URL_CADASTRO : undefined}
-            origem="menu:comecar"
-            titulo="Comece grátis assim que o app abrir"
-            opcoesProfissao={opcoes}
-            className="!min-h-10 !px-4 text-sm"
-          />
+          <span class="hidden sm:inline-flex">
+            <Cta client:idle variante="link" texto="Entrar" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="menu:entrar" titulo="O acesso ao app está quase pronto" opcoesProfissao={opcoes} />
+          </span>
+          <Cta client:idle variante="primario" texto="Começar grátis" href={APP_PRONTO ? URL_CADASTRO : undefined} origem="menu:comecar" titulo="Comece grátis assim que o app abrir" opcoesProfissao={opcoes} className="!min-h-10 whitespace-nowrap !px-3 text-sm sm:!px-4" />
+          <details class="relative md:hidden">
+            <summary class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-[10px] text-carbono hover:bg-carbono-claro" aria-label="Abrir menu">
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+            </summary>
+            <nav aria-label="Menu" class="cartao absolute right-0 mt-2 w-56 p-2">
+              <a href="/como-funciona" class="block rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-fundo">Como funciona</a>
+              <a href="/#recursos" class="block rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-fundo">Recursos</a>
+              <a href="/precos" class="block rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-fundo">Preços</a>
+              <a href={URL_HUB} class="block rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-fundo">Modelos grátis</a>
+              {APP_PRONTO && <a href={URL_CADASTRO} class="block rounded-lg px-3 py-2.5 text-sm font-medium text-carbono hover:bg-fundo">Entrar</a>}
+            </nav>
+          </details>
         </div>
       </div>
     </header>
 
-    <main id="conteudo" class="mx-auto w-full max-w-5xl px-4 pb-16">
+    <main id="conteudo" class={`mx-auto w-full ${maxW} px-4 pb-16`}>
       <slot />
     </main>
 
     <footer class="border-t border-pauta bg-folha">
-      <div class="mx-auto grid max-w-5xl gap-8 px-4 py-10 sm:grid-cols-3">
-        <div>
-          <Logo tamanho={28} />
+      <div class={`mx-auto grid ${maxW} gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4`}>
+        <div class="sm:col-span-2 lg:col-span-1">
+          <Logo tamanho={30} />
           <p class="mt-3 max-w-xs text-sm text-grafite">
-            Orçamento com cara de empresa, aprovação pelo WhatsApp e cobrança por Pix. Feito para quem trabalha por
-            conta própria.
+            Orçamento com cara de empresa, aprovação pelo WhatsApp, contrato assinado, Pix e recibo. Feito para quem trabalha por conta própria.
           </p>
         </div>
         <nav aria-label="Produto" class="text-sm">
           <p class="font-semibold">Produto</p>
           <ul class="mt-2 space-y-1">
-            <li><a href="/#como-funciona" class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">Como funciona</a></li>
+            <li><a href="/como-funciona" class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">Como funciona</a></li>
+            <li><a href="/#recursos" class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">Todos os recursos</a></li>
             <li><a href="/precos" class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">Preços</a></li>
             <li><a href={URL_HUB} class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">Modelos de orçamento grátis</a></li>
             <li><a href="/#perguntas" class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">Perguntas frequentes</a></li>
@@ -117,21 +112,43 @@ const populares = profissoes.slice(0, 5);
         <nav aria-label="Modelos populares" class="text-sm">
           <p class="font-semibold">Modelos populares</p>
           <ul class="mt-2 space-y-1">
-            {
-              populares.map((p) => (
-                <li>
-                  <a href={urlProfissao(p.slug)} class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">
-                    Orçamento para {p.nome.toLowerCase()}
-                  </a>
-                </li>
-              ))
-            }
+            {populares.map((p) => (
+              <li><a href={urlProfissao(p.slug)} class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">Orçamento para {p.nome.toLowerCase()}</a></li>
+            ))}
+          </ul>
+        </nav>
+        <nav aria-label="Legal" class="text-sm">
+          <p class="font-semibold">Legal</p>
+          <ul class="mt-2 space-y-1">
+            <li><a href="/termos" class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">Termos de uso</a></li>
+            <li><a href="/privacidade" class="inline-flex min-h-9 items-center text-grafite hover:text-carbono">Privacidade</a></li>
           </ul>
         </nav>
       </div>
       <div class="border-t border-pauta">
-        <p class="mx-auto max-w-5xl px-4 py-4 text-xs text-grafite">© {ano} Orça Já. Todos os direitos reservados.</p>
+        <p class={`mx-auto ${maxW} px-4 py-4 text-xs text-grafite`}>© {ano} {NOME_SITE}. Todos os direitos reservados.</p>
       </div>
     </footer>
+
+    <script>
+      // Revela as seções conforme entram na tela (sem biblioteca).
+      const alvos = document.querySelectorAll<HTMLElement>(".revelar");
+      if ("IntersectionObserver" in window) {
+        const obs = new IntersectionObserver(
+          (entradas) => {
+            for (const e of entradas) {
+              if (e.isIntersecting) {
+                e.target.classList.add("visivel");
+                obs.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+        );
+        alvos.forEach((a) => obs.observe(a));
+      } else {
+        alvos.forEach((a) => a.classList.add("visivel"));
+      }
+    </script>
   </body>
 </html>

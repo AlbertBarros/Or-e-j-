@@ -1,0 +1,22 @@
+---
+/** Moldura de celular com uma tela real do app (site/public/app/*.webp). */
+interface Props {
+  tela: string; // nome do arquivo sem extensão, ex.: "inicio"
+  alt: string;
+  class?: string;
+  flutuar?: boolean;
+  mancha?: boolean;
+  largura?: number; // px máx.
+  prioridade?: boolean;
+}
+const { tela, alt, class: classe = "", flutuar = false, mancha = true, largura = 300, prioridade = false } = Astro.props;
+---
+
+<div class={`relative ${classe}`}>
+  {mancha && <span class="mancha" aria-hidden="true"></span>}
+  <div class={`telefone mx-auto ${flutuar ? "flutuar" : ""}`} style={`max-width:${largura}px`}>
+    <div class="tela">
+      <img src={`/app/${tela}.webp`} alt={alt} width="780" height="1688" loading={prioridade ? "eager" : "lazy"} decoding="async" />
+    </div>
+  </div>
+</div>

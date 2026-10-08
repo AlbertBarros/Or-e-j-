@@ -1,5 +1,5 @@
 /**
- * Orça Já — conversão entre números e texto digitado em pt-BR ("1.250,50", "90,5", "150").
+ * Orça Fácil — conversão entre números e texto digitado em pt-BR ("1.250,50", "90,5", "150").
  * Usado nos campos de quantidade e valor do site e do app.
  */
 

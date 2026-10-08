@@ -1,5 +1,5 @@
 /**
- * Orça Já — Cloudflare Worker que recebe os avisos (webhooks) do Mercado Pago e libera o Pro.
+ * Orça Fácil — Cloudflare Worker que recebe os avisos (webhooks) do Mercado Pago e libera o Pro.
  *
  * Fluxo: Mercado Pago avisa "pagamento X" → o Worker confirma o pagamento na API do Mercado Pago
  * (nunca confia só no aviso) → acha o usuário pelo e-mail do pagador → grava plano "pro" e "planoAte".
@@ -122,7 +122,7 @@ async function mp(env, caminho) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (request.method === "GET") return new Response("Orça Já — webhook de pagamentos ativo", { status: 200 });
+    if (request.method === "GET") return new Response("Orça Fácil — webhook de pagamentos ativo", { status: 200 });
     if (request.method !== "POST") return new Response("método não permitido", { status: 405 });
     if (env.WEBHOOK_SEGREDO && url.searchParams.get("s") !== env.WEBHOOK_SEGREDO) {
       return new Response("não autorizado", { status: 401 });

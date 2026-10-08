@@ -148,7 +148,7 @@ export default function OrcamentoPDF({ dados, siteUrl }: Props) {
         ) : null}
 
         <Text style={estilos.rodape} fixed>
-          Feito com Orça Já — crie o seu grátis em {siteUrl.replace(/^https?:\/\//, "")}
+          Feito com Orça Fácil — crie o seu grátis em {siteUrl.replace(/^https?:\/\//, "")}
         </Text>
       </Page>
     </Document>
