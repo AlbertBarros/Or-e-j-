@@ -5,7 +5,7 @@ import Campo from "@/componentes/Campo";
 import Carregando from "@/componentes/Carregando";
 import { useAuth } from "@/hooks/useAuth";
 import { sair } from "@/lib/auth";
-import { atualizarPerfil, atualizarDadosRecibo, buscarLogo, salvarLogo, mesAtual } from "@/lib/usuario";
+import { atualizarPerfil, atualizarPerfilV2, atualizarDadosRecibo, buscarLogo, salvarLogo, mesAtual } from "@/lib/usuario";
 import { comprimirLogo } from "@/lib/logo";
 import { LIMITE_FREE } from "@/lib/firebase";
 import { registrarEvento } from "@/lib/eventos";
@@ -27,6 +27,9 @@ export default function Conta() {
   const [nomeResponsavel, setNomeResponsavel] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [cidade, setCidade] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [site, setSite] = useState("");
   const [chavePix, setChavePix] = useState("");
   const [tipoManual, setTipoManual] = useState<TipoChavePix | null>(null);
   const [nomePix, setNomePix] = useState("");
@@ -52,6 +55,9 @@ export default function Conta() {
     setNomeResponsavel(perfil.nomeResponsavel);
     setWhatsapp(formatarWhatsapp(perfil.whatsapp));
     setCidade(perfil.cidade);
+    setDescricao(perfil.descricao ?? "");
+    setInstagram(perfil.instagram ?? "");
+    setSite(perfil.site ?? "");
     setChavePix(perfil.chavePix);
     setTipoManual(perfil.tipoChavePix);
     setNomePix(perfil.nomePix);
@@ -92,6 +98,7 @@ export default function Conta() {
     setErroGeral(null);
     try {
       await atualizarPerfil(uid!, { nomeNegocio, nomeResponsavel, whatsapp, cidade });
+      await atualizarPerfilV2(uid!, { descricao, instagram, site });
       setAviso("Dados do negócio salvos");
     } catch (err) {
       console.error(err);
@@ -253,6 +260,11 @@ export default function Conta() {
         <Campo id="c-nomeResponsavel" rotulo="Seu nome" value={nomeResponsavel} onChange={(e) => setNomeResponsavel(e.target.value)} erro={erros.nomeResponsavel} />
         <Campo id="c-whatsapp" rotulo="Seu WhatsApp" type="tel" inputMode="tel" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} erro={erros.whatsapp} />
         <Campo id="c-cidade" rotulo="Cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} erro={erros.cidade} />
+        <Campo id="c-descricao" rotulo="Frase do negócio (opcional)" placeholder="Ex.: Instalações elétricas residenciais com garantia" maxLength={120} value={descricao} onChange={(e) => setDescricao(e.target.value)} ajuda="Aparece no cartão de visita e nos cards." />
+        <div className="grid grid-cols-2 gap-3">
+          <Campo id="c-instagram" rotulo="Instagram (opcional)" placeholder="@seuperfil" value={instagram} onChange={(e) => setInstagram(e.target.value)} />
+          <Campo id="c-site" rotulo="Site (opcional)" placeholder="seusite.com.br" inputMode="url" value={site} onChange={(e) => setSite(e.target.value)} />
+        </div>
         <button type="submit" className="botao-secundario" disabled={salvando !== null}>
           {salvando === "negocio" ? "Salvando…" : "Salvar dados do negócio"}
         </button>

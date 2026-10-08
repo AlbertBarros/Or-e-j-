@@ -98,3 +98,24 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 - [x] Página de termos de uso e privacidade (LGPD) no site, com links no app (Entrar e Conta) — revisar com advogado antes do lançamento oficial
 
 **Pronto quando:** um usuário real, de fora, consegue se cadastrar pelo Google, enviar, receber aprovação, cobrar e assinar o Pro sem ajuda.
+
+---
+
+## V2 (7 out 2026) — navegação por abas, clientes, contratos, catálogo e cartão
+
+Pedido do Jonathan após o MVP: sistema mais elegante e interativo, painel com gráficos, cadastro completo no
+primeiro acesso (empresa, endereço, contato, logo, produtos e serviços), contrato sugerido ao aprovar com
+assinatura simples pelo link, aba de contratos assinados com busca, banco de clientes com mensagem em fila,
+cartão de visita virtual (3 modelos) e cards em imagem (3 modelos).
+
+- [x] Barra de abas (Início, Orçamentos, Clientes, Contratos, Mais) e visual novo (`cartao`, `chip`, animações)
+- [x] Início: resumo financeiro, gráficos SVG (barras mensais + rosca de aprovação), pendências e atalhos
+- [x] Onboarding em 6 passos (endereço, logo e catálogo puláveis) — `Comecar.tsx`
+- [x] Catálogo `users/{uid}/catalogo` com sugestões da profissão; "+ Do catálogo" no orçamento
+- [x] Clientes `clientes/{uid}_{whats}`: automático a partir dos orçamentos, busca, filtros, ficha, seleção múltipla
+- [x] Mensagem em fila (uma conversa por vez; WhatsApp não permite envio em massa por site), com card anexo
+- [x] Contratos `contratos/{id}`: texto de 10 cláusulas (`shared/src/contrato.ts`), edição, envio, página pública `/c/:id`
+      com assinatura desenhada (assinatura eletrônica simples, MP 2.200-2/2001), PDF com assinatura, aba com busca
+- [x] Cartão virtual `cartoes/{uid}` público em `/v/:uid` (3 modelos) e cards PNG gerados no navegador (3 modelos)
+- [x] Prévia Open Graph para /c/ e /v/ (Pages Functions)
+- [ ] Depois: recibo avulso, cancelamento automático da assinatura Pro, depoimentos reais

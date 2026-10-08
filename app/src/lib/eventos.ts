@@ -13,7 +13,9 @@ export type NomeEvento =
   | "orcamento_pago"
   | "recibo_emitido"
   | "limite_free_atingido"
-  | "clique_assinar_pro";
+  | "clique_assinar_pro"
+  | "contrato_gerado"
+  | "contrato_enviado";
 
 export function registrarEvento(nome: NomeEvento, dados: { uid?: string; orcamentoId?: string; origem?: string } = {}): void {
   addDoc(collection(db, "eventos"), {

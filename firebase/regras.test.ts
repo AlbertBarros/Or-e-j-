@@ -153,6 +153,34 @@ describe("orcamentos", () => {
   });
 });
 
+describe("catálogo, clientes, contratos e cartões (V2)", () => {
+  it("catálogo: só o dono lê e escreve", async () => {
+    await assertSucceeds(setDoc(doc(como(A), "users", A, "catalogo", "i1"), { nome: "Tomada", preco: 60 }));
+    await assertFails(setDoc(doc(como(B), "users", A, "catalogo", "i2"), { nome: "X" }));
+    await assertFails(getDocs(collection(como(B), "users", A, "catalogo")));
+  });
+  it("clientes: só o dono; ninguém lê os de outro", async () => {
+    await assertSucceeds(setDoc(doc(como(A), "clientes", A + "_5561999990000"), { ownerId: A, nome: "Maria", whatsapp: "5561999990000" }));
+    await assertFails(setDoc(doc(como(B), "clientes", B + "_x"), { ownerId: A, nome: "Falso", whatsapp: "1" }));
+    await assertFails(getDoc(doc(como(B), "clientes", A + "_5561999990000")));
+    await assertFails(getDoc(doc(anonimo(), "clientes", A + "_5561999990000")));
+  });
+  it("contratos: dono cria; link público lê um; cliente só assina contrato enviado", async () => {
+    await assertSucceeds(setDoc(doc(como(A), "contratos", "c1"), { ownerId: A, status: "enviado", numero: 1, texto: "..." }));
+    await assertSucceeds(getDoc(doc(anonimo(), "contratos", "c1")));
+    await assertFails(getDocs(collection(anonimo(), "contratos")));
+    await assertFails(updateDoc(doc(anonimo(), "contratos", "c1"), { texto: "alterado" }));
+    await assertFails(updateDoc(doc(anonimo(), "contratos", "c1"), { status: "cancelado", atualizadoEm: new Date() }));
+    await assertSucceeds(updateDoc(doc(anonimo(), "contratos", "c1"), { status: "assinado", assinatura: { nome: "Maria", imagem: "data:image/png;base64,AAA", agente: "x", assinadoEm: new Date() }, atualizadoEm: new Date() }));
+    await assertFails(updateDoc(doc(anonimo(), "contratos", "c1"), { status: "enviado", assinatura: {}, atualizadoEm: new Date() }));
+  });
+  it("cartões: leitura pública, escrita só do dono", async () => {
+    await assertSucceeds(setDoc(doc(como(A), "cartoes", A), { nome: "JS", modelo: 1 }));
+    await assertFails(setDoc(doc(como(B), "cartoes", A), { nome: "Falso" }));
+    await assertSucceeds(getDoc(doc(anonimo(), "cartoes", A)));
+  });
+});
+
 describe("eventos", () => {
   it("qualquer um cria evento sem dados pessoais; ninguém lê", async () => {
     await assertSucceeds(addDoc(collection(anonimo(), "eventos"), { nome: "orcamento_aprovado", orcamentoId: "x", origem: "publico", criadoEm: new Date() }));

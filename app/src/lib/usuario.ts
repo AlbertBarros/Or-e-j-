@@ -12,7 +12,7 @@ import {
   type DocumentData,
 } from "firebase/firestore";
 import { db } from "./firebase";
-import type { Usuario, TipoChavePix } from "@/tipos";
+import type { Usuario, TipoChavePix, PerfilV2, Endereco } from "@/tipos";
 import { normalizarChave } from "@shared/src/pix";
 import { normalizarWhatsapp } from "@shared/src/mensagens";
 
@@ -68,6 +68,12 @@ export interface DadosCadastro {
   nomePix: string;
   logoDataUrl?: string | null;
   email?: string | null;
+  // V2 (opcionais)
+  descricao?: string;
+  instagram?: string;
+  documento?: string;
+  endereco?: Endereco | null;
+  cadastroCompleto?: boolean;
 }
 
 /** Cria o perfil (plano free, numeração em 1) e, se houver, a logo, numa única gravação. */
@@ -83,6 +89,11 @@ export async function criarPerfil(uid: string, dados: DadosCadastro): Promise<vo
     chavePix: normalizarChave(dados.chavePix, dados.tipoChavePix),
     tipoChavePix: dados.tipoChavePix,
     temLogo: Boolean(dados.logoDataUrl),
+    ...(dados.descricao?.trim() ? { descricao: dados.descricao.trim() } : {}),
+    ...(dados.instagram?.trim() ? { instagram: dados.instagram.trim().replace(/^@/, "") } : {}),
+    ...(dados.documento?.trim() ? { documento: dados.documento.trim() } : {}),
+    ...(dados.endereco ? { endereco: dados.endereco } : {}),
+    ...(dados.cadastroCompleto ? { cadastroCompleto: true } : {}),
     plano: "free" as const,
     proximoNumero: 1,
     uso: { mes: mesAtual(), enviados: 0 },
@@ -139,4 +150,15 @@ export async function atualizarDadosRecibo(
     email: dados.email ? dados.email.toLowerCase() : deleteField(),
     endereco: dados.endereco ? dados.endereco : deleteField(),
   });
+}
+
+/** Campos da V2 do perfil (descrição, Instagram, site, modelo do cartão). Vazio remove. */
+export async function atualizarPerfilV2(uid: string, dados: Partial<PerfilV2>): Promise<void> {
+  const m: Record<string, unknown> = {};
+  if (dados.descricao !== undefined) m.descricao = dados.descricao.trim() || deleteField();
+  if (dados.instagram !== undefined) m.instagram = dados.instagram.trim().replace(/^@/, "") || deleteField();
+  if (dados.site !== undefined) m.site = dados.site.trim() || deleteField();
+  if (dados.modeloCartao !== undefined) m.modeloCartao = dados.modeloCartao;
+  if (dados.cadastroCompleto !== undefined) m.cadastroCompleto = dados.cadastroCompleto;
+  if (Object.keys(m).length) await updateDoc(doc(db, "users", uid), m);
 }

@@ -9,6 +9,8 @@ import DocumentoOrcamento from "@/componentes/DocumentoOrcamento";
 import Selo from "@/componentes/Selo";
 import { useAuth } from "@/hooks/useAuth";
 import { useOrcamento } from "@/hooks/useOrcamentos";
+import { useContratos } from "@/hooks/useDados";
+import { IconeContratos } from "@/componentes/Icones";
 import {
   desfazerPago,
   enviarOrcamento,
@@ -40,6 +42,8 @@ export default function DetalheOrcamento() {
   const { usuario, perfil } = useAuth();
   const navegar = useNavigate();
   const { orcamento, carregando, erro } = useOrcamento(id);
+  const { contratos } = useContratos(usuario?.uid);
+  const contratoDeste = contratos.find((c) => c.orcamentoId === id && c.status !== "cancelado");
   const [logo, setLogo] = useState<string | null>(null);
   const [confirmacao, setConfirmacao] = useState<"excluir" | "editar" | "desfazerPago" | null>(null);
   const [marcandoPago, setMarcandoPago] = useState(false);
@@ -195,6 +199,15 @@ export default function DetalheOrcamento() {
         <DocumentoOrcamento orcamento={orcamento} logoDataUrl={logo} />
       </div>
 
+      {(status === "aprovado" || status === "pago") && (
+        <Link to={contratoDeste ? `/contratos/${contratoDeste.id}` : `/contratos/novo?orcamento=${orcamento.id}`} className="cartao lista-item mt-3 !rounded-2xl border-dashed">
+          <span className="botao-icone !bg-[#E6F4EA] !text-pago"><IconeContratos tamanho={20} /></span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold">{contratoDeste ? `Contrato nº ${String(contratoDeste.numero).padStart(4, "0")} · ${contratoDeste.status === "assinado" ? "assinado" : contratoDeste.status === "enviado" ? "aguardando assinatura" : "rascunho"}` : "Sugestão: gerar contrato de prestação de serviço"}</span>
+            <span className="block text-sm text-grafite">{contratoDeste ? "Toque para ver, reenviar ou baixar o PDF." : "Já preenchido com os dados deste orçamento, para o cliente assinar pelo celular."}</span>
+          </span>
+        </Link>
+      )}
       {status === "pago" && orcamento.recibo && (
         <p className="mt-3 text-center text-sm text-grafite">
           Recibo nº {String(orcamento.recibo.numero).padStart(4, "0")} emitido.

@@ -1,8 +1,18 @@
+import { lazy, Suspense } from "react";
+import Carregando from "@/componentes/Carregando";
 import PaginaPublica from "./PaginaPublica";
 
-/** Entrada da área pública (/o/:id): sem roteador, sem Auth, chunk separado e leve. */
+const PaginaContrato = lazy(() => import("./PaginaContrato"));
+const PaginaCartao = lazy(() => import("./PaginaCartao"));
+
+/** Entrada da área pública (/o/:id orçamento, /c/:id contrato, /v/:uid cartão): sem roteador, sem Auth. */
 export default function AppPublico() {
-  const partes = window.location.pathname.split("/").filter(Boolean); // ["o", "{id}"]
+  const partes = window.location.pathname.split("/").filter(Boolean);
+  const tipo = partes[0];
   const id = partes[1] ?? "";
-  return <PaginaPublica id={id} />;
+  return (
+    <Suspense fallback={<Carregando />}>
+      {tipo === "c" ? <PaginaContrato id={id} /> : tipo === "v" ? <PaginaCartao uid={id} /> : <PaginaPublica id={id} />}
+    </Suspense>
+  );
 }

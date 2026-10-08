@@ -3,7 +3,14 @@
  * Gera as cláusulas já preenchidas a partir do orçamento aprovado. É uma SUGESTÃO de modelo:
  * o profissional pode editar antes de enviar e deve revisar com um advogado para o seu caso.
  */
-import { formatarReais, formatarData, formatarWhatsapp, type Item } from "./mensagens";
+import { formatarReais, formatarData, formatarWhatsapp } from "./mensagens";
+
+interface ItemContrato {
+  descricao: string;
+  qtd: number;
+  unidade: string;
+  valorUnit: number;
+}
 import { valorPorExtenso } from "./extenso";
 
 export interface DadosContrato {
@@ -11,7 +18,7 @@ export interface DadosContrato {
   orcamentoNumero: number;
   contratante: { nome: string; whatsapp: string; documento?: string; endereco?: string };
   contratado: { nome: string; responsavel: string; whatsapp: string; documento?: string; endereco?: string; cidade: string };
-  objeto: Item[];
+  objeto: ItemContrato[];
   valor: number;
   formaPagamento: string;
   prazoExecucao: string;

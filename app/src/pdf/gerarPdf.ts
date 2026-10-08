@@ -6,7 +6,8 @@ import { createElement, type ReactElement } from "react";
 import { pdf, type DocumentProps } from "@react-pdf/renderer";
 import OrcamentoPDF from "./OrcamentoPDF";
 import ReciboPDF from "./ReciboPDF";
-import type { Orcamento, Recibo } from "@/tipos";
+import ContratoPDF from "./ContratoPDF";
+import type { Contrato, Orcamento, Recibo } from "@/tipos";
 
 const SITE = "orca-ja-6cz.pages.dev";
 
@@ -52,6 +53,14 @@ export async function gerarPdfRecibo(orcamento: Orcamento, recibo: Recibo, logo?
   const el = createElement(ReciboPDF, { orcamento, recibo, logoPng }) as unknown as ReactElement<DocumentProps>;
   const blob = await pdf(el).toBlob();
   return new File([blob], nomeArquivo("recibo", recibo.numero, orcamento.cliente.nome), { type: "application/pdf" });
+}
+
+export async function gerarPdfContrato(contrato: Contrato, logo?: string | null): Promise<File> {
+  const logoPng = await logoParaPng(logo);
+  const assinaturaPng = contrato.assinatura ? await logoParaPng(contrato.assinatura.imagem) : null;
+  const el = createElement(ContratoPDF, { contrato, logoPng, assinaturaPng }) as unknown as ReactElement<DocumentProps>;
+  const blob = await pdf(el).toBlob();
+  return new File([blob], nomeArquivo("contrato", contrato.numero, contrato.contratante.nome), { type: "application/pdf" });
 }
 
 export function baixarArquivo(arquivo: File): void {

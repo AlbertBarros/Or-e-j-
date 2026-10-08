@@ -62,6 +62,7 @@ O `app/` e o `site/` importam de `shared/` por caminho relativo ou alias `@share
 
 - `users/{uid}`: perfil do negócio (nomeNegocio, nomeResponsavel, nomePix, whatsapp, cidade), chave Pix (normalizada), `temLogo`, `plano` ("free"|"pro", só o servidor altera), `proximoNumero`, `uso: { mes: "AAAA-MM", enviados: number }`.
 - `logos/{uid}`: `dataUrl` da logo (≤ 100 KB, `data:image/*`), leitura pública, escrita só do dono.
+- V2: `users/{uid}/catalogo/{id}` (produtos e serviços), `clientes/{uid}_{whats}` (só dono), `contratos/{id}` (get público; cliente só assina enviado→assinado), `cartoes/{uid}` (público). Páginas públicas: `/o/`, `/c/`, `/v/` (pacote separado em `app/src/publico`). Navegação por abas (`BarraAbas`).
 - `eventos/{id}`: métricas (nome, uid?, orcamentoId?, origem, criadoEm), só criação. `leads/{id}`: lista de espera do site, só criação.
 - Recibo (Pro) fica dentro do orçamento em `recibo` (numeração própria em `users.proximoRecibo`). Pro com `planoAte` vencido é tratado como grátis (`comPlanoEfetivo`).
 - `orcamentos/{id}`: `ownerId`, `numero`, `cliente {nome, whatsapp}`, `itens[]`, `desconto`, `total`, `validadeAte`, `vencimentoPagamento`, `observacoes`, `status`, timestamps e **snapshot `negocio`** (nome, nomePix, whatsapp, chavePix, cidade, mostrarMarca, mostrarLogo, mostrarPix) para a página pública não ler `users/`. Pix na página de aprovação só no Pro.

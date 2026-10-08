@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import CabecalhoPagina from "@/componentes/CabecalhoPagina";
 import Campo from "@/componentes/Campo";
 import Carregando from "@/componentes/Carregando";
@@ -9,6 +9,8 @@ import { atualizarOrcamento, buscarOrcamento, clientesDistintos, criarOrcamento 
 import { registrarEvento } from "@/lib/eventos";
 import { lerRascunhoImportado, limparRascunhoImportado } from "@/lib/rascunhoImportado";
 import { itensSugeridos, observacoesPadrao, validadeDiasPadrao } from "@/lib/profissoes";
+import { useCatalogo, useClientes } from "@/hooks/useDados";
+import { garantirCliente } from "@/lib/clientes";
 import { validarNome, validarWhatsapp } from "@/lib/validacao";
 import { dataParaInput, inputParaData, paraDate } from "@/lib/datas";
 import type { Orcamento } from "@/tipos";
@@ -30,6 +32,10 @@ export default function NovoOrcamento() {
   const { usuario, perfil } = useAuth();
   const navegar = useNavigate();
   const { orcamentos: recentes } = useOrcamentos(usuario?.uid, "todos");
+  const { itens: catalogo } = useCatalogo(usuario?.uid);
+  const { clientes: fichas } = useClientes(usuario?.uid);
+  const [params] = useSearchParams();
+  const clienteParam = params.get("cliente");
 
   // Rascunho vindo do site: lido uma única vez (o efeito abaixo roda duas vezes no modo estrito do React)
   const importadoRef = useRef(editando ? null : lerRascunhoImportado());
@@ -50,7 +56,20 @@ export default function NovoOrcamento() {
   const [salvando, setSalvando] = useState(false);
 
   const slug = perfil?.profissao ?? "outra";
-  const sugeridos = itensSugeridos(slug);
+  // "Dos sugeridos" usa o catálogo do profissional; sem catálogo, as sugestões da profissão.
+  const doCatalogo = catalogo.filter((i) => i.ativo).map((i) => ({ descricao: i.nome, unidade: i.unidade, precoSugerido: i.preco }));
+  const sugeridos = doCatalogo.length > 0 ? doCatalogo : itensSugeridos(slug);
+  const rotuloSugeridos = doCatalogo.length > 0 ? "+ Do catálogo" : "+ Dos sugeridos";
+
+  // Veio da ficha do cliente (?cliente=id): preenche nome e WhatsApp.
+  useEffect(() => {
+    if (!clienteParam || editando) return;
+    const f = fichas.find((c) => c.id === clienteParam);
+    if (f) {
+      setClienteNome(f.nome);
+      setClienteWhats(formatarWhatsapp(f.whatsapp));
+    }
+  }, [clienteParam, fichas, editando]);
   const clientes = useMemo(() => clientesDistintos(recentes), [recentes]);
 
   function novoItem(parcial?: Partial<ItemEmEdicao>): ItemEmEdicao {
@@ -185,9 +204,11 @@ export default function NovoOrcamento() {
     try {
       if (existente) {
         await atualizarOrcamento(existente, dados);
+        void garantirCliente(usuario.uid, clienteNome, clienteWhats);
         navegar(`/orcamentos/${existente.id}`, { replace: true });
       } else {
         const novoId = await criarOrcamento(usuario.uid, perfil, dados);
+        void garantirCliente(usuario.uid, clienteNome, clienteWhats);
         registrarEvento("orcamento_criado", { uid: usuario.uid, orcamentoId: novoId, origem: importadoRef.current ? "site" : "app" });
         limparRascunhoImportado();
         navegar(`/orcamentos/${novoId}`, { replace: true });
@@ -309,7 +330,7 @@ export default function NovoOrcamento() {
                 aria-expanded={mostrarSugeridos}
                 aria-controls="sugeridos"
               >
-                + Dos sugeridos
+                {rotuloSugeridos}
               </button>
             )}
           </div>
@@ -322,7 +343,7 @@ export default function NovoOrcamento() {
                     onClick={() => {
                       setItens((l) => {
                         const semVazios = l.filter((i) => i.descricao.trim() || i.valorUnit.trim());
-                        return [...semVazios, novoItem({ descricao: s.descricao, unidade: s.unidade, valorUnit: paraTexto(s.precoSugerido) })];
+                        return [...semVazios, novoItem({ descricao: s.descricao, unidade: s.unidade, valorUnit: s.precoSugerido > 0 ? paraTexto(s.precoSugerido) : "" })];
                       });
                       setMostrarSugeridos(false);
                     }}
@@ -330,7 +351,7 @@ export default function NovoOrcamento() {
                   >
                     <span>{s.descricao}</span>
                     <span className="tabular shrink-0 text-sm text-grafite">
-                      {formatarReais(s.precoSugerido)}/{s.unidade}
+                      {s.precoSugerido > 0 ? `${formatarReais(s.precoSugerido)}/${s.unidade}` : "a combinar"}
                     </span>
                   </button>
                 </li>

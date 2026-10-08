@@ -4,7 +4,7 @@
  */
 import { initializeApp } from "firebase/app";
 import { connectFirestoreEmulator, doc, getDoc, getFirestore, serverTimestamp, updateDoc } from "firebase/firestore/lite";
-import type { Orcamento } from "@/tipos";
+import type { CartaoVirtual, Contrato, Orcamento } from "@/tipos";
 
 const app = initializeApp(
   {
@@ -33,4 +33,23 @@ export async function buscarLogoPublica(uid: string): Promise<string | null> {
 /** O cliente só pode mudar status de "enviado" para "aprovado"/"recusado" + respondidoEm (regras). */
 export async function responderOrcamento(id: string, resposta: "aprovado" | "recusado"): Promise<void> {
   await updateDoc(doc(db, "orcamentos", id), { status: resposta, respondidoEm: serverTimestamp() });
+}
+
+export async function buscarContratoPublico(id: string): Promise<Contrato | null> {
+  const snap = await getDoc(doc(db, "contratos", id));
+  return snap.exists() ? ({ id: snap.id, ...(snap.data() as Omit<Contrato, "id">) } as Contrato) : null;
+}
+
+/** O cliente só pode mudar status "enviado" → "assinado" com a assinatura (regras). */
+export async function assinarContrato(id: string, assinatura: { nome: string; imagem: string; agente: string }): Promise<void> {
+  await updateDoc(doc(db, "contratos", id), {
+    status: "assinado",
+    assinatura: { ...assinatura, assinadoEm: serverTimestamp() },
+    atualizadoEm: serverTimestamp(),
+  });
+}
+
+export async function buscarCartaoPublico(uid: string): Promise<CartaoVirtual | null> {
+  const snap = await getDoc(doc(db, "cartoes", uid));
+  return snap.exists() ? (snap.data() as CartaoVirtual) : null;
 }

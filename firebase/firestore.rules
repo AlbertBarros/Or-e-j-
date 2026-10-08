@@ -22,7 +22,9 @@ service cloud.firestore {
 
     // Banco de clientes: só o dono lê e escreve os seus.
     match /clientes/{id} {
-      allow read: if logado() && resource.data.ownerId == request.auth.uid;
+      // get de documento inexistente devolve "não existe" (resource == null) em vez de erro
+      allow get: if logado() && (resource == null || resource.data.ownerId == request.auth.uid);
+      allow list: if logado() && resource.data.ownerId == request.auth.uid;
       allow create: if logado() && request.resource.data.ownerId == request.auth.uid;
       allow update, delete: if logado() && resource.data.ownerId == request.auth.uid
         && request.resource.data.ownerId == resource.data.ownerId;
