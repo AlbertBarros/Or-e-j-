@@ -27,7 +27,7 @@ export default function Selo({ orcamento }: { orcamento: Orcamento }) {
         classes = "bg-[#E6F4EA] text-pago";
         break;
       case "pago":
-        rotulo = "Pago";
+        rotulo = orcamento.avulso ? "Recibo avulso" : "Pago";
         classes = "bg-pago text-white";
         break;
       case "recusado":

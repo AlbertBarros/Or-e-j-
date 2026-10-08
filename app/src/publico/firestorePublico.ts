@@ -30,9 +30,22 @@ export async function buscarLogoPublica(uid: string): Promise<string | null> {
   return snap.exists() ? ((snap.data() as { dataUrl?: string }).dataUrl ?? null) : null;
 }
 
+/**
+ * Pede ao servidor para avisar o profissional no celular (Web Push). O servidor confere no banco antes de avisar;
+ * se falhar, a rotina de hora em hora reenvia. Nunca atrapalha o cliente.
+ */
+function pedirAviso(tipo: "orcamento" | "contrato", id: string): void {
+  try {
+    void fetch("/api/avisar", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ tipo, id }), keepalive: true }).catch(() => undefined);
+  } catch {
+    /* sem rede ou sem suporte: a rotina cuida */
+  }
+}
+
 /** O cliente só pode mudar status de "enviado" para "aprovado"/"recusado" + respondidoEm (regras). */
 export async function responderOrcamento(id: string, resposta: "aprovado" | "recusado"): Promise<void> {
   await updateDoc(doc(db, "orcamentos", id), { status: resposta, respondidoEm: serverTimestamp() });
+  pedirAviso("orcamento", id);
 }
 
 export async function buscarContratoPublico(id: string): Promise<Contrato | null> {
@@ -47,6 +60,7 @@ export async function assinarContrato(id: string, assinatura: { nome: string; im
     assinatura: { ...assinatura, assinadoEm: serverTimestamp() },
     atualizadoEm: serverTimestamp(),
   });
+  pedirAviso("contrato", id);
 }
 
 export async function buscarCartaoPublico(uid: string): Promise<CartaoVirtual | null> {

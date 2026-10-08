@@ -297,7 +297,7 @@ export default function NovoOrcamento() {
       <CabecalhoPagina titulo={editando ? `Editar orçamento${existente ? ` nº ${String(existente.numero).padStart(4, "0")}` : ""}` : "Novo orçamento"} voltarPara={existente ? `/orcamentos/${existente.id}` : "/"} />
 
       <form id="form-orcamento" onSubmit={salvar} noValidate className="mt-4 space-y-6">
-        <section className="documento p-4" aria-labelledby="sec-cliente">
+        <section className="documento p-4" aria-labelledby="sec-cliente" data-tour="orc-cliente">
           <h2 id="sec-cliente" className="text-sm font-semibold uppercase tracking-wide text-grafite">
             Cliente
           </h2>
@@ -331,7 +331,7 @@ export default function NovoOrcamento() {
           </div>
         </section>
 
-        <section className="documento overflow-hidden" aria-labelledby="sec-itens">
+        <section className="documento overflow-hidden" aria-labelledby="sec-itens" data-tour="orc-itens">
           <h2 id="sec-itens" className="px-4 pt-4 text-sm font-semibold uppercase tracking-wide text-grafite">
             Itens
           </h2>
@@ -462,7 +462,7 @@ export default function NovoOrcamento() {
           </div>
         </section>
 
-        <section className="documento space-y-3 p-4" aria-labelledby="sec-pag">
+        <section className="documento space-y-3 p-4" aria-labelledby="sec-pag" data-tour="orc-pagamento">
           <div className="flex items-center justify-between">
             <h2 id="sec-pag" className="text-sm font-semibold uppercase tracking-wide text-grafite">
               Formas de pagamento
@@ -498,7 +498,7 @@ export default function NovoOrcamento() {
           <Campo id="obsPag" rotulo="Condição (opcional)" placeholder="Ex.: 50% na aprovação e 50% na entrega" value={obsPagamento} onChange={(e) => setObsPagamento(e.target.value)} maxLength={120} />
         </section>
 
-        <section className="documento p-4" aria-labelledby="sec-frete">
+        <section className="documento p-4" aria-labelledby="sec-frete" data-tour="orc-frete">
           <div className="flex items-center justify-between">
             <h2 id="sec-frete" className="text-sm font-semibold uppercase tracking-wide text-grafite">
               Frete / deslocamento
@@ -542,7 +542,7 @@ export default function NovoOrcamento() {
       </form>
 
       {/* Barra de total fixa no rodapé (DESIGN.md) */}
-      <div className="fixed inset-x-0 bottom-0 barra-fixa border-t-2 border-double border-tinta p-4">
+      <div className="fixed inset-x-0 bottom-0 barra-fixa border-t-2 border-double border-tinta p-4" data-tour="orc-salvar">
         <div className="mx-auto max-w-[560px]">
           {(valorDesconto > 0 || freteValor > 0) && (
             <div className="flex items-baseline justify-between text-sm text-grafite">

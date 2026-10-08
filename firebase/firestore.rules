@@ -1,5 +1,5 @@
 rules_version = '2';
-// Orça Já — regras do Firestore (MVP)
+// Preço Fechado — regras do Firestore
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -7,12 +7,70 @@ service cloud.firestore {
     function dono(uid) { return logado() && request.auth.uid == uid; }
     function mudou() { return request.resource.data.diff(resource.data).affectedKeys(); }
 
-    // Perfil do profissional. "plano" só pode ser alterado pelo servidor (Admin SDK / webhook).
+    // Teste grátis do Pro: 14 dias, uma única vez por conta. planoAte == testeProAte; folga de 1 dia para relógio errado no celular.
+    function testeProValido(d) {
+      return d.plano == "pro"
+        && d.planoAte is timestamp
+        && d.testeProAte == d.planoAte
+        && d.planoAte > request.time
+        && d.planoAte <= request.time + duration.value(15 * 24 * 60, "m");
+    }
+
+    // Perfil do profissional. "plano" e "planoAte" só o servidor altera (webhook / script),
+    // com uma exceção: ligar o teste de 14 dias do Pro, uma vez.
     match /users/{uid} {
       allow read: if dono(uid);
-      allow create: if dono(uid) && request.resource.data.plano == "free";
-      allow update: if dono(uid) && !mudou().hasAny(["plano", "planoAte"]);
+      allow create: if dono(uid)
+        && (request.resource.data.plano == "free" || testeProValido(request.resource.data));
+      allow update: if dono(uid) && (
+        !mudou().hasAny(["plano", "planoAte", "testeProAte", "assinatura"])
+        ||
+        (!("testeProAte" in resource.data)
+          && (resource.data.plano == "free" || !("planoAte" in resource.data) || resource.data.planoAte < request.time)
+          && mudou().hasOnly(["plano", "planoAte", "testeProAte"])
+          && testeProValido(request.resource.data))
+      );
       allow delete: if false;
+    }
+
+    // Aparelhos inscritos para receber avisos (Web Push). O id é o hash do endereço do aparelho.
+    match /push/{id} {
+      allow get: if logado() && (resource == null || resource.data.ownerId == request.auth.uid);
+      allow list: if logado() && resource.data.ownerId == request.auth.uid;
+      allow create, update: if logado()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.keys().hasOnly(["ownerId", "endpoint", "chaves", "aparelho", "criadoEm"])
+        && request.resource.data.endpoint is string
+        && request.resource.data.endpoint.size() < 1000
+        && request.resource.data.endpoint.matches("https://.*");
+      allow delete: if logado() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Mensagens para o suporte: o profissional só cria; quem lê é o dono do sistema, no console.
+    match /suporte/{id} {
+      allow create: if logado()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(["uid", "nome", "negocio", "email", "whatsapp", "assunto", "mensagem", "aparelho", "criadoEm"])
+        && request.resource.data.mensagem is string
+        && request.resource.data.mensagem.size() > 0
+        && request.resource.data.mensagem.size() < 3000;
+      allow read, update, delete: if false;
+    }
+
+    // Depoimentos: o profissional escreve o seu (sempre como não publicado); o dono do sistema publica no console.
+    // O site lê só os publicados.
+    match /depoimentos/{uid} {
+      allow read: if resource.data.publicado == true || dono(uid);
+      allow create, update: if dono(uid)
+        && request.resource.data.publicado == false
+        && request.resource.data.keys().hasOnly(["nome", "negocio", "profissao", "cidade", "nota", "texto", "publicado", "criadoEm", "atualizadoEm"])
+        && request.resource.data.texto is string
+        && request.resource.data.texto.size() >= 10
+        && request.resource.data.texto.size() <= 600
+        && request.resource.data.nota is int
+        && request.resource.data.nota >= 1
+        && request.resource.data.nota <= 5;
+      allow delete: if dono(uid);
     }
 
     // Catálogo de produtos e serviços: só o dono.

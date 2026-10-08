@@ -57,7 +57,7 @@ export default function ReciboPDF({ orcamento: o, recibo: r, logoPng }: Props) {
           <Text style={estilos.destaque}>
             Recebi de <Text style={{ fontFamily: "Helvetica-Bold" }}>{o.cliente.nome}</Text> a importância de{" "}
             <Text style={{ fontFamily: "Helvetica-Bold" }}>{formatarReais(o.total)}</Text> ({valorPorExtenso(o.total)}), referente a{" "}
-            {descricao}, conforme o orçamento nº {String(o.numero).padStart(4, "0")}.
+            {descricao}{o.avulso ? "." : `, conforme o orçamento nº ${String(o.numero).padStart(4, "0")}.`}
           </Text>
         </View>
 

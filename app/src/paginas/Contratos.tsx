@@ -48,7 +48,7 @@ export default function Contratos() {
     <main className="pb-abas mx-auto w-full max-w-[560px] px-4">
       <CabecalhoAba titulo="Contratos" subtitulo={contratos.length ? `${assinados} assinado(s) · ${contratos.length - assinados} em andamento` : undefined} />
 
-      <div className="mt-4">
+      <div className="mt-4" data-tour="contratos-busca">
         <Busca valor={busca} aoMudar={setBusca} placeholder="Buscar por cliente, telefone ou número" rotulo="Buscar contratos" />
       </div>
       <div className="mt-3 flex gap-2" role="tablist">

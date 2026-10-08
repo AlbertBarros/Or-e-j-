@@ -84,7 +84,7 @@ export default function Clientes() {
         }
       />
 
-      <div className="mt-4">
+      <div className="mt-4" data-tour="clientes-busca">
         <Busca valor={busca} aoMudar={setBusca} placeholder="Buscar por nome ou telefone" rotulo="Buscar clientes" />
       </div>
       <nav aria-label="Filtrar clientes" className="-mx-4 mt-3 overflow-x-auto px-4">

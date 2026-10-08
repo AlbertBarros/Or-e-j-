@@ -47,7 +47,7 @@ export default function Orcamentos() {
         <Busca valor={busca} aoMudar={setBusca} placeholder="Buscar por cliente, telefone ou número" rotulo="Buscar orçamentos" />
       </div>
 
-      <nav aria-label="Filtrar por status" className="-mx-4 mt-3 overflow-x-auto px-4">
+      <nav aria-label="Filtrar por status" className="-mx-4 mt-3 overflow-x-auto px-4" data-tour="orc-filtros">
         <div className="flex gap-2 pb-1" role="tablist">
           {FILTROS.map((f) => (
             <button key={f} type="button" role="tab" aria-selected={filtro === f} onClick={() => setFiltro(f)} className={`chip shrink-0 ${filtro === f ? "chip-ativo" : "hover:border-carbono"}`}>

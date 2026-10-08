@@ -20,6 +20,9 @@ import Catalogo from "@/paginas/Catalogo";
 import Cartao from "@/paginas/Cartao";
 import Mais from "@/paginas/Mais";
 import Conta from "@/paginas/Conta";
+import Ajuda from "@/paginas/Ajuda";
+import NovoRecibo from "@/paginas/NovoRecibo";
+import { ProvedorTour } from "@/tour/Tour";
 import NaoEncontrada from "@/paginas/NaoEncontrada";
 import { capturarRascunhoDaUrl } from "@/lib/rascunhoImportado";
 
@@ -32,6 +35,7 @@ export default function App() {
   return (
     <ProvedorAuth>
       <BrowserRouter>
+        <ProvedorTour>
         <Routes>
           <Route path="/entrar" element={<SoDeslogado><Entrar /></SoDeslogado>} />
           <Route path="/comecar" element={<ExigeLoginSemPerfil><Comecar /></ExigeLoginSemPerfil>} />
@@ -62,10 +66,15 @@ export default function App() {
           <Route path="/catalogo" element={<P><Catalogo /></P>} />
           <Route path="/cartao" element={<P><Cartao /></P>} />
           <Route path="/conta" element={<P><Conta /></P>} />
+          <Route path="/ajuda" element={<P><Ajuda /></P>} />
+
+          {/* Recibo avulso (sem orçamento) */}
+          <Route path="/recibos/novo" element={<P><NovoRecibo /></P>} />
 
           {/* /o/:id, /c/:id e /v/:uid (páginas públicas) são um pacote separado, decidido em main.tsx */}
           <Route path="*" element={<NaoEncontrada />} />
         </Routes>
+        </ProvedorTour>
       </BrowserRouter>
     </ProvedorAuth>
   );

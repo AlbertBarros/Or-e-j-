@@ -36,6 +36,12 @@ export interface Usuario extends PerfilV2 {
   temLogo: boolean; // a imagem fica em logos/{uid}
   plano: Plano;
   planoAte?: Timestamp;
+  /** Fim do teste grátis de 14 dias do Pro (igual a planoAte enquanto o teste está valendo). Só existe uma vez. */
+  testeProAte?: Timestamp;
+  /** Situação da assinatura no Mercado Pago (gravada pelo servidor). */
+  assinatura?: { status: "ativa" | "cancelada" | "pausada"; atualizadoEm?: Timestamp };
+  /** Tour guiado: quando foi oferecido e quando foi concluído. */
+  tutorial?: { oferecidoEm?: Timestamp; concluidoEm?: Timestamp };
   proximoNumero: number; // começa em 1
   uso: { mes: string; enviados: number }; // mes = "AAAA-MM"
   criadoEm: Timestamp;
@@ -106,6 +112,8 @@ export interface Orcamento {
   respondidoEm?: Timestamp;
   pagoEm?: Timestamp;
   recibo?: Recibo;
+  /** Recibo avulso: criado direto como pago, sem orçamento enviado ao cliente. */
+  avulso?: boolean;
 }
 
 // ---------------------------------------------------------------------------

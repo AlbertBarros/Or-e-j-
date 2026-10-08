@@ -6,11 +6,15 @@ import InstalarApp from "@/componentes/InstalarApp";
 import Selo from "@/componentes/Selo";
 import { BarrasMensais, Rosca } from "@/componentes/Graficos";
 import Sino from "@/componentes/Sino";
+import BotaoAjuda from "@/componentes/BotaoAjuda";
+import OfertaTour from "@/componentes/OfertaTour";
+import AtivarAvisos from "@/componentes/AtivarAvisos";
+import AvisoPlano from "@/componentes/AvisoPlano";
 import { useNotificacoes } from "@/hooks/useNotificacoes";
 import { IconeAlerta, IconeCartao, IconeCatalogo, IconeClientes, IconeContratos, IconeMais1, IconeSeta } from "@/componentes/Icones";
 import { useAuth } from "@/hooks/useAuth";
 import { useCatalogo, useContratos, useTodosOrcamentos } from "@/hooks/useDados";
-import { buscarLogo } from "@/lib/usuario";
+import { buscarLogo, diasRestantesPro, emTestePro } from "@/lib/usuario";
 import { LIMITE_FREE } from "@/lib/firebase";
 import { porMes, totais } from "@/lib/estatisticas";
 import { diasDesde, paraDate, textoHaDias } from "@/lib/datas";
@@ -32,7 +36,7 @@ export default function Inicio() {
   const { orcamentos, carregando } = useTodosOrcamentos(uid);
   const { itens: catalogo, carregando: carregandoCatalogo } = useCatalogo(uid);
   const { contratos } = useContratos(uid);
-  const { notificacoes, naoVistas, marcarVistas } = useNotificacoes(orcamentos, contratos);
+  const { notificacoes, naoVistas, marcarVistas } = useNotificacoes(orcamentos, contratos, perfil);
 
   useEffect(() => {
     if (perfil && lerRascunhoImportado()) navegar("/orcamentos/novo", { replace: true });
@@ -51,31 +55,42 @@ export default function Inicio() {
 
   if (!perfil) return null;
   const pro = perfil.plano === "pro";
+  const teste = emTestePro(perfil);
   const recentes = orcamentos.slice(0, 4);
   const cadastroIncompleto = !carregandoCatalogo && catalogo.length === 0;
 
   return (
     <main className="pb-abas mx-auto w-full max-w-[560px] px-4">
       <header className="flex items-center gap-3 pt-5">
-        <Avatar nome={perfil.nomeNegocio} logo={logo} tamanho={52} />
+        <Avatar nome={perfil.nomeNegocio} logo={logo} tamanho={48} />
         <div className="min-w-0 flex-1">
-          <p className="text-sm text-grafite">
-            {saudacao()}, {primeiroNome(perfil.nomeResponsavel)}
+          <p className="flex min-w-0 items-center gap-2 text-sm text-grafite">
+            <span className="truncate">
+              {saudacao()}, {primeiroNome(perfil.nomeResponsavel)}
+            </span>
+            <Link
+              to="/conta#plano"
+              className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-bold leading-none ${pro ? "border-carbono/30 bg-carbono-claro text-carbono" : "border-pauta bg-white/70 text-grafite"}`}
+              aria-label={teste ? `Teste do Pro: faltam ${diasRestantesPro(perfil)} dias` : pro ? "Plano Pro" : `Plano grátis: ${perfil.uso.enviados} de ${LIMITE_FREE} orçamentos enviados`}
+            >
+              {pro ? (teste ? `PRO · ${diasRestantesPro(perfil)}d` : "PRO") : `${perfil.uso.enviados}/${LIMITE_FREE} grátis`}
+            </Link>
           </p>
           <h1 className="truncate text-xl font-bold leading-tight">{perfil.nomeNegocio}</h1>
         </div>
-        <Link to="/conta#plano" className={`chip ${pro ? "!border-carbono !bg-carbono-claro !text-carbono" : ""}`}>
-          {pro ? "PRO" : `${perfil.uso.enviados}/${LIMITE_FREE} grátis`}
-        </Link>
         <Sino notificacoes={notificacoes} naoVistas={naoVistas} aoAbrir={marcarVistas} />
+        <BotaoAjuda />
       </header>
 
+      {uid && <OfertaTour uid={uid} perfil={perfil} />}
+      <AvisoPlano perfil={perfil} />
+
       {/* Destaque: dinheiro */}
-      <section className="cartao-destaque surgir mt-5 p-5" aria-label="Resumo financeiro">
+      <section className="cartao-destaque surgir mt-5 p-5" aria-label="Resumo financeiro" data-tour="resumo">
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-xs font-medium uppercase tracking-wider text-white/70">A receber</p>
-            <p className="tabular mt-1 text-2xl font-bold">{formatarReais(t.valorAprovado - t.valorRecebido)}</p>
+            <p className="tabular mt-1 text-2xl font-bold">{formatarReais(t.aReceber)}</p>
             {t.atrasados > 0 && (
               <p className="mt-1 inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-xs font-medium">
                 <IconeAlerta tamanho={13} /> {t.atrasados} {t.atrasados === 1 ? "atrasado" : "atrasados"}
@@ -88,7 +103,7 @@ export default function Inicio() {
             <p className="mt-1 text-xs text-white/70">em {t.pagos} {t.pagos === 1 ? "orçamento pago" : "orçamentos pagos"}</p>
           </div>
         </div>
-        <Link to="/orcamentos/novo" className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-white font-semibold text-carbono hover:bg-carbono-claro">
+        <Link to="/orcamentos/novo" data-tour="novo-orcamento" className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-white font-semibold text-carbono hover:bg-carbono-claro">
           <IconeMais1 tamanho={20} /> Novo orçamento
         </Link>
       </section>
@@ -196,7 +211,8 @@ export default function Inicio() {
         </Link>
       </section>
 
-      <div className="mt-4">
+      <div className="mt-4 space-y-2">
+        {uid && <AtivarAvisos uid={uid} compacto />}
         <InstalarApp compacto />
       </div>
 
@@ -205,7 +221,7 @@ export default function Inicio() {
         <section className="mt-4" aria-labelledby="rec">
           <div className="flex items-baseline justify-between">
             <h2 id="rec" className="titulo-secao">Recentes</h2>
-            <Link to="/orcamentos" className="text-sm font-medium text-carbono">Ver todos</Link>
+            <Link to="/orcamentos" className="-my-2 inline-flex min-h-11 items-center px-2 text-sm font-medium text-carbono">Ver todos</Link>
           </div>
           <ul className="cartao mt-2 divide-y divide-pauta overflow-hidden">
             {recentes.map((o) => {

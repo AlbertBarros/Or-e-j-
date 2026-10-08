@@ -15,7 +15,8 @@
     "test": "npm run test --workspaces --if-present",
     "test:regras": "node firebase/testar-regras.cjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "build": "npm run build --workspaces --if-present"
+    "build": "npm run build --workspaces --if-present",
+    "test:avisos": "node servidor/testar-avisos.cjs"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^5.0.2",

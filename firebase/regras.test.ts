@@ -106,6 +106,58 @@ describe("users", () => {
   });
 });
 
+describe("teste grátis do Pro (14 dias)", () => {
+  const dias = (n: number) => new Date(Date.now() + n * 86_400_000);
+  it("cria o perfil já em teste de 14 dias, mas não com mais dias", async () => {
+    const ate = dias(14);
+    await assertSucceeds(setDoc(doc(como(A), "users", A), { ...perfilBase, plano: "pro", planoAte: ate, testeProAte: ate }));
+    const longe = dias(20);
+    await assertFails(setDoc(doc(como(B), "users", B), { ...perfilBase, plano: "pro", planoAte: longe, testeProAte: longe }));
+  });
+  it("conta antiga liga o teste uma única vez", async () => {
+    await semear(`users/${A}`, perfilBase);
+    const ate = dias(14);
+    await assertSucceeds(updateDoc(doc(como(A), "users", A), { plano: "pro", planoAte: ate, testeProAte: ate }));
+    await semear(`users/${A}`, { ...perfilBase, plano: "free", planoAte: dias(-1), testeProAte: dias(-1) });
+    const de_novo = dias(14);
+    await assertFails(updateDoc(doc(como(A), "users", A), { plano: "pro", planoAte: de_novo, testeProAte: de_novo }));
+  });
+  it("não encurta nem estende um Pro pago com o teste", async () => {
+    await semear(`users/${A}`, { ...perfilBase, plano: "pro", planoAte: dias(200) });
+    const ate = dias(14);
+    await assertFails(updateDoc(doc(como(A), "users", A), { plano: "pro", planoAte: ate, testeProAte: ate }));
+    await assertFails(updateDoc(doc(como(A), "users", A), { planoAte: dias(400) }));
+  });
+});
+
+describe("push, suporte e depoimentos", () => {
+  const insc = { ownerId: A, endpoint: "https://fcm.googleapis.com/fcm/send/abc", chaves: { p256dh: "x", auth: "y" }, aparelho: "Android", criadoEm: new Date() };
+  it("push: dono grava e apaga a própria inscrição; outro não lê", async () => {
+    await assertSucceeds(setDoc(doc(como(A), "push", "h1"), insc));
+    await assertFails(getDoc(doc(como(B), "push", "h1")));
+    await assertFails(setDoc(doc(como(A), "push", "h2"), { ...insc, ownerId: B }));
+    await assertFails(setDoc(doc(como(A), "push", "h3"), { ...insc, endpoint: "http://inseguro" }));
+    await assertSucceeds(deleteDoc(doc(como(A), "push", "h1")));
+  });
+  it("suporte: só cria, com o próprio uid; ninguém lê", async () => {
+    const m = { uid: A, nome: "João", assunto: "Dúvida", mensagem: "Como envio o PDF?", criadoEm: new Date() };
+    await assertSucceeds(addDoc(collection(como(A), "suporte"), m));
+    await assertFails(addDoc(collection(como(A), "suporte"), { ...m, uid: B }));
+    await assertFails(addDoc(collection(anonimo(), "suporte"), m));
+    await semear("suporte/s1", m);
+    await assertFails(getDoc(doc(como(A), "suporte", "s1")));
+  });
+  it("depoimentos: dono escreve como não publicado; site lê só os publicados", async () => {
+    const d = { nome: "João", negocio: "JS Elétrica", profissao: "eletricista", cidade: "Brasília", nota: 5, texto: "Meus clientes aprovam muito mais rápido.", publicado: false, criadoEm: new Date() };
+    await assertSucceeds(setDoc(doc(como(A), "depoimentos", A), d));
+    await assertFails(setDoc(doc(como(A), "depoimentos", A), { ...d, publicado: true }));
+    await assertFails(getDoc(doc(anonimo(), "depoimentos", A)));
+    await semear(`depoimentos/${B}`, { ...d, publicado: true });
+    await assertSucceeds(getDocs(query(collection(anonimo(), "depoimentos"), where("publicado", "==", true))));
+    await assertFails(getDocs(collection(anonimo(), "depoimentos")));
+  });
+});
+
 describe("logos", () => {
   const logo = { dataUrl: "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=", atualizadoEm: new Date() };
   it("dono grava e qualquer um lê", async () => {

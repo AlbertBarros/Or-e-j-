@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router";
-import { pedirPermissaoNotificacao, suportaNotificacaoSistema, type Notificacao } from "@/hooks/useNotificacoes";
+import { suportaNotificacaoSistema, type Notificacao } from "@/hooks/useNotificacoes";
 import { diasDesde, textoHaDias } from "@/lib/datas";
 
 interface Props {
@@ -10,13 +10,19 @@ interface Props {
   aoAbrir: () => void;
 }
 
-const COR: Record<Notificacao["tipo"], string> = { aprovado: "bg-[#E6F4EA] text-pago", recusado: "bg-[#FDECEF] text-recusado", assinado: "bg-carbono-claro text-carbono" };
-const ICONE: Record<Notificacao["tipo"], string> = { aprovado: "✓", recusado: "×", assinado: "✎" };
+const COR: Record<Notificacao["tipo"], string> = {
+  aprovado: "bg-[#E6F4EA] text-pago",
+  recusado: "bg-[#FDECEF] text-recusado",
+  assinado: "bg-carbono-claro text-carbono",
+  atrasado: "bg-[#FDF3E7] text-atraso",
+  plano: "bg-[#FDF3E7] text-atraso",
+};
+const ICONE: Record<Notificacao["tipo"], string> = { aprovado: "✓", recusado: "×", assinado: "✎", atrasado: "!", plano: "★" };
 
 /** Sininho com contador e painel de notificações. */
 export default function Sino({ notificacoes, naoVistas, aoAbrir }: Props) {
   const [aberto, setAberto] = useState(false);
-  const [permissao, setPermissao] = useState<NotificationPermission | "indisponivel">(() => (suportaNotificacaoSistema() ? Notification.permission : "indisponivel"));
+  const [permissao] = useState<NotificationPermission | "indisponivel">(() => (suportaNotificacaoSistema() ? Notification.permission : "indisponivel"));
 
   useEffect(() => {
     if (aberto) aoAbrir();
@@ -24,7 +30,7 @@ export default function Sino({ notificacoes, naoVistas, aoAbrir }: Props) {
 
   return (
     <>
-      <button type="button" onClick={() => setAberto(true)} className="botao-icone relative" aria-label={naoVistas ? `${naoVistas} notificações novas` : "Notificações"}>
+      <button type="button" onClick={() => setAberto(true)} data-tour="sino" className="botao-icone relative" aria-label={naoVistas ? `${naoVistas} notificações novas` : "Notificações"}>
         <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
           <path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z" />
           <path d="M10 20a2 2 0 0 0 4 0" />
@@ -48,12 +54,12 @@ export default function Sino({ notificacoes, naoVistas, aoAbrir }: Props) {
                   Fechar
                 </button>
               </header>
-              {permissao === "default" && (
+              {permissao !== "granted" && (
                 <div className="mx-5 mt-3 rounded-xl bg-carbono-claro p-3 text-sm">
-                  <p>Quer um aviso no celular quando um cliente aprovar ou assinar, com o app aberto?</p>
-                  <button type="button" onClick={() => pedirPermissaoNotificacao().then(setPermissao)} className="mt-2 font-semibold text-carbono underline">
-                    Ativar avisos
-                  </button>
+                  <p>Quer um aviso no celular quando um cliente aprovar ou assinar, mesmo com o app fechado?</p>
+                  <Link to="/ajuda#avisos" onClick={() => setAberto(false)} className="mt-2 inline-block font-semibold text-carbono underline">
+                    Ligar avisos no celular
+                  </Link>
                 </div>
               )}
               <ul className="mt-3 min-h-0 flex-1 divide-y divide-pauta overflow-y-auto">
@@ -74,7 +80,7 @@ export default function Sino({ notificacoes, naoVistas, aoAbrir }: Props) {
                   </li>
                 ))}
               </ul>
-              <p className="border-t border-pauta px-5 py-3 text-xs text-grafite">Os avisos aparecem assim que o cliente responde, com o app aberto ou ao abri-lo. Avisos com o app fechado chegam numa próxima versão.</p>
+              <p className="border-t border-pauta px-5 py-3 text-xs text-grafite">Com os avisos ligados em Ajuda, você recebe no celular mesmo com o app fechado.</p>
             </div>
           </div>,
           document.body,

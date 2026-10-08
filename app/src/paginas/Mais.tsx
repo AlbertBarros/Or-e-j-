@@ -1,14 +1,16 @@
 import { Link } from "react-router";
 import BarraAbas from "@/componentes/BarraAbas";
 import CabecalhoAba from "@/componentes/CabecalhoAba";
-import { IconeCartao, IconeCatalogo, IconeConta, IconeSeta } from "@/componentes/Icones";
+import { IconeAjuda, IconeCartao, IconeCatalogo, IconeConta, IconeRecibo, IconeSeta } from "@/componentes/Icones";
 import { useAuth } from "@/hooks/useAuth";
 import { sair } from "@/lib/auth";
 import { URL_SITE } from "@/lib/planos";
 
 const ITENS = [
+  { para: "/ajuda", Icone: IconeAjuda, titulo: "Ajuda", texto: "Tour guiado, instalar o app, avisos e suporte" },
   { para: "/cartao", Icone: IconeCartao, titulo: "Cartão de visita", texto: "Cartão virtual e cards em imagem para divulgar" },
   { para: "/catalogo", Icone: IconeCatalogo, titulo: "Produtos e serviços", texto: "O que você oferece, com preços" },
+  { para: "/recibos/novo", Icone: IconeRecibo, titulo: "Recibo avulso", texto: "Recebeu sem orçamento? Faça o recibo na hora" },
   { para: "/conta", Icone: IconeConta, titulo: "Conta e plano", texto: "Seus dados, logo, Pix, endereço e assinatura" },
 ];
 
@@ -18,7 +20,7 @@ export default function Mais() {
   return (
     <main className="pb-abas mx-auto w-full max-w-[560px] px-4">
       <CabecalhoAba titulo="Mais" subtitulo={perfil?.nomeNegocio} />
-      <ul className="cartao mt-5 divide-y divide-pauta overflow-hidden">
+      <ul className="cartao mt-5 divide-y divide-pauta overflow-hidden" data-tour="mais-lista">
         {ITENS.map(({ para, Icone, titulo, texto }) => (
           <li key={para}>
             <Link to={para} className="lista-item">

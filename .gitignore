@@ -12,3 +12,6 @@ firebase-debug*.log
 firestore-debug*.log
 ui-debug*.log
 service-account*.json
+
+# Chaves e segredos gerados localmente (vão para o Cloudflare, nunca para o Git)
+segredos*.txt

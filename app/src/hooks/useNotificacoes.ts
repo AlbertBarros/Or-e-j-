@@ -4,13 +4,16 @@
  * Quando o app está aberto e a permissão foi dada, também mostra uma notificação do sistema.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Contrato, Orcamento } from "@/tipos";
+import type { Contrato, Orcamento, Usuario } from "@/tipos";
 import { paraDate } from "@/lib/datas";
+import { estaAtrasado } from "@/lib/orcamentos";
+import { diasRestantesPro, emTestePro } from "@/lib/usuario";
+import { diasEmAtraso } from "@shared/src/mensagens";
 import { formatarReais } from "@shared/src/mensagens";
 
 export interface Notificacao {
   id: string;
-  tipo: "aprovado" | "recusado" | "assinado";
+  tipo: "aprovado" | "recusado" | "assinado" | "atrasado" | "plano";
   titulo: string;
   texto: string;
   quando: Date;
@@ -27,7 +30,7 @@ function lerVistasEm(): number {
   }
 }
 
-export function useNotificacoes(orcamentos: Orcamento[], contratos: Contrato[]) {
+export function useNotificacoes(orcamentos: Orcamento[], contratos: Contrato[], perfil?: Usuario | null) {
   const [vistasEm, setVistasEm] = useState<number>(lerVistasEm);
   const primeiraCarga = useRef(true);
   const conhecidas = useRef<Set<string>>(new Set());
@@ -49,8 +52,26 @@ export function useNotificacoes(orcamentos: Orcamento[], contratos: Contrato[]) 
         n.push({ id: `c-${c.id}`, tipo: "assinado", titulo: `${c.assinatura?.nome ?? c.contratante.nome} assinou o contrato nº ${String(c.numero).padStart(4, "0")}`, texto: `${formatarReais(c.valor)} · PDF assinado disponível`, quando: q, link: `/contratos/${c.id}` });
       }
     }
+    // Pagamentos atrasados (um aviso por orçamento)
+    for (const o of orcamentos) {
+      if (!estaAtrasado(o)) continue;
+      const venc = paraDate(o.vencimentoPagamento);
+      if (!venc) continue;
+      const dias = diasEmAtraso(venc);
+      const quando = new Date(venc.getTime() + 86_400_000);
+      n.push({ id: `a-${o.id}`, tipo: "atrasado", titulo: `Pagamento de ${o.cliente.nome} atrasado`, texto: `${formatarReais(o.total)} · venceu há ${dias} ${dias === 1 ? "dia" : "dias"}. Toque para cobrar`, quando: quando > new Date() ? new Date() : quando, link: `/orcamentos/${o.id}/cobrar` });
+    }
+    // Teste do Pro acabando (últimos 3 dias)
+    if (perfil && emTestePro(perfil)) {
+      const dias = diasRestantesPro(perfil);
+      const ate = paraDate(perfil.planoAte);
+      if (dias <= 3 && ate) {
+        const quando = new Date(Math.min(Date.now(), ate.getTime() - 3 * 86_400_000));
+        n.push({ id: `t-${ate.getTime()}`, tipo: "plano", titulo: dias === 1 ? "Último dia do seu teste do Pro" : `Seu teste do Pro acaba em ${dias} dias`, texto: "Assine para manter o Pix, o recibo e sua logo", quando, link: "/conta#plano" });
+      }
+    }
     return n.sort((a, b) => b.quando.getTime() - a.quando.getTime()).slice(0, 30);
-  }, [orcamentos, contratos]);
+  }, [orcamentos, contratos, perfil]);
 
   const naoVistas = lista.filter((n) => n.quando.getTime() > vistasEm).length;
 

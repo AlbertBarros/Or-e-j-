@@ -24,6 +24,8 @@ export interface Totais {
   taxaAprovacao: number; // 0..1 sobre os respondidos
   valorAprovado: number;
   valorRecebido: number;
+  /** Aprovados ainda não pagos (o que falta receber). */
+  aReceber: number;
   ticketMedio: number;
 }
 
@@ -42,6 +44,13 @@ export function porMes(orcamentos: Orcamento[], n = 6, hoje: Date = new Date()):
   const meses = ultimosMeses(n, hoje);
   const mapa = new Map(meses.map((m) => [m.chave, m]));
   for (const o of orcamentos) {
+    if (o.avulso) {
+      // Recibo avulso: não foi orçamento enviado; só conta como dinheiro recebido
+      const pagoAvulso = paraDate(o.pagoEm);
+      const m = pagoAvulso ? mapa.get(mesDe(pagoAvulso)) : undefined;
+      if (m) m.valorRecebido += o.total;
+      continue;
+    }
     const enviado = paraDate(o.enviadoEm) ?? (o.status !== "rascunho" ? paraDate(o.criadoEm) : null);
     if (enviado) {
       const m = mapa.get(mesDe(enviado));
@@ -67,8 +76,17 @@ export function porMes(orcamentos: Orcamento[], n = 6, hoje: Date = new Date()):
 }
 
 export function totais(orcamentos: Orcamento[]): Totais {
-  const t: Totais = { total: orcamentos.length, rascunhos: 0, enviados: 0, aprovados: 0, recusados: 0, pagos: 0, atrasados: 0, taxaAprovacao: 0, valorAprovado: 0, valorRecebido: 0, ticketMedio: 0 };
+  const t: Totais = { total: orcamentos.length, rascunhos: 0, enviados: 0, aprovados: 0, recusados: 0, pagos: 0, atrasados: 0, taxaAprovacao: 0, valorAprovado: 0, valorRecebido: 0, aReceber: 0, ticketMedio: 0 };
   for (const o of orcamentos) {
+    if (o.avulso) {
+      // Recibo avulso: entra só no recebido (não é orçamento respondido por cliente)
+      t.total--;
+      if (o.status === "pago") {
+        t.pagos++;
+        t.valorRecebido += o.total;
+      }
+      continue;
+    }
     if (o.status === "rascunho") t.rascunhos++;
     else if (o.status === "enviado") t.enviados++;
     else if (o.status === "recusado") t.recusados++;
@@ -80,6 +98,7 @@ export function totais(orcamentos: Orcamento[]): Totais {
       t.pagos++;
       t.valorRecebido += o.total;
     }
+    if (o.status === "aprovado") t.aReceber += o.total;
     if (estaAtrasado(o)) t.atrasados++;
   }
   const respondidos = t.aprovados + t.recusados;

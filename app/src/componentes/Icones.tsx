@@ -121,3 +121,51 @@ export const IconeAlerta = (p: P) => (
     <path d="M12 9v5M12 17.5v.5" />
   </Base>
 );
+export const IconeAjuda = (p: P) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6" />
+    <path d="M12 17.3v.4" />
+  </Base>
+);
+export const IconeRecibo = (p: P) => (
+  <Base {...p}>
+    <path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" />
+    <path d="M9 8h6M9 12h6" />
+  </Base>
+);
+export const IconeSino = (p: P) => (
+  <Base {...p}>
+    <path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z" />
+    <path d="M10 20a2 2 0 0 0 4 0" />
+  </Base>
+);
+export const IconeCelular = (p: P) => (
+  <Base {...p}>
+    <rect x="7" y="2.5" width="10" height="19" rx="2.5" />
+    <path d="M11 18.5h2" />
+  </Base>
+);
+export const IconeComputador = (p: P) => (
+  <Base {...p}>
+    <rect x="3" y="4" width="18" height="12" rx="2" />
+    <path d="M8 20h8M12 16v4" />
+  </Base>
+);
+export const IconePlay = (p: P) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="m10 8.5 5.5 3.5-5.5 3.5z" />
+  </Base>
+);
+export const IconeEstrela = ({ cheia = false, ...p }: P & { cheia?: boolean }) => (
+  <Base {...p} fill={cheia ? "currentColor" : "none"}>
+    <path d="m12 3.5 2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" />
+  </Base>
+);
+export const IconeEmail = (p: P) => (
+  <Base {...p}>
+    <rect x="3" y="5" width="18" height="14" rx="2.5" />
+    <path d="m4 7 8 6 8-6" />
+  </Base>
+);

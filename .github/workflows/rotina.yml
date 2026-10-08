@@ -1,0 +1,30 @@
+# Rotina de hora em hora do Preço Fechado: reenvia avisos perdidos, manda o resumo do dia (a partir das 9h)
+# e volta para o plano grátis quem tem o Pro vencido. A lógica fica em functions/api/rotina.js.
+#
+# Precisa do segredo ROTINA_SEGREDO no GitHub (Settings → Secrets and variables → Actions) com o MESMO valor
+# da variável ROTINA_SEGREDO do projeto do app no Cloudflare.
+name: Rotina de avisos
+
+on:
+  schedule:
+    - cron: "7 * * * *" # todo minuto 7 de cada hora (horário UTC)
+  workflow_dispatch: {} # botão "Run workflow" para testar na hora
+
+jobs:
+  rotina:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Chamar a rotina no app
+        env:
+          SEGREDO: ${{ secrets.ROTINA_SEGREDO }}
+          APP_URL: ${{ vars.APP_URL || 'https://orca-ja-app.pages.dev' }}
+        run: |
+          if [ -z "$SEGREDO" ]; then
+            echo "ROTINA_SEGREDO ainda não foi cadastrado no GitHub. Nada a fazer."
+            exit 0
+          fi
+          status=$(curl -s -o resposta.txt -w "%{http_code}" -X POST "$APP_URL/api/rotina" -H "x-segredo: $SEGREDO")
+          echo "HTTP $status"
+          cat resposta.txt; echo
+          if [ "$status" != "200" ] && [ "$status" != "503" ]; then exit 1; fi

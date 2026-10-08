@@ -154,7 +154,7 @@ export default function ClienteDetalhe() {
                     {cliente.endereco.logradouro}, {cliente.endereco.bairro} · {cliente.endereco.cidade}/{cliente.endereco.uf}
                   </p>
                 )}
-                {cliente.observacoes && <p className="mt-2 whitespace-pre-line text-sm">{cliente.observacoes}</p>}
+                {cliente.observacoes && <p className="mt-2 whitespace-pre-line text-sm [overflow-wrap:anywhere]">{cliente.observacoes}</p>}
               </div>
               <a href={linkWhatsapp(cliente.whatsapp, "")} target="_blank" rel="noopener" className="botao-icone !bg-[#E6F4EA] !text-pago" aria-label="Abrir conversa no WhatsApp">
                 <IconeWhatsapp />

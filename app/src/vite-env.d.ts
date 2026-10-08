@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly VITE_FIREBASE_APP_ID: string;
   readonly VITE_APP_URL: string;
   readonly VITE_LIMITE_FREE: string;
+  readonly VITE_SUPORTE_WHATSAPP?: string;
+  readonly VITE_SUPORTE_EMAIL?: string;
   /** "true" para usar os emuladores locais em desenvolvimento */
   readonly VITE_USAR_EMULADOR?: string;
 }

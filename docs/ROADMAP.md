@@ -93,7 +93,7 @@ Uma fase por vez. Marque `[x]` ao concluir cada item. Cada fase só termina quan
 - [x] Logo só no Pro; marca só no grátis; Pro vencido (planoAte) tratado como grátis
 - [x] Métricas do PRD: coleção `eventos` (só criação, sem dados pessoais); eventos de cadastro, criação, envio, aprovação/recusa, pago, recibo, limite e clique em assinar
 - [x] Integrar o site ao app: "Salvar e enviar" leva ao cadastro com o orçamento preenchido (?rascunho= em base64url → sessionStorage → Novo orçamento)
-- [ ] Revisão de acessibilidade e de 360px em todas as telas
+- [x] Revisão de acessibilidade e de 360px em todas as telas (8 out 2026: todas as telas do app e as páginas públicas sem rolagem lateral em 360px; campos com rótulo, botões com nome)
 - [ ] Deploy de produção: domínios, domínios autorizados no Auth, regras e índices
 - [x] Página de termos de uso e privacidade (LGPD) no site, com links no app (Entrar e Conta) — revisar com advogado antes do lançamento oficial
 
@@ -118,7 +118,7 @@ cartão de visita virtual (3 modelos) e cards em imagem (3 modelos).
       com assinatura desenhada (assinatura eletrônica simples, MP 2.200-2/2001), PDF com assinatura, aba com busca
 - [x] Cartão virtual `cartoes/{uid}` público em `/v/:uid` (3 modelos) e cards PNG gerados no navegador (3 modelos)
 - [x] Prévia Open Graph para /c/ e /v/ (Pages Functions)
-- [ ] Depois: recibo avulso, cancelamento automático da assinatura Pro, depoimentos reais
+- [x] Recibo avulso (Mais → Recibo avulso), cancelamento automático (rotina volta para grátis quem tem o Pro vencido; webhook registra assinatura cancelada) e depoimentos reais (escritos na Ajuda, publicados no console, mostrados na home)
 
 ## V3 (8 out 2026) — pagamento, frete, modelos de documento e notificações
 
@@ -129,7 +129,7 @@ cartão de visita virtual (3 modelos) e cards em imagem (3 modelos).
 - [x] 3 modelos de documento (Simples, Detalhado, Completo) no app, na página pública e no PDF; modelo padrão em Conta
 - [x] Antes de enviar: escolha do modelo com prévia em moldura de celular + Enviar no WhatsApp / Baixar PDF
 - [x] Notificações no app (sininho) para aprovação, recusa e assinatura; aviso do sistema com o app aberto
-- [ ] Depois: avisos com o app fechado (precisa de Cloud Functions + FCM), período de teste Pro de 14 dias
+- [x] Avisos com o app fechado (Web Push próprio em Pages Functions, sem Blaze) e teste Pro de 14 dias (regras do Firestore garantem uma vez por conta)
 
 ## Marca e site (8 out 2026) — "Preço Fechado"
 
@@ -164,3 +164,13 @@ cartão de visita virtual (3 modelos) e cards em imagem (3 modelos).
 - [x] App: fundo com luzes suaves; `.cartao`, `.vidro`, `.vidro-forte`, `.barra-fixa` com backdrop-blur; janelas, abas, barras fixas, chips e campos translúcidos; botões em degradê
 - [x] Site: `.cartao` e planos em vidro, cabeçalho translúcido, fundo com luzes; galeria em carrossel contínuo
 - [x] Telas do app recapturadas após o redesenho (manter este hábito: mudou o app, recapturar `site/public/app`)
+
+## V4 — Ajuda, tour, avisos no celular e teste Pro (8 out 2026)
+
+- [x] Botão de Ajuda em todas as abas e item em Mais: tour guiado, instalar o app (Android, iPhone, computador), avisos no celular, guia completo com busca, suporte (WhatsApp/e-mail por variável + formulário em `suporte/`) e depoimento
+- [x] Tour guiado em 16 passos pelas telas de verdade (`app/src/tour/`), oferecido uma vez no primeiro acesso (`users.tutorial`)
+- [x] Avisos no celular (Web Push): `functions/api/avisar` (na hora, chamado pela página pública), `functions/api/rotina` (de hora em hora pelo GitHub Actions: reenvio, resumo das 9h, Pro vencido volta para grátis), `servidor/` com Web Push e Firestore REST; testes `npm run test:avisos`
+- [x] Webhook do Mercado Pago migrou do worker separado para `functions/api/mercadopago` (trava contra pagamento repetido em `pagamentos/`)
+- [x] Teste grátis do Pro: 14 dias no cadastro; contas antigas ativam uma vez (Início e Conta); faixa com dias restantes; avisos no sino e no resumo diário
+- [x] Recibo avulso, notificações de atraso e de fim do teste no sino
+- [ ] Dono: cadastrar as variáveis no Cloudflare e o segredo no GitHub (docs/LANCAMENTO.md, item 3); informar WhatsApp/e-mail do suporte

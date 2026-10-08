@@ -98,7 +98,7 @@ export default function Cobrar() {
         <h2 id="previa" className="text-sm font-semibold uppercase tracking-wide text-grafite">
           Prévia da mensagem
         </h2>
-        <p className="mt-2 whitespace-pre-line leading-relaxed">{mensagem}</p>
+        <p className="mt-2 whitespace-pre-line leading-relaxed [overflow-wrap:anywhere]">{mensagem}</p>
       </section>
 
       <div className="fixed inset-x-0 bottom-0 barra-fixa p-4">

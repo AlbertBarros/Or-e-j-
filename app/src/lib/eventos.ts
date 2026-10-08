@@ -15,7 +15,12 @@ export type NomeEvento =
   | "limite_free_atingido"
   | "clique_assinar_pro"
   | "contrato_gerado"
-  | "contrato_enviado";
+  | "contrato_enviado"
+  | "recibo_avulso"
+  | "tour_iniciado"
+  | "tour_concluido"
+  | "avisos_ligados"
+  | "teste_pro_ativado";
 
 export function registrarEvento(nome: NomeEvento, dados: { uid?: string; orcamentoId?: string; origem?: string } = {}): void {
   addDoc(collection(db, "eventos"), {

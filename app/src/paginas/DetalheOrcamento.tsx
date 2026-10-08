@@ -200,7 +200,7 @@ export default function DetalheOrcamento() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-[560px] flex-col px-4 pb-48">
-      <CabecalhoPagina titulo={`Orçamento nº ${numero}`} acao={<Selo orcamento={orcamento} />} />
+      <CabecalhoPagina titulo={orcamento.avulso ? "Recibo avulso" : `Orçamento nº ${numero}`} acao={<Selo orcamento={orcamento} />} />
 
       <div className="mt-4">
         <DocumentoOrcamento orcamento={orcamento} logoDataUrl={logo} />
@@ -306,7 +306,13 @@ export default function DetalheOrcamento() {
             </>
           )}
 
-          {status === "pago" && (
+          {status === "pago" && orcamento.avulso && (
+            <Link to={`/orcamentos/${orcamento.id}/recibo`} className="botao-primario">
+              {orcamento.recibo ? "Ver e enviar recibo" : "Gerar recibo"}
+            </Link>
+          )}
+
+          {status === "pago" && !orcamento.avulso && (
             <>
               <Link to={`/orcamentos/${orcamento.id}/recibo`} className="botao-primario">
                 {orcamento.recibo ? "Ver e enviar recibo" : "Gerar recibo"}

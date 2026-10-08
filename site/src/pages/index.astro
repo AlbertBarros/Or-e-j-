@@ -7,6 +7,7 @@ import PassosInterativos from "../components/PassosInterativos";
 import Contador from "../components/Contador";
 import Recursos from "../components/Recursos.astro";
 import Planos from "../components/Planos.astro";
+import Depoimentos from "../components/Depoimentos";
 import Faq from "../components/Faq.astro";
 import { profissoes, urlProfissao } from "../lib/profissoes";
 import { iconeProfissao } from "../lib/icones";
@@ -40,6 +41,7 @@ const faq = [
   { pergunta: "O dinheiro passa pelo Preço Fechado?", resposta: "Nunca. O Pix é gerado com a sua chave e cai direto na sua conta. O Preço Fechado só organiza o orçamento, a aprovação, o contrato e o recibo." },
   { pergunta: "O contrato assinado pelo celular vale?", resposta: "A assinatura eletrônica simples tem validade legal no Brasil para contratos entre particulares (MP 2.200-2/2001). O app registra nome, data, hora e aparelho. O texto é um modelo sugerido: revise com um advogado se o seu caso for mais complexo." },
   { pergunta: "Preciso de CNPJ ou MEI?", resposta: "Não. Autônomo com CPF usa normalmente, inclusive o Pix. Se você tiver MEI, pode colocar o nome da empresa e o CNPJ nos documentos." },
+  { pergunta: "Tem teste grátis do Pro?", resposta: "Tem. Toda conta nova começa com 14 dias de Pro: orçamentos ilimitados, Pix na aprovação, recibo em PDF e sua logo. Sem cartão de crédito. Se não assinar, a conta continua no plano grátis, com tudo salvo." },
   { pergunta: "O plano grátis é grátis mesmo?", resposta: `Sim. Você envia até ${LIMITE_FREE} orçamentos por mês, com link de aprovação, contratos, clientes e cobrança, sem cartão de crédito. O Pix na aprovação, o recibo em PDF, a logo e a retirada da nossa marca ficam para o Pro.` },
   { pergunta: "Funciona no meu celular?", resposta: "Funciona em qualquer celular com navegador, Android ou iPhone, e também no computador. Dá para instalar na tela inicial como um app." },
 ];
@@ -85,7 +87,8 @@ const jsonLd = [
         <a href="/como-funciona" class="botao-secundario !min-h-12 !rounded-xl !px-7 text-base">Ver como funciona</a>
       </div>
       <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-grafite">
-        <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> {LIMITE_FREE} orçamentos grátis por mês</li>
+        <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> 14 dias de Pro grátis</li>
+        <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> {LIMITE_FREE} orçamentos grátis por mês depois</li>
         <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> Sem cartão de crédito</li>
         <li class="flex items-center gap-1.5"><span class="text-pago" aria-hidden="true">✓</span> O cliente não precisa de app</li>
       </ul>
@@ -186,6 +189,8 @@ const jsonLd = [
   </section>
 
   <!-- Planos -->
+  <Depoimentos client:visible />
+
   <section id="precos" aria-labelledby="planos-titulo" class="mt-24 scroll-mt-24">
     <div class="revelar text-center">
       <p class="titulo-secao">Planos</p>

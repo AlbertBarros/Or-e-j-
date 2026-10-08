@@ -168,7 +168,7 @@ export default function DocumentoOrcamento({ orcamento: o, logoDataUrl, rodapeMa
           </p>
         )}
         {!simples && o.observacoes && (
-          <p className="whitespace-pre-line">
+          <p className="whitespace-pre-line [overflow-wrap:anywhere]">
             <span className="text-grafite">Observações:</span> {o.observacoes}
           </p>
         )}

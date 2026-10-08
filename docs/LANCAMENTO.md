@@ -28,24 +28,42 @@ node scripts/ativar-pro.cjs email@cliente.com 12
 - `12` = meses (anual). Para mensal, use `1`. Para voltar ao grátis: `node scripts/ativar-pro.cjs email@cliente.com --free`.
 - A pessoa precisa ter criado a conta no app **com o mesmo e-mail**. Se o script disser que não achou, peça o e-mail certo.
 
-## 3. Liberação automática (webhook do Mercado Pago) — opcional, recomendado após os primeiros clientes
+## 3. Variáveis do servidor no Cloudflare (avisos no celular, Pro automático e rotina diária)
 
-Passo a passo completo em `worker-pagamentos/README.md`. Resumo:
+Tudo roda no próprio projeto do app (`orca-ja-app`), sem publicar nada à parte. Os valores secretos já foram gerados e estão no arquivo
+`segredos-cloudflare.txt` na raiz do projeto (o Git ignora esse arquivo; não compartilhe).
 
-```powershell
-cd worker-pagamentos
-npx wrangler login
-npx wrangler deploy
-npx wrangler secret put MP_ACCESS_TOKEN
-npx wrangler secret put WEBHOOK_SEGREDO
-Get-Content ..\service-account.json -Raw | npx wrangler secret put FIREBASE_SERVICE_ACCOUNT
-cd ..
-```
+1. Cloudflare → **Workers & Pages** → `orca-ja-app` → **Settings** → **Variables and Secrets** → **Add**. Cadastre como **Secret**:
 
-- `MP_ACCESS_TOKEN`: Mercado Pago → https://www.mercadopago.com.br/developers → Suas integrações → sua aplicação → **Credenciais de produção** → Access Token.
-- `WEBHOOK_SEGREDO`: invente um texto longo (30 letras e números) e guarde.
-- Depois, na mesma aplicação do Mercado Pago → **Webhooks** → URL de produção:
-  `https://orca-ja-pagamentos.SEU-USUARIO.workers.dev/?s=SEU_WEBHOOK_SEGREDO` (o `wrangler deploy` mostra a URL), eventos **Pagamentos** e **Planos e assinaturas**.
+   | Nome | Valor |
+   |---|---|
+   | `FIREBASE_SERVICE_ACCOUNT` | o conteúdo inteiro do `service-account.json` (abra no Bloco de Notas, Ctrl+A, Ctrl+C) |
+   | `VAPID_PRIVADA` | a linha `VAPID_PRIVADA=` do `segredos-cloudflare.txt` (só o que vem depois do =) |
+   | `ROTINA_SEGREDO` | a linha `ROTINA_SEGREDO=` do mesmo arquivo |
+   | `WEBHOOK_SEGREDO` | a linha `WEBHOOK_SEGREDO=` do mesmo arquivo |
+   | `MP_ACCESS_TOKEN` | Mercado Pago → https://www.mercadopago.com.br/developers → Suas integrações → sua aplicação → **Credenciais de produção** → Access Token |
+
+   E como **Text** (aparecem na tela Ajuda do app; deixe em branco se ainda não tiver):
+
+   | Nome | Exemplo |
+   |---|---|
+   | `VITE_SUPORTE_WHATSAPP` | `5561999998888` (só números, com 55) |
+   | `VITE_SUPORTE_EMAIL` | `suporte@precofechado.com.br` |
+
+   Depois: **Deployments** → no último → **Retry deployment**.
+
+2. GitHub → https://github.com/AlbertBarros/Or-e-j-/settings/secrets/actions → **New repository secret**:
+   nome `ROTINA_SEGREDO`, valor igual ao do Cloudflare. A rotina passa a rodar de hora em hora sozinha
+   (aba **Actions** → "Rotina de avisos" → **Run workflow** para testar na hora).
+
+3. Mercado Pago → sua aplicação → **Webhooks** → URL de produção:
+   `https://orca-ja-app.pages.dev/api/mercadopago?s=SEU_WEBHOOK_SEGREDO` (o mesmo valor do passo 1),
+   eventos **Pagamentos** e **Planos e assinaturas**. Pronto: quem paga com o mesmo e-mail da conta vira Pro sozinho.
+
+Como conferir:
+- Abra https://orca-ja-app.pages.dev/api/mercadopago no navegador: deve aparecer "webhook de pagamentos ativo".
+- No app, **Ajuda → Avisos no celular → Ligar avisos**. Depois aprove um orçamento seu pelo link em outro aparelho:
+  o aviso chega em segundos, mesmo com o app fechado (no iPhone, só com o app instalado na Tela de Início).
 
 ## 4. Testes reais no celular (antes de divulgar)
 
@@ -56,6 +74,7 @@ cd ..
 5. Libere o Pro na sua própria conta (`node scripts/ativar-pro.cjs seu@email.com 12`) e abra o link de novo: o **Pix** aparece. Pague R$ 1 de teste lendo o QR em **3 bancos diferentes** (Nubank, Itaú, Caixa, Inter…). Anote quais funcionaram.
 6. Toque em **Marcar como pago**, depois **Gerar recibo**, preencha a garantia e envie o PDF pelo WhatsApp.
 7. Instale o app pela tela inicial (botão **Baixar o app**) e repita um envio pelo ícone.
+8. Em **Ajuda**, ligue os avisos no celular e faça o tour guiado uma vez para conferir as telas.
 
 ## 5. Revisar textos
 
@@ -69,12 +88,12 @@ cd ..
 2. Verificação por **tag HTML**: copie o código que o Google mostrar e me envie; eu coloco no site.
 3. Depois de verificado: **Sitemaps** → enviar `sitemap-index.xml`.
 
-## 7. Domínio próprio (quando decidir, ex.: orcaja.com.br)
+## 7. Domínio próprio (precofechado.com.br)
 
 1. Registre em https://registro.br (R$ 40/ano) e, no Cloudflare, adicione o domínio (**Websites → Add a domain**) e troque os servidores DNS no Registro.br pelos que o Cloudflare indicar.
-2. Cloudflare → **Workers & Pages** → `orca-ja` → **Custom domains** → `orcaja.com.br` e `www.orcaja.com.br`. Em `orca-ja-app` → **Custom domains** → `app.orcaja.com.br`.
-3. Firebase → Authentication → Settings → **Domínios autorizados** → adicionar `app.orcaja.com.br`.
-4. Cloudflare, projeto `orca-ja` → Settings → Variables: `SITE_URL=https://orcaja.com.br` e `PUBLIC_APP_URL=https://app.orcaja.com.br`. Projeto `orca-ja-app`: `VITE_APP_URL=https://app.orcaja.com.br`. Depois **Retry deployment** nos dois.
+2. Cloudflare → **Workers & Pages** → `orca-ja` → **Custom domains** → `precofechado.com.br` e `www.precofechado.com.br`. Em `orca-ja-app` → **Custom domains** → `app.precofechado.com.br`.
+3. Firebase → Authentication → Settings → **Domínios autorizados** → adicionar `app.precofechado.com.br`.
+4. Cloudflare, projeto `orca-ja` → Settings → Variables: `SITE_URL=https://precofechado.com.br` e `PUBLIC_APP_URL=https://app.precofechado.com.br`. Projeto `orca-ja-app`: `VITE_APP_URL=https://app.precofechado.com.br`. Depois **Retry deployment** nos dois.
 5. Me avise: eu troco os endereços fixos no código (robots, prévia do link, textos) e reenvio o sitemap.
 
 ## 8. Acompanhar o dia a dia
@@ -82,6 +101,9 @@ cd ..
 - **Leads do site** (lista de espera) e **métricas**: https://console.firebase.google.com/project/orca-ja-aaf65/firestore → coleções `leads` e `eventos`.
 - **Usuários e orçamentos**: mesma tela, coleções `users` e `orcamentos`. Não edite à mão; use o app ou o script.
 - **Pagamentos**: painel do Mercado Pago → Assinaturas / Vendas.
+- **Mensagens de suporte** (formulário da tela Ajuda): mesma tela do Firestore, coleção `suporte` (nome, negócio, WhatsApp, e-mail e a mensagem). Responda pelo WhatsApp da pessoa.
+- **Depoimentos**: coleção `depoimentos`. Para mostrar um no site, abra o documento e mude `publicado` para `true`. Ele aparece na home sozinho (se a pessoa editar depois, volta para `false` até você aprovar de novo).
+- **Teste grátis do Pro**: toda conta nova ganha 14 dias. No perfil (`users`), `testeProAte` mostra até quando; se a pessoa assinar durante o teste, os dias que faltam continuam valendo.
 - **Site e app fora do ar?** Cloudflare → Workers & Pages → projeto → **Deployments** (último build verde?). Qualquer `git push` publica sozinho em 1 a 2 minutos.
 
 ## 9. Mexer no código e publicar
@@ -124,12 +146,12 @@ firebase deploy --only firestore:rules,firestore:indexes
 | `firebase/` | Regras de segurança, índices e testes das regras |
 | `functions/o/[id].js` | Prévia do link do orçamento no WhatsApp (roda no Cloudflare) |
 | `scripts/ativar-pro.cjs` | Libera/retira o Pro de um cliente |
-| `worker-pagamentos/` | Webhook do Mercado Pago (liberação automática) |
+| `functions/api/` | Servidor: avisos no celular (`avisar`), rotina de hora em hora (`rotina`) e webhook do Mercado Pago (`mercadopago`) |
+| `servidor/` | Código do servidor usado pelas funções: Firestore com a conta de serviço, Web Push e regras dos avisos |
 | `docs/` | PRD, arquitetura, design, SEO, roadmap e este guia |
 | `.env.example`, `site/.env.example` | Modelos das variáveis; os valores reais ficam em `app/.env.local` e `site/.env.local` (fora do Git) e no painel do Cloudflare |
 
 ## 11. Pendências conhecidas (pequenas, para depois)
 
-- Recibo avulso (sem orçamento) e cancelamento automático da assinatura (hoje o Pro expira pela data `planoAte`).
 - Página de recibo e de cobrança no site de SEO (previstas na expansão do SEO.md).
 - Depoimentos reais na home quando houver clientes.

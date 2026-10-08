@@ -352,6 +352,29 @@ export async function marcarComoPago(id: string, data: Date): Promise<void> {
   });
 }
 
+/**
+ * Recibo avulso: cria o registro já como pago (sem passar pelo cliente) e devolve o id.
+ * Depois a tela de recibo (EmitirRecibo) emite o recibo com garantia e numeração própria.
+ */
+export async function criarReciboAvulso(uid: string, perfil: Usuario, dados: { cliente: { nome: string; whatsapp: string }; itens: ItemOrcamento[]; pagoEm: Date; metodo: PagamentoOrcamento["metodos"][number]; observacoes: string }): Promise<string> {
+  const id = await criarOrcamento(uid, perfil, {
+    cliente: dados.cliente,
+    itens: dados.itens,
+    desconto: 0,
+    validadeDias: 0,
+    vencimentoPagamento: null,
+    observacoes: dados.observacoes,
+    pagamento: { metodos: [dados.metodo], aCombinar: false },
+  });
+  await updateDoc(doc(db, "orcamentos", id), {
+    status: "pago" as StatusOrcamento,
+    avulso: true,
+    pagoEm: Timestamp.fromDate(dados.pagoEm),
+    atualizadoEm: serverTimestamp(),
+  });
+  return id;
+}
+
 /** Desfaz o "pago" (engano), voltando para aprovado. */
 export async function desfazerPago(id: string): Promise<void> {
   await updateDoc(doc(db, "orcamentos", id), {

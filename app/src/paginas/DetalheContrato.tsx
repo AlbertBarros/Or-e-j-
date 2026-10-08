@@ -156,7 +156,7 @@ export default function DetalheContrato() {
         {editando ? (
           <textarea className="campo min-h-[60vh] py-3 font-mono text-sm leading-relaxed" value={texto} onChange={(e) => setTexto(e.target.value)} />
         ) : (
-          <pre className="whitespace-pre-wrap font-sans text-[15px] leading-relaxed">{c.texto}</pre>
+          <pre className="whitespace-pre-wrap font-sans text-[15px] leading-relaxed [overflow-wrap:anywhere]">{c.texto}</pre>
         )}
       </section>
 

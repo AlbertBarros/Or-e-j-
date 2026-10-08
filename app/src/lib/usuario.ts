@@ -9,12 +9,14 @@ import {
   deleteDoc,
   deleteField,
   setDoc,
+  Timestamp,
   type DocumentData,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import type { Usuario, TipoChavePix, PerfilV2, Endereco } from "@/tipos";
 import { normalizarChave } from "@shared/src/pix";
 import { normalizarWhatsapp } from "@shared/src/mensagens";
+import { registrarEvento } from "./eventos";
 
 /** "AAAA-MM" no fuso de São Paulo. */
 export function mesAtual(agora: Date = new Date()): string {
@@ -26,6 +28,45 @@ export function mesAtual(agora: Date = new Date()): string {
   const ano = partes.find((p) => p.type === "year")?.value ?? "0000";
   const mes = partes.find((p) => p.type === "month")?.value ?? "00";
   return `${ano}-${mes}`;
+}
+
+/** Duração do teste grátis do Pro. */
+export const DIAS_TESTE_PRO = 14;
+const DIA_MS = 86_400_000;
+
+function paraData(t: unknown): Date | null {
+  return t && typeof (t as { toDate?: () => Date }).toDate === "function" ? (t as Timestamp).toDate() : null;
+}
+
+/** Está no teste grátis do Pro agora (planoAte == testeProAte, ainda no futuro)? */
+export function emTestePro(perfil: Usuario, agora: number = Date.now()): boolean {
+  const ate = paraData(perfil.planoAte);
+  const teste = paraData(perfil.testeProAte);
+  return perfil.plano === "pro" && Boolean(ate && teste) && Math.abs(ate!.getTime() - teste!.getTime()) < 60_000 && ate!.getTime() > agora;
+}
+
+/** Dias que faltam do Pro (teste ou pago). 0 quando não é Pro ou não tem data. */
+export function diasRestantesPro(perfil: Usuario, agora: number = Date.now()): number {
+  const ate = paraData(perfil.planoAte);
+  if (perfil.plano !== "pro" || !ate) return 0;
+  return Math.max(0, Math.ceil((ate.getTime() - agora) / DIA_MS));
+}
+
+/** Pode ligar o teste: nunca usou e não está com um Pro pago valendo. */
+export function podeTestarPro(perfil: Usuario): boolean {
+  return !perfil.testeProAte && perfil.plano !== "pro";
+}
+
+/** Liga o teste de 14 dias do Pro (as regras só deixam uma vez por conta). */
+export async function ativarTestePro(uid: string): Promise<void> {
+  const ate = Timestamp.fromMillis(Date.now() + DIAS_TESTE_PRO * DIA_MS - 60_000);
+  await updateDoc(doc(db, "users", uid), { plano: "pro", planoAte: ate, testeProAte: ate });
+  registrarEvento("teste_pro_ativado", { uid });
+}
+
+/** Marca o tour guiado como oferecido ou concluído (para não oferecer de novo em outro aparelho). */
+export async function marcarTutorial(uid: string, campo: "oferecidoEm" | "concluidoEm"): Promise<void> {
+  await updateDoc(doc(db, "users", uid), { [`tutorial.${campo}`]: serverTimestamp() });
 }
 
 /** Pro vencido (planoAte no passado) é tratado como grátis em todo o app, sem esperar o servidor. */
@@ -77,7 +118,7 @@ export interface DadosCadastro {
   frete?: { fixo: number; porKm: number } | null;
 }
 
-/** Cria o perfil (plano free, numeração em 1) e, se houver, a logo, numa única gravação. */
+/** Cria o perfil (já com o teste de 14 dias do Pro, numeração em 1) e, se houver, a logo, numa única gravação. */
 export async function criarPerfil(uid: string, dados: DadosCadastro): Promise<void> {
   const perfil = {
     ...(dados.email ? { email: dados.email.toLowerCase() } : {}),
@@ -96,13 +137,15 @@ export async function criarPerfil(uid: string, dados: DadosCadastro): Promise<vo
     ...(dados.endereco ? { endereco: dados.endereco } : {}),
     ...(dados.cadastroCompleto ? { cadastroCompleto: true } : {}),
     ...(dados.frete && (dados.frete.fixo > 0 || dados.frete.porKm > 0) ? { frete: { fixo: dados.frete.fixo, porKm: dados.frete.porKm } } : {}),
-    plano: "free" as const,
+    // Teste grátis do Pro: começa no cadastro (as regras aceitam no máximo 14 dias, uma vez)
+    plano: "pro" as const,
+    planoAte: Timestamp.fromMillis(Date.now() + DIAS_TESTE_PRO * DIA_MS - 60_000),
     proximoNumero: 1,
     uso: { mes: mesAtual(), enviados: 0 },
     criadoEm: serverTimestamp(),
   };
   const lote = writeBatch(db);
-  lote.set(doc(db, "users", uid), perfil);
+  lote.set(doc(db, "users", uid), { ...perfil, testeProAte: perfil.planoAte });
   if (dados.logoDataUrl) {
     lote.set(doc(db, "logos", uid), { dataUrl: dados.logoDataUrl, atualizadoEm: serverTimestamp() });
   }

@@ -5,7 +5,7 @@ import Campo from "@/componentes/Campo";
 import Carregando from "@/componentes/Carregando";
 import { useAuth } from "@/hooks/useAuth";
 import { sair } from "@/lib/auth";
-import { atualizarPerfil, atualizarPerfilV2, atualizarDadosRecibo, buscarLogo, salvarLogo, mesAtual } from "@/lib/usuario";
+import { atualizarPerfil, atualizarPerfilV2, atualizarDadosRecibo, buscarLogo, salvarLogo, mesAtual, ativarTestePro, diasRestantesPro, emTestePro, podeTestarPro, DIAS_TESTE_PRO } from "@/lib/usuario";
 import { comprimirLogo } from "@/lib/logo";
 import { LIMITE_FREE } from "@/lib/firebase";
 import { registrarEvento } from "@/lib/eventos";
@@ -215,24 +215,46 @@ export default function Conta() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 id="plano-titulo" className="text-lg font-semibold">
-              {pro ? "Plano Pro" : "Plano grátis"}
+              {pro ? (emTestePro(perfil) ? "Pro grátis (teste)" : "Plano Pro") : "Plano grátis"}
             </h2>
             <p className="text-sm text-grafite">
               {pro
-                ? planoAte
-                  ? `Ativo até ${formatarData(planoAte)}.`
-                  : "Ativo. Orçamentos ilimitados, Pix na aprovação, recibo e sua logo."
+                ? emTestePro(perfil)
+                  ? `Teste de ${DIAS_TESTE_PRO} dias: ${diasRestantesPro(perfil) === 1 ? "último dia" : `faltam ${diasRestantesPro(perfil)} dias`} (até ${planoAte ? formatarData(planoAte) : ""}).`
+                  : planoAte
+                    ? `Ativo até ${formatarData(planoAte)}.`
+                    : "Ativo. Orçamentos ilimitados, Pix na aprovação, recibo e sua logo."
                 : `${enviados} de ${LIMITE_FREE} orçamentos enviados este mês.`}
             </p>
+            {perfil.assinatura?.status === "cancelada" && pro && planoAte && (
+              <p className="mt-1 text-sm text-atraso">Assinatura cancelada. O Pro continua até {formatarData(planoAte)}.</p>
+            )}
           </div>
           <span className={`rounded-full px-3 py-1 text-xs font-semibold ${pro ? "bg-carbono text-white" : "bg-pauta text-grafite"}`}>
             {pro ? "PRO" : "GRÁTIS"}
           </span>
         </div>
-        {!pro && (
+        {podeTestarPro(perfil) && (
+          <div className="mt-4 rounded-xl bg-[#E6F4EA] p-3">
+            <p className="text-sm font-semibold text-pago">🎁 Você ainda não usou o teste grátis: {DIAS_TESTE_PRO} dias de Pro, sem cartão.</p>
+            <button type="button" onClick={() => usuario && void ativarTestePro(usuario.uid).catch((e) => console.error(e))} className="botao-primario mt-2">
+              Ativar {DIAS_TESTE_PRO} dias grátis
+            </button>
+          </div>
+        )}
+        {pro && !emTestePro(perfil) && (
+          <p className="ajuda mt-3">
+            Para cancelar ou trocar o cartão da assinatura, entre na sua conta do Mercado Pago →{" "}
+            <a href="https://www.mercadopago.com.br/subscriptions" target="_blank" rel="noopener" className="underline">
+              Assinaturas
+            </a>
+            . O Pro continua até o fim do período já pago.
+          </p>
+        )}
+        {(!pro || emTestePro(perfil)) && (
           <div className="mt-4">
             <p className="text-sm">
-              O Pro libera envios ilimitados, <strong>Pix na página de aprovação</strong>, <strong>recibo em PDF</strong> com garantia e a sua logo
+              {emTestePro(perfil) ? "Assine agora e os dias que faltam do teste continuam valendo. " : ""}O Pro libera envios ilimitados, <strong>Pix na página de aprovação</strong>, <strong>recibo em PDF</strong> com garantia e a sua logo
               no orçamento.
             </p>
             <div className="mt-3 grid gap-2">

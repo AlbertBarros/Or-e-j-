@@ -112,7 +112,7 @@ export default function PaginaContrato({ id }: { id: string }) {
             <p className="tabular text-sm text-grafite">{formatarReais(c.valor)}</p>
           </div>
         </header>
-        <pre className="mt-4 whitespace-pre-wrap font-sans text-[15px] leading-relaxed">{c.texto}</pre>
+        <pre className="mt-4 whitespace-pre-wrap font-sans text-[15px] leading-relaxed [overflow-wrap:anywhere]">{c.texto}</pre>
         {assinado && c.assinatura && (
           <footer className="mt-8 grid gap-6 border-t border-pauta pt-6 sm:grid-cols-2">
             <div className="text-center">

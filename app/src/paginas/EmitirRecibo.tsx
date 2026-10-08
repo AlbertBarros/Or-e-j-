@@ -208,7 +208,7 @@ export default function EmitirRecibo() {
             Recebi de <strong>{orcamento.cliente.nome}</strong> o valor do orçamento nº {String(orcamento.numero).padStart(4, "0")}.
           </p>
           <p className="mt-2 text-grafite">{textoGarantia(recibo.garantiaDias, paraDate(recibo.garantiaInicio) ?? new Date())}</p>
-          {recibo.observacoes && <p className="mt-2 whitespace-pre-line text-grafite">{recibo.observacoes}</p>}
+          {recibo.observacoes && <p className="mt-2 whitespace-pre-line text-grafite [overflow-wrap:anywhere]">{recibo.observacoes}</p>}
           <p className="ajuda mt-3">O recibo já foi emitido e numerado. Para corrigir dados do emissor, edite em Conta e emita o próximo.</p>
         </section>
       ) : (

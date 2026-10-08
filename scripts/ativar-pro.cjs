@@ -106,7 +106,9 @@ async function main() {
   const campos = voltarFree
     ? { plano: { stringValue: "free" } }
     : (() => {
-        const ate = new Date();
+        // Pro ainda válido (inclusive o teste de 14 dias): soma a partir do fim dele, como o webhook.
+        const atual = docUsuario.fields.planoAte && docUsuario.fields.planoAte.timestampValue;
+        const ate = atual && new Date(atual) > new Date() ? new Date(atual) : new Date();
         ate.setMonth(ate.getMonth() + meses);
         return { plano: { stringValue: "pro" }, planoAte: { timestampValue: ate.toISOString() } };
       })();

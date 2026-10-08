@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { ehIphoneOuIpad, jaInstalado, type EventoInstalacao } from "@/lib/pwa";
+import { aoMudarPedidoInstalacao, ehIphoneOuIpad, instalarAgora, jaInstalado, pedidoInstalacao, type EventoInstalacao } from "@/lib/pwa";
 
 const CHAVE_DISPENSADO = "orcaja:instalarDispensadoEm";
 const DIAS_SILENCIO = 7;
@@ -28,21 +28,17 @@ export default function InstalarApp({ compacto = false }: { compacto?: boolean }
     }
     if (iphone) setVisivel(true);
 
-    function aoPoderInstalar(e: Event) {
-      e.preventDefault();
-      setEvento(e as EventoInstalacao);
+    // O pedido de instalação é guardado em lib/pwa desde que o app abre
+    const atual = pedidoInstalacao();
+    if (atual) {
+      setEvento(atual);
       setVisivel(true);
     }
-    function aoInstalar() {
-      setInstalado(true);
-      setVisivel(false);
-    }
-    window.addEventListener("beforeinstallprompt", aoPoderInstalar);
-    window.addEventListener("appinstalled", aoInstalar);
-    return () => {
-      window.removeEventListener("beforeinstallprompt", aoPoderInstalar);
-      window.removeEventListener("appinstalled", aoInstalar);
-    };
+    return aoMudarPedidoInstalacao((e) => {
+      setEvento(e);
+      if (e) setVisivel(true);
+      else if (jaInstalado()) setInstalado(true);
+    });
   }, [iphone]);
 
   async function instalar() {
@@ -51,9 +47,7 @@ export default function InstalarApp({ compacto = false }: { compacto?: boolean }
       return;
     }
     if (!evento) return;
-    await evento.prompt();
-    const escolha = await evento.userChoice;
-    if (escolha.outcome === "accepted") {
+    if (await instalarAgora()) {
       setInstalado(true);
       setVisivel(false);
     }
