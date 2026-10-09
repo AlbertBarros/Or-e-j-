@@ -7,6 +7,7 @@ import { pdf, type DocumentProps } from "@react-pdf/renderer";
 import OrcamentoPDF from "./OrcamentoPDF";
 import ReciboPDF from "./ReciboPDF";
 import ContratoPDF from "./ContratoPDF";
+import RelatorioAdminPDF, { type DadosRelatorio } from "./RelatorioAdminPDF";
 import type { Contrato, ModeloDocumento, Orcamento, Recibo } from "@/tipos";
 
 const SITE = "orca-ja-6cz.pages.dev";
@@ -61,6 +62,14 @@ export async function gerarPdfContrato(contrato: Contrato, logo?: string | null)
   const el = createElement(ContratoPDF, { contrato, logoPng, assinaturaPng }) as unknown as ReactElement<DocumentProps>;
   const blob = await pdf(el).toBlob();
   return new File([blob], nomeArquivo("contrato", contrato.numero, contrato.contratante.nome), { type: "application/pdf" });
+}
+
+/** Relatório do Painel administrativo. */
+export async function gerarPdfRelatorioAdmin(d: DadosRelatorio): Promise<File> {
+  const el = createElement(RelatorioAdminPDF, { d }) as unknown as ReactElement<DocumentProps>;
+  const blob = await pdf(el).toBlob();
+  const dia = d.geradoEm.toISOString().slice(0, 10);
+  return new File([blob], `relatorio-preco-fechado-${dia}.pdf`, { type: "application/pdf" });
 }
 
 export function baixarArquivo(arquivo: File): void {

@@ -98,6 +98,11 @@ Como conferir:
 
 ## 8. Acompanhar o dia a dia
 
+- **Painel administrativo** (só a sua conta vê): no app, **Mais → Painel administrativo**, ou https://orca-ja-app.pages.dev/admin.
+  Tem visão geral com gráficos, lista de todas as contas (com planilha), mensagens em massa por WhatsApp ou e-mail para quem cancelou,
+  não assinou ou parou de usar, relatórios em PDF/planilha por período, pedidos de suporte e depoimentos.
+  Para dar acesso a outra pessoa (ou tirar): `node scripts/tornar-admin.mjs email@dela.com` (ou `--remover` no fim).
+
 - **Leads do site** (lista de espera) e **métricas**: https://console.firebase.google.com/project/orca-ja-aaf65/firestore → coleções `leads` e `eventos`.
 - **Usuários e orçamentos**: mesma tela, coleções `users` e `orcamentos`. Não edite à mão; use o app ou o script.
 - **Pagamentos**: painel do Mercado Pago → Assinaturas / Vendas.

@@ -174,3 +174,9 @@ cartão de visita virtual (3 modelos) e cards em imagem (3 modelos).
 - [x] Teste grátis do Pro: 14 dias no cadastro; contas antigas ativam uma vez (Início e Conta); faixa com dias restantes; avisos no sino e no resumo diário
 - [x] Recibo avulso, notificações de atraso e de fim do teste no sino
 - [ ] Dono: cadastrar as variáveis no Cloudflare e o segredo no GitHub (docs/LANCAMENTO.md, item 3); informar WhatsApp/e-mail do suporte
+
+## V5 — Painel administrativo (8 out 2026)
+
+- [x] Papel de administrador em `admins/{uid}` (só o servidor escreve; `scripts/tornar-admin.mjs`); regras liberam ao admin a leitura de contas, orçamentos, contratos, suporte, eventos, leads, pagamentos e inscrições de push
+- [x] `/admin` (pacote separado): Visão geral (indicadores por período e 6 gráficos), Clientes (filtros, busca, ficha e planilha), Mensagens (grupos: cancelaram, teste acabou, teste acabando, grátis, Pro vencido, inativos, lista de espera; WhatsApp um a um ou e-mail em cópia oculta), Relatório (PDF e planilhas por período) e Suporte (responder e moderar depoimentos)
+- [x] Cálculos puros em `app/src/lib/adminCalculos.ts` com testes

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router";
-import type { ReactNode } from "react";
+import { lazy, Suspense, type ReactNode } from "react";
+import Carregando from "@/componentes/Carregando";
 import { ProvedorAuth } from "@/hooks/useAuth";
 import { ExigePerfil, ExigeLoginSemPerfil, SoDeslogado } from "@/rotas/Guardas";
 import Entrar from "@/paginas/Entrar";
@@ -23,6 +24,9 @@ import Conta from "@/paginas/Conta";
 import Ajuda from "@/paginas/Ajuda";
 import NovoRecibo from "@/paginas/NovoRecibo";
 import { ProvedorTour } from "@/tour/Tour";
+
+// Painel administrativo: pacote separado, só baixa para quem abre /admin
+const Admin = lazy(() => import("@/paginas/admin/Admin"));
 import NaoEncontrada from "@/paginas/NaoEncontrada";
 import { capturarRascunhoDaUrl } from "@/lib/rascunhoImportado";
 
@@ -67,6 +71,7 @@ export default function App() {
           <Route path="/cartao" element={<P><Cartao /></P>} />
           <Route path="/conta" element={<P><Conta /></P>} />
           <Route path="/ajuda" element={<P><Ajuda /></P>} />
+          <Route path="/admin" element={<P><Suspense fallback={<Carregando />}><Admin /></Suspense></P>} />
 
           {/* Recibo avulso (sem orçamento) */}
           <Route path="/recibos/novo" element={<P><NovoRecibo /></P>} />

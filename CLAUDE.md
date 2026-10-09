@@ -110,5 +110,6 @@ Além disso: abrir no navegador em largura de celular e percorrer o fluxo da tar
 - `node scripts/semear-demo.cjs` — dados de demonstração no EMULADOR (para telas do site)
 - `node scripts/ativar-pro.cjs <email> [meses|--free]` — libera/retira o Pro (precisa de `service-account.json` na raiz, ignorado pelo Git)
 - `functions/api/` — servidor no próprio app (Cloudflare Pages Functions): `avisar` (Web Push na hora), `rotina` (de hora em hora, via `.github/workflows/rotina.yml`) e `mercadopago` (webhook que libera o Pro)
+- `app/src/paginas/admin/` — Painel administrativo (`/admin`), visível só para contas em `admins/{uid}`; cálculos em `app/src/lib/adminCalculos.ts`; dar acesso: `node scripts/tornar-admin.mjs <email>`
 - `servidor/` — código usado pelas funções: `firestore.js` (REST com conta de serviço; aceita o emulador), `webpush.js` (VAPID + aes128gcm só com WebCrypto) e `avisos.js`; teste de ponta a ponta: `npm run test:avisos`
 - Projeto Firebase: `orca-ja-aaf65` (Firestore em `southamerica-east1`). Chaves públicas do site em `site/.env.local` (modelo em `site/.env.example`).

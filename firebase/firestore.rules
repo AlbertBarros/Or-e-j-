@@ -6,6 +6,25 @@ service cloud.firestore {
     function logado() { return request.auth != null; }
     function dono(uid) { return logado() && request.auth.uid == uid; }
     function mudou() { return request.resource.data.diff(resource.data).affectedKeys(); }
+    // Administrador do sistema: documento admins/{uid}, criado só pelo servidor (scripts/tornar-admin.mjs).
+    function ehAdmin() { return logado() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+
+    // Quem é administrador: cada um só consegue ver o próprio documento (para o app mostrar o painel).
+    match /admins/{uid} {
+      allow get: if logado() && request.auth.uid == uid;
+      allow list, write: if false;
+    }
+
+    // Pagamentos do Pro processados pelo webhook: só o administrador lê.
+    match /pagamentos/{id} {
+      allow read: if ehAdmin();
+      allow write: if false;
+    }
+
+    // Travas dos avisos (servidor): ninguém pelo app.
+    match /avisosEnviados/{id} {
+      allow read, write: if false;
+    }
 
     // Teste grátis do Pro: 14 dias, uma única vez por conta. planoAte == testeProAte; folga de 1 dia para relógio errado no celular.
     function testeProValido(d) {
@@ -19,7 +38,7 @@ service cloud.firestore {
     // Perfil do profissional. "plano" e "planoAte" só o servidor altera (webhook / script),
     // com uma exceção: ligar o teste de 14 dias do Pro, uma vez.
     match /users/{uid} {
-      allow read: if dono(uid);
+      allow read: if dono(uid) || ehAdmin();
       allow create: if dono(uid)
         && (request.resource.data.plano == "free" || testeProValido(request.resource.data));
       allow update: if dono(uid) && (
@@ -36,7 +55,7 @@ service cloud.firestore {
     // Aparelhos inscritos para receber avisos (Web Push). O id é o hash do endereço do aparelho.
     match /push/{id} {
       allow get: if logado() && (resource == null || resource.data.ownerId == request.auth.uid);
-      allow list: if logado() && resource.data.ownerId == request.auth.uid;
+      allow list: if (logado() && resource.data.ownerId == request.auth.uid) || ehAdmin();
       allow create, update: if logado()
         && request.resource.data.ownerId == request.auth.uid
         && request.resource.data.keys().hasOnly(["ownerId", "endpoint", "chaves", "aparelho", "criadoEm"])
@@ -54,13 +73,18 @@ service cloud.firestore {
         && request.resource.data.mensagem is string
         && request.resource.data.mensagem.size() > 0
         && request.resource.data.mensagem.size() < 3000;
-      allow read, update, delete: if false;
+      // O administrador lê e marca como respondida
+      allow read: if ehAdmin();
+      allow update: if ehAdmin() && mudou().hasOnly(["respondidaEm"]);
+      allow delete: if false;
     }
 
     // Depoimentos: o profissional escreve o seu (sempre como não publicado); o dono do sistema publica no console.
     // O site lê só os publicados.
     match /depoimentos/{uid} {
-      allow read: if resource.data.publicado == true || dono(uid);
+      allow read: if resource.data.publicado == true || dono(uid) || ehAdmin();
+      // O administrador só publica ou despublica
+      allow update: if ehAdmin() && mudou().hasOnly(["publicado"]) && request.resource.data.publicado is bool;
       allow create, update: if dono(uid)
         && request.resource.data.publicado == false
         && request.resource.data.keys().hasOnly(["nome", "negocio", "profissao", "cidade", "nota", "texto", "publicado", "criadoEm", "atualizadoEm"])
@@ -91,7 +115,7 @@ service cloud.firestore {
     // Contratos: link público lê um; o cliente (sem login) só assina um contrato enviado.
     match /contratos/{id} {
       allow get: if true;
-      allow list: if logado() && resource.data.ownerId == request.auth.uid;
+      allow list: if (logado() && resource.data.ownerId == request.auth.uid) || ehAdmin();
       allow create: if logado() && request.resource.data.ownerId == request.auth.uid;
       allow update: if
         (logado() && resource.data.ownerId == request.auth.uid
@@ -128,7 +152,7 @@ service cloud.firestore {
     match /orcamentos/{id} {
       // Qualquer pessoa com o link lê UM documento; ninguém lista orçamentos alheios.
       allow get: if true;
-      allow list: if logado() && resource.data.ownerId == request.auth.uid;
+      allow list: if (logado() && resource.data.ownerId == request.auth.uid) || ehAdmin();
 
       allow create: if logado()
         && request.resource.data.ownerId == request.auth.uid
@@ -152,7 +176,8 @@ service cloud.firestore {
       allow create: if request.resource.data.keys().hasOnly(["nome", "uid", "orcamentoId", "origem", "criadoEm"])
         && request.resource.data.nome is string
         && request.resource.data.nome.size() < 60;
-      allow read, update, delete: if false;
+      allow read: if ehAdmin();
+      allow update, delete: if false;
     }
 
     // Lista de espera vinda do site de SEO: só criação, ninguém lê pelo cliente.
@@ -160,7 +185,8 @@ service cloud.firestore {
       allow create: if request.resource.data.keys().hasOnly(["email", "whatsapp", "profissao", "origem", "criadoEm"])
         && request.resource.data.email is string
         && request.resource.data.email.size() < 120;
-      allow read, update, delete: if false;
+      allow read: if ehAdmin();
+      allow update, delete: if false;
     }
   }
 }

@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import BarraAbas from "@/componentes/BarraAbas";
 import CabecalhoAba from "@/componentes/CabecalhoAba";
-import { IconeAjuda, IconeCartao, IconeCatalogo, IconeConta, IconeRecibo, IconeSeta } from "@/componentes/Icones";
+import { IconeAjuda, IconeCartao, IconeCatalogo, IconeConta, IconeGrafico, IconeRecibo, IconeSeta } from "@/componentes/Icones";
+import { ehAdmin } from "@/lib/admin";
 import { useAuth } from "@/hooks/useAuth";
 import { sair } from "@/lib/auth";
 import { URL_SITE } from "@/lib/planos";
@@ -16,10 +18,26 @@ const ITENS = [
 
 /** Mais: acesso a cartão, catálogo, conta e ajuda. */
 export default function Mais() {
-  const { perfil } = useAuth();
+  const { perfil, usuario } = useAuth();
+  const [admin, setAdmin] = useState(false);
+  useEffect(() => {
+    if (usuario) ehAdmin(usuario.uid).then(setAdmin);
+  }, [usuario]);
   return (
     <main className="pb-abas mx-auto w-full max-w-[560px] px-4">
       <CabecalhoAba titulo="Mais" subtitulo={perfil?.nomeNegocio} />
+      {admin && (
+        <Link to="/admin" className="cartao-destaque mt-5 flex items-center gap-3 p-4 text-white">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/20">
+            <IconeGrafico tamanho={22} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold">Painel administrativo</span>
+            <span className="block text-sm text-white/80">Clientes, gráficos, relatórios e mensagens</span>
+          </span>
+          <IconeSeta tamanho={18} />
+        </Link>
+      )}
       <ul className="cartao mt-5 divide-y divide-pauta overflow-hidden" data-tour="mais-lista">
         {ITENS.map(({ para, Icone, titulo, texto }) => (
           <li key={para}>

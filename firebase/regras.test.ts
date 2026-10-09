@@ -158,6 +158,44 @@ describe("push, suporte e depoimentos", () => {
   });
 });
 
+describe("administrador", () => {
+  const ADM = "admin-1";
+  beforeEach(async () => {
+    await semear(`admins/${ADM}`, { email: "dono@teste.local", criadoEm: new Date() });
+    await semear(`users/${A}`, perfilBase);
+    await semear("orcamentos/o1", orcamentoBase(A, "enviado"));
+    await semear("suporte/s1", { uid: A, nome: "João", assunto: "Dúvida", mensagem: "Oi", criadoEm: new Date() });
+    await semear(`depoimentos/${A}`, { nome: "João", negocio: "X", profissao: "p", cidade: "c", nota: 5, texto: "Muito bom mesmo, recomendo.", publicado: false, criadoEm: new Date() });
+  });
+  it("admin lê contas, orçamentos, suporte, eventos e leads de todo mundo", async () => {
+    await assertSucceeds(getDocs(collection(como(ADM), "users")));
+    await assertSucceeds(getDocs(collection(como(ADM), "orcamentos")));
+    await assertSucceeds(getDocs(collection(como(ADM), "contratos")));
+    await assertSucceeds(getDocs(collection(como(ADM), "suporte")));
+    await assertSucceeds(getDocs(collection(como(ADM), "eventos")));
+    await assertSucceeds(getDocs(collection(como(ADM), "leads")));
+    await assertSucceeds(getDocs(collection(como(ADM), "pagamentos")));
+    await assertSucceeds(getDocs(collection(como(ADM), "push")));
+  });
+  it("quem não é admin não lista nada disso", async () => {
+    await assertFails(getDocs(collection(como(A), "users")));
+    await assertFails(getDocs(collection(como(A), "orcamentos")));
+    await assertFails(getDocs(collection(como(A), "suporte")));
+    await assertFails(getDocs(collection(como(A), "pagamentos")));
+    await assertFails(getDoc(doc(como(A), "admins", ADM)));
+  });
+  it("ninguém se torna admin pelo app", async () => {
+    await assertFails(setDoc(doc(como(A), "admins", A), { email: "x" }));
+    await assertSucceeds(getDoc(doc(como(ADM), "admins", ADM)));
+  });
+  it("admin publica depoimento e marca suporte como respondido, mas não altera o resto", async () => {
+    await assertSucceeds(updateDoc(doc(como(ADM), "depoimentos", A), { publicado: true }));
+    await assertFails(updateDoc(doc(como(ADM), "depoimentos", A), { texto: "outro texto qualquer" }));
+    await assertSucceeds(updateDoc(doc(como(ADM), "suporte", "s1"), { respondidaEm: new Date() }));
+    await assertFails(updateDoc(doc(como(ADM), "users", A), { plano: "pro" }));
+  });
+});
+
 describe("logos", () => {
   const logo = { dataUrl: "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=", atualizadoEm: new Date() };
   it("dono grava e qualquer um lê", async () => {
